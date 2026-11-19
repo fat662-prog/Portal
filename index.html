@@ -860,6 +860,44 @@ nameSelect.disabled = true; nameSelect.required = false; nameSelect.classList.ad
 }
 }
 
+function bukaFormUjian(url, judul) {
+var tautan = String(url).trim();
+if (tautan.indexOf('docs.google.com/forms') !== -1 && tautan.indexOf('embedded=true') === -1) {
+tautan += (tautan.indexOf('?') === -1 ? '?' : '&') + 'embedded=true';
+}
+var ov = document.getElementById('examOverlay');
+if (!ov) {
+ov = document.createElement('div');
+ov.id = 'examOverlay';
+ov.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;z-index:9999;background:#ffffff;display:none;flex-direction:column;';
+var bar = document.createElement('div');
+bar.style.cssText = 'display:flex;align-items:center;gap:8px;padding:8px 12px;background:#2563eb;color:#ffffff;font:600 14px sans-serif;';
+var btnBack = document.createElement('button');
+btnBack.type = 'button'; btnBack.id = 'examBack'; btnBack.textContent = '\u2190 Kembali';
+btnBack.style.cssText = 'background:#ffffff;color:#2563eb;border:0;border-radius:8px;padding:6px 12px;font-weight:700;';
+var ttl = document.createElement('span');
+ttl.id = 'examTitle'; ttl.style.cssText = 'flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;';
+var btnDirect = document.createElement('button');
+btnDirect.type = 'button'; btnDirect.id = 'examDirect'; btnDirect.textContent = 'Form tidak tampil? Klik di sini';
+btnDirect.style.cssText = 'background:rgba(255,255,255,0.2);color:#ffffff;border:1px solid rgba(255,255,255,0.5);border-radius:8px;padding:6px 10px;font-size:12px;';
+bar.appendChild(btnBack); bar.appendChild(ttl); bar.appendChild(btnDirect);
+var fr = document.createElement('iframe');
+fr.id = 'examFrame'; fr.style.cssText = 'flex:1;border:0;width:100%;height:100%;'; fr.setAttribute('allow', 'fullscreen');
+ov.appendChild(bar); ov.appendChild(fr);
+document.body.appendChild(ov);
+btnBack.onclick = function() {
+if (confirm('Kembali ke portal? Jawaban yang belum dikirim bisa hilang.')) {
+ov.style.display = 'none'; fr.src = 'about:blank';
+}
+};
+btnDirect.onclick = function() { window.location.href = ov.getAttribute('data-url'); };
+}
+ov.setAttribute('data-url', String(url).trim());
+document.getElementById('examTitle').textContent = judul || 'Ujian';
+document.getElementById('examFrame').src = tautan;
+ov.style.display = 'flex';
+}
+
 function loginStafServer(peran, password, namaTampil, tabAwal, ambilLink) {
 var btnText = document.querySelector('#btnLogin span');
 var spinner = document.getElementById('loginSpinner');
@@ -1610,7 +1648,7 @@ if(cachedLinks && cachedLinks[jenisAsesmen] && cachedLinks[jenisAsesmen][subject
 url = cachedLinks[jenisAsesmen][subject];
 }
 if (url && url.trim() !== "") {
-window.open(url, '_blank');
+bukaFormUjian(url, subject);
 } else {
 showToast("Admin belum memasukkan link untuk mapel ini.", "error");
 }
