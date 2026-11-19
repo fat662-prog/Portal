@@ -583,10 +583,11 @@ Rekap Hasil Ujian
 <script>
 // ===== ADAPTER API: menggantikan google.script.run dengan fetch ke Apps Script =====
 // GANTI URL di bawah dengan URL Web App /exec Anda
-var API_URL = 'https://script.google.com/macros/s/AKfycbwRYdIi1mGy0wrb7R7ugSnI2JtAZf1HVD2n0TURyABb_Qtqh5g88UhF--KYUEtXk15hbA/exec';
+var API_URL = 'https://script.google.com/macros/s/AKfycbxubIJmiA7ouJiVopWWhmEZb3xt3oa_v-Y7Px7YSFBBkL2M6lkl2ZzS98SJfFizkA65qw/exec';
 (function () {
   // Jika dijalankan di dalam Apps Script asli, pakai google.script.run bawaan
   if (window.google && window.google.script && window.google.script.run) return;
+  function ambilToken() { try { return localStorage.getItem('smpn8_token') || ''; } catch (e) { return ''; } }
   function makeRunner(ok, fail) {
     return new Proxy({}, {
       get: function (_, name) {
@@ -597,11 +598,18 @@ var API_URL = 'https://script.google.com/macros/s/AKfycbwRYdIi1mGy0wrb7R7ugSnI2J
           fetch(API_URL, {
             method: 'POST',
             headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-            body: JSON.stringify({ fn: name, args: args })
+            body: JSON.stringify({ fn: name, args: args, token: ambilToken() })
           })
           .then(function (r) { return r.json(); })
           .then(function (res) {
+            if (res.error === 'SESI_HABIS') {
+              try { localStorage.removeItem('smpn8_user'); localStorage.removeItem('smpn8_tab'); localStorage.removeItem('smpn8_token'); } catch (e) {}
+              alert('Sesi Anda telah berakhir. Silakan login kembali.');
+              location.reload();
+              return;
+            }
             if (res.error) throw new Error(res.error);
+            if (res.token) { try { localStorage.setItem('smpn8_token', res.token); } catch (e) {} }
             if (ok) ok(res.result);
           })
           .catch(function (err) { if (fail) fail(err); else console.error(err); });
@@ -852,6 +860,23 @@ nameSelect.disabled = true; nameSelect.required = false; nameSelect.classList.ad
 }
 }
 
+function loginStafServer(peran, password, namaTampil, tabAwal, ambilLink) {
+var btnText = document.querySelector('#btnLogin span');
+var spinner = document.getElementById('loginSpinner');
+if (!password) { showError("Password " + peran + " wajib diisi!"); return; }
+btnText.classList.add('hidden'); spinner.style.display = 'block'; document.getElementById('btnLogin').disabled = true;
+function selesai() { btnText.classList.remove('hidden'); spinner.style.display = 'none'; document.getElementById('btnLogin').disabled = false; }
+google.script.run
+.withSuccessHandler(function(response) {
+selesai();
+if (response && response.status === 'success') {
+currentUser = { name: namaTampil, role: peran }; finalizeLogin(tabAwal); if (ambilLink) fetchLinksBackground(false);
+} else { showError(response && response.message ? response.message : "Login gagal!"); }
+})
+.withFailureHandler(function(err) { selesai(); showError("Gagal terhubung ke server. Coba lagi."); })
+.loginStaf(peran, password);
+}
+
 function handleLoginSiswa(e) {
 if (e.preventDefault) e.preventDefault(); else e.returnValue = false;
 document.getElementById('loginError').classList.add('hidden');
@@ -862,20 +887,10 @@ var btnText = document.querySelector('#btnLogin span');
 var spinner = document.getElementById('loginSpinner');
 
 if (isGuruMode) {
-if (document.getElementById('loginPasswordGuru').value === 'guru8') {
-btnText.classList.add('hidden'); spinner.style.display = 'block';
-setTimeout(function() {
-currentUser = { name: 'Dewan Guru', role: 'guru' }; finalizeLogin('guru-home'); btnText.classList.remove('hidden'); spinner.style.display = 'none';
-}, 300);
-} else { showError("Password guru salah!"); }
+loginStafServer('guru', document.getElementById('loginPasswordGuru').value, 'Dewan Guru', 'guru-home', false);
 }
 else if (!isSiswaMode && !isGuruMode) {
-if (document.getElementById('loginPasswordAdmin').value === 'admin8') {
-btnText.classList.add('hidden'); spinner.style.display = 'block';
-setTimeout(function() {
-currentUser = { name: 'Administrator', role: 'admin' }; finalizeLogin('admin-home'); fetchLinksBackground(false); btnText.classList.remove('hidden'); spinner.style.display = 'none';
-}, 300);
-} else { showError("Password admin salah!"); }
+loginStafServer('admin', document.getElementById('loginPasswordAdmin').value, 'Administrator', 'admin-home', true);
 }
 else {
 var kelas = document.getElementById('loginClass').value;
@@ -920,7 +935,7 @@ renderMenu(); openTab(currentTab);
 }
 
 function logout() {
-localStorage.removeItem('smpn8_user'); localStorage.removeItem('smpn8_tab'); currentUser = null; document.getElementById('loginForm').reset(); updateNameDropdown();
+localStorage.removeItem('smpn8_token'); localStorage.removeItem('smpn8_user'); localStorage.removeItem('smpn8_tab'); currentUser = null; document.getElementById('loginForm').reset(); updateNameDropdown();
 var modes = ['Siswa', 'Guru', 'Admin'];
 for (var i = 0; i < modes.length; i++) {
 var p = document.getElementById('loginPassword' + modes[i]); var eye = document.getElementById('eyeIcon' + modes[i]);
