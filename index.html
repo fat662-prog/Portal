@@ -604,7 +604,6 @@ var API_URL = 'https://script.google.com/macros/s/AKfycbwRYdIi1mGy0wrb7R7ugSnI2J
           .then(function (res) {
             if (res.error === 'SESI_HABIS') {
               try { localStorage.removeItem('smpn8_user'); localStorage.removeItem('smpn8_tab'); localStorage.removeItem('smpn8_token'); } catch (e) {}
-              alert('Sesi Anda telah berakhir. Silakan login kembali.');
               location.reload();
               return;
             }
@@ -885,11 +884,24 @@ var fr = document.createElement('iframe');
 fr.id = 'examFrame'; fr.style.cssText = 'flex:1;border:0;width:100%;height:100%;'; fr.setAttribute('allow', 'fullscreen');
 ov.appendChild(bar); ov.appendChild(fr);
 document.body.appendChild(ov);
-btnBack.onclick = function() {
-if (confirm('Kembali ke portal? Jawaban yang belum dikirim bisa hilang.')) {
-ov.style.display = 'none'; fr.src = 'about:blank';
-}
-};
+var kt = document.createElement('div');
+kt.id = 'examConfirm';
+kt.style.cssText = 'position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(15,23,42,0.6);display:none;align-items:center;justify-content:center;padding:16px;';
+var kb = document.createElement('div');
+kb.style.cssText = 'background:#ffffff;border-radius:16px;padding:20px;max-width:340px;width:100%;font-family:sans-serif;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,0.3);';
+var kp = document.createElement('p');
+kp.textContent = 'Kembali ke portal? Jawaban yang belum dikirim bisa hilang.';
+kp.style.cssText = 'margin:0 0 16px 0;color:#1e293b;font-size:15px;font-weight:600;';
+var kBatal = document.createElement('button');
+kBatal.type = 'button'; kBatal.textContent = 'Lanjut Mengerjakan';
+kBatal.style.cssText = 'background:#2563eb;color:#ffffff;border:0;border-radius:10px;padding:10px 14px;font-weight:700;margin-right:8px;';
+var kYa = document.createElement('button');
+kYa.type = 'button'; kYa.textContent = 'Kembali';
+kYa.style.cssText = 'background:#e2e8f0;color:#334155;border:0;border-radius:10px;padding:10px 14px;font-weight:700;';
+kb.appendChild(kp); kb.appendChild(kBatal); kb.appendChild(kYa); kt.appendChild(kb); ov.appendChild(kt);
+btnBack.onclick = function() { kt.style.display = 'flex'; };
+kBatal.onclick = function() { kt.style.display = 'none'; };
+kYa.onclick = function() { kt.style.display = 'none'; ov.style.display = 'none'; fr.src = 'about:blank'; };
 btnDirect.onclick = function() { window.location.href = ov.getAttribute('data-url'); };
 }
 ov.setAttribute('data-url', String(url).trim());
