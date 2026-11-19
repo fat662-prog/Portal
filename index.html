@@ -1140,13 +1140,13 @@ listHTML += '</ul>';
 
 html += '<div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden flex flex-col h-fit">' +
 '<div class="w-full bg-white p-4 flex items-center justify-between border-b border-slate-100">' +
-'<button onclick="toggleMapelDetail('' + uniqueId + '')" class="text-left flex-1 pr-2 outline-none group">' +
+'<button onclick="toggleMapelDetail(\'' + uniqueId + '\')" class="text-left flex-1 pr-2 outline-none group">' +
 '<h4 class="font-bold text-slate-800 text-sm md:text-base leading-tight mb-1 truncate group-hover:text-blue-600 transition">Kelas ' + kelas + '</h4>' +
 '<span class="inline-block bg-rose-100 text-rose-700 text-[10px] md:text-xs px-2 py-0.5 rounded-md font-bold">' + count + ' Siswa Belum</span>' +
 '</button>' +
 '<div class="flex items-center gap-2">' +
-'<button onclick="salinBelumSiswa('' + uniqueId + '')" class="w-8 h-8 rounded-lg bg-slate-50 border border-slate-200 text-slate-500 hover:text-blue-600 hover:bg-blue-50 transition" title="Salin daftar nama"><i class="fa-regular fa-copy"></i></button>' +
-'<button onclick="toggleMapelDetail('' + uniqueId + '')" class="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center text-slate-500 shrink-0 outline-none hover:bg-slate-200 transition"><i class="fa-solid fa-chevron-down chevron-icon" id="icon_' + uniqueId + '"></i></button>' +
+'<button onclick="salinBelumSiswa(\'' + uniqueId + '\')" class="w-8 h-8 rounded-lg bg-slate-50 border border-slate-200 text-slate-500 hover:text-blue-600 hover:bg-blue-50 transition" title="Salin daftar nama"><i class="fa-regular fa-copy"></i></button>' +
+'<button onclick="toggleMapelDetail(\'' + uniqueId + '\')" class="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center text-slate-500 shrink-0 outline-none hover:bg-slate-200 transition"><i class="fa-solid fa-chevron-down chevron-icon" id="icon_' + uniqueId + '"></i></button>' +
 '</div>' +
 '</div>' +
 '<div id="' + uniqueId + '" class="accordion-content bg-slate-50/50">' + listHTML + '</div>' +
@@ -1637,7 +1637,7 @@ if(cachedLinks && cachedLinks[jenisAsesmen] && cachedLinks[jenisAsesmen][subject
 val = cachedLinks[jenisAsesmen][subject];
 }
 var card = document.createElement('div');
-card.innerHTML = '<label class="block text-xs md:text-sm font-bold text-slate-700 mb-1.5 truncate">' + subject + '</label><div class="flex relative group"><div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"><i class="fa-solid fa-link text-slate-400 text-xs group-focus-within:text-blue-500 transition-colors"></i></div><input type="url" placeholder="https://forms.gle/..." value="' + val + '" onchange="simpanLinkInstan('' + jenisAsesmen + '', '' + subject + '', this.value)" class="w-full pl-8 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 outline-none text-xs md:text-sm transition-all hover:border-slate-300"></div>';
+card.innerHTML = '<label class="block text-xs md:text-sm font-bold text-slate-700 mb-1.5 truncate">' + subject + '</label><div class="flex relative group"><div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"><i class="fa-solid fa-link text-slate-400 text-xs group-focus-within:text-blue-500 transition-colors"></i></div><input type="url" placeholder="https://forms.gle/..." value="' + val + '" onchange="simpanLinkInstan(\'' + jenisAsesmen + '\', \'' + subject + '\', this.value)" class="w-full pl-8 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 outline-none text-xs md:text-sm transition-all hover:border-slate-300"></div>';
 grid.appendChild(card);
 }); container.appendChild(grid);
 }
