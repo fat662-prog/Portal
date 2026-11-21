@@ -528,7 +528,7 @@ Rekap Hasil Ujian
 </button>
 <!-- Tombol Unduh XLS Selalu Muncul -->
 <button onclick="exportTableToExcel('tabelHasilData', 'Rekap_Hasil_Ujian')" class="flex-1 sm:flex-none bg-emerald-600 border border-emerald-700 shadow-sm text-white px-3 md:px-4 py-2 rounded-lg font-semibold flex items-center justify-center gap-1.5 hover:bg-emerald-700 transition active:scale-95 text-xs md:text-sm whitespace-nowrap">
-<i class="fa-solid fa-file-excel"></i> Unduh .xls
+<i class="fa-solid fa-file-excel"></i> Unduh .xlsx
 </button>
 </div>
 </div>
@@ -1155,22 +1155,144 @@ else if (tabId === 'guru-analisis') { displayTitle = 'ANALISIS HASIL'; document.
 document.getElementById('headerTitle').innerText = displayTitle; document.getElementById('mobileHeaderTitle').innerText = displayTitle;
 }
 
-// ==== FITUR DOWNLOAD EXCEL DIPERBAIKI (UNDUH SEMUA) ====
+// ==== FITUR DOWNLOAD EXCEL (file .xlsx asli, dibuat langsung di browser tanpa library tambahan) ====
+var CRC_TABEL_XLSX = null;
+function crc32Xlsx(bytes) {
+if (!CRC_TABEL_XLSX) {
+CRC_TABEL_XLSX = [];
+for (var n = 0; n < 256; n++) {
+var c = n;
+for (var k = 0; k < 8; k++) { c = (c & 1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1); }
+CRC_TABEL_XLSX[n] = c >>> 0;
+}
+}
+var crc = 0xFFFFFFFF;
+for (var i = 0; i < bytes.length; i++) { crc = CRC_TABEL_XLSX[(crc ^ bytes[i]) & 0xFF] ^ (crc >>> 8); }
+return (crc ^ 0xFFFFFFFF) >>> 0;
+}
+
+// Membuat arsip ZIP (tanpa kompresi) dari daftar {nama, isi(string)}
+function buatZipXlsx(berkas) {
+var enc = new TextEncoder();
+var bagian = [], pusat = [], offset = 0;
+function u16(v) { return [v & 255, (v >>> 8) & 255]; }
+function u32(v) { return [v & 255, (v >>> 8) & 255, (v >>> 16) & 255, (v >>> 24) & 255]; }
+for (var i = 0; i < berkas.length; i++) {
+var nama = enc.encode(berkas[i].nama);
+var isi = enc.encode(berkas[i].isi);
+var crc = crc32Xlsx(isi);
+var header = [].concat(u32(0x04034B50), u16(20), u16(0x0800), u16(0), u16(0), u16(0x21), u32(crc), u32(isi.length), u32(isi.length), u16(nama.length), u16(0));
+var entri = [].concat(u32(0x02014B50), u16(20), u16(20), u16(0x0800), u16(0), u16(0), u16(0x21), u32(crc), u32(isi.length), u32(isi.length), u16(nama.length), u16(0), u16(0), u16(0), u16(0), u32(0), u32(offset));
+bagian.push(new Uint8Array(header), nama, isi);
+pusat.push(new Uint8Array(entri), nama);
+offset += header.length + nama.length + isi.length;
+}
+var ukuranPusat = 0;
+for (var p = 0; p < pusat.length; p++) ukuranPusat += pusat[p].length;
+var akhir = new Uint8Array([].concat(u32(0x06054B50), u16(0), u16(0), u16(berkas.length), u16(berkas.length), u32(ukuranPusat), u32(offset), u16(0)));
+return new Blob(bagian.concat(pusat, [akhir]), { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+}
+
+function xmlEscXlsx(s) {
+return String(s).replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F  ]/g, '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+function namaKolomXlsx(i) {
+var s = '';
+i++;
+while (i > 0) { var m = (i - 1) % 26; s = String.fromCharCode(65 + m) + s; i = Math.floor((i - 1) / 26); }
+return s;
+}
+
+// baris: array of array berisi teks. Baris pertama = header.
+function buatXlsxBlob(baris, namaSheet) {
+var jmlKolom = 0, r, c;
+for (r = 0; r < baris.length; r++) { if (baris[r].length > jmlKolom) jmlKolom = baris[r].length; }
+var lebar = [];
+for (c = 0; c < jmlKolom; c++) {
+var maks = 6;
+for (r = 0; r < baris.length; r++) { var t = String(baris[r][c] === undefined ? '' : baris[r][c]); if (t.length + 2 > maks) maks = t.length + 2; }
+lebar.push(Math.min(maks, 45));
+}
+var sd = '';
+for (r = 0; r < baris.length; r++) {
+sd += '<row r="' + (r + 1) + '">';
+for (c = 0; c < baris[r].length; c++) {
+var ref = namaKolomXlsx(c) + (r + 1);
+var teks = String(baris[r][c] === null || baris[r][c] === undefined ? '' : baris[r][c]).trim();
+if (r === 0) {
+sd += '<c r="' + ref + '" s="1" t="inlineStr"><is><t>' + xmlEscXlsx(teks) + '</t></is></c>';
+} else if (/^-?(0|[1-9][0-9]*)([.,][0-9]+)?$/.test(teks)) {
+sd += '<c r="' + ref + '" s="3"><v>' + teks.replace(',', '.') + '</v></c>';
+} else {
+sd += '<c r="' + ref + '" s="2" t="inlineStr"><is><t xml:space="preserve">' + xmlEscXlsx(teks) + '</t></is></c>';
+}
+}
+sd += '</row>';
+}
+var cols = '';
+for (c = 0; c < jmlKolom; c++) cols += '<col min="' + (c + 1) + '" max="' + (c + 1) + '" width="' + lebar[c] + '" customWidth="1"/>';
+var akhirRef = namaKolomXlsx(Math.max(jmlKolom, 1) - 1) + Math.max(baris.length, 1);
+var X = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n';
+var sheet = X + '<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><dimension ref="A1:' + akhirRef + '"/>' +
+'<sheetViews><sheetView workbookViewId="0"><pane ySplit="1" topLeftCell="A2" activePane="bottomLeft" state="frozen"/></sheetView></sheetViews>' +
+'<sheetFormatPr defaultRowHeight="15"/><cols>' + cols + '</cols><sheetData>' + sd + '</sheetData></worksheet>';
+var styles = X + '<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">' +
+'<fonts count="2"><font><sz val="11"/><name val="Calibri"/></font><font><b/><sz val="11"/><color rgb="FFFFFFFF"/><name val="Calibri"/></font></fonts>' +
+'<fills count="3"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill><fill><patternFill patternType="solid"><fgColor rgb="FF2563EB"/><bgColor indexed="64"/></patternFill></fill></fills>' +
+'<borders count="2"><border><left/><right/><top/><bottom/><diagonal/></border><border><left style="thin"><color rgb="FF94A3B8"/></left><right style="thin"><color rgb="FF94A3B8"/></right><top style="thin"><color rgb="FF94A3B8"/></top><bottom style="thin"><color rgb="FF94A3B8"/></bottom><diagonal/></border></borders>' +
+'<cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>' +
+'<cellXfs count="4"><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/>' +
+'<xf numFmtId="0" fontId="1" fillId="2" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment horizontal="center" vertical="center" wrapText="1"/></xf>' +
+'<xf numFmtId="0" fontId="0" fillId="0" borderId="1" xfId="0" applyBorder="1" applyAlignment="1"><alignment horizontal="left" vertical="center"/></xf>' +
+'<xf numFmtId="0" fontId="0" fillId="0" borderId="1" xfId="0" applyBorder="1" applyAlignment="1"><alignment horizontal="center" vertical="center"/></xf></cellXfs>' +
+'<cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>';
+var nama = String(namaSheet || 'Sheet1').replace(/[\\\/\?\*\[\]:]/g, ' ').substring(0, 31);
+var berkas = [
+{ nama: '[Content_Types].xml', isi: X + '<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/></Types>' },
+{ nama: '_rels/.rels', isi: X + '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>' },
+{ nama: 'xl/workbook.xml', isi: X + '<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets><sheet name="' + xmlEscXlsx(nama) + '" sheetId="1" r:id="rId1"/></sheets></workbook>' },
+{ nama: 'xl/_rels/workbook.xml.rels', isi: X + '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet1.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>' },
+{ nama: 'xl/styles.xml', isi: styles },
+{ nama: 'xl/worksheets/sheet1.xml', isi: sheet }
+];
+return buatZipXlsx(berkas);
+}
+
 function exportTableToExcel(tableID, filename){
 var input = document.getElementById('searchHasilAdmin');
 var originalSearch = input.value;
 input.value = '';
 filterTableCustom();
 
-var downloadLink = document.createElement("a"); var dataType = 'application/vnd.ms-excel'; var tableSelect = document.getElementById(tableID);
-var tableHTML = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"><style>table { border-collapse: collapse; } th, td { border: 1px solid #000; padding: 5px; text-align: left; }</style></head><body><table>' + tableSelect.innerHTML + '</table></body></html>';
-var fname = filename ? filename + '.xls' : 'excel_data.xls';
-var blob = new Blob(['\ufeff', tableHTML], { type: dataType });
-if(navigator.msSaveOrOpenBlob){ navigator.msSaveOrOpenBlob(blob, fname); }
-else { downloadLink.href = window.URL.createObjectURL(blob); downloadLink.download = fname; document.body.appendChild(downloadLink); downloadLink.click(); document.body.removeChild(downloadLink); showToast("Berhasil diunduh!", "success"); }
-
+var tabel = document.getElementById(tableID);
+var baris = [];
+var trHead = tabel.tHead && tabel.tHead.rows[0];
+if (trHead) {
+var h = [];
+for (var i = 0; i < trHead.cells.length; i++) h.push(trHead.cells[i].innerText.trim());
+baris.push(h);
+}
+var trs = tabel.tBodies[0] ? tabel.tBodies[0].rows : [];
+for (var r = 0; r < trs.length; r++) {
+if (trs[r].style.display === 'none') continue;
+var b = [];
+for (var k = 0; k < trs[r].cells.length; k++) b.push(trs[r].cells[k].innerText.trim());
+baris.push(b);
+}
 input.value = originalSearch;
 filterTableCustom();
+
+if (baris.length < 2) { showToast("Tidak ada data untuk diunduh.", "error"); return; }
+var fname = (filename ? filename : 'excel_data') + '.xlsx';
+var blob = buatXlsxBlob(baris, 'Hasil Ujian');
+if (navigator.msSaveOrOpenBlob) { navigator.msSaveOrOpenBlob(blob, fname); showToast("Berhasil diunduh!", "success"); return; }
+var url = window.URL.createObjectURL(blob);
+var a = document.createElement('a');
+a.href = url; a.download = fname; a.style.display = 'none';
+document.body.appendChild(a); a.click(); document.body.removeChild(a);
+setTimeout(function() { window.URL.revokeObjectURL(url); }, 4000);
+showToast("Berhasil diunduh!", "success");
 }
 
 // ========================================================
