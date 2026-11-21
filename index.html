@@ -60,10 +60,11 @@ select:disabled { background-color: #f8fafc; cursor: not-allowed; opacity: 0.7; 
 .k-ttd-img{height:13mm;display:flex;align-items:center;}
 .k-ttd-img img{max-height:13mm;max-width:40mm;}
 .k-kepsek{font-weight:700;text-decoration:underline;}
-.k-garis-jd{margin:1.5mm 0 1.5mm 0;}
+.k-garis-jd{margin:0.8mm 0 1.2mm 0;}
+.k-jd-judul{text-align:center;font-weight:800;font-size:10pt;line-height:1.2;}
 .k-jd-wrap{width:100%;}
-.k-jd-tabel{width:100%;border-collapse:collapse;table-layout:auto;font-size:7pt;line-height:1.2;white-space:nowrap;}
-.k-jd-tabel th,.k-jd-tabel td{border:0.25mm solid #000;padding:0.4mm 1mm;vertical-align:middle;white-space:nowrap;}
+.k-jd-tabel{width:100%;border-collapse:collapse;table-layout:auto;font-size:7pt;line-height:1.1;white-space:nowrap;}
+.k-jd-tabel th,.k-jd-tabel td{border:0.25mm solid #000;padding:0.1mm 1mm !important;font-size:inherit !important;line-height:1.1;vertical-align:middle;white-space:nowrap;}
 .k-jd-tabel th{background:#e8e8e8;font-weight:700;text-align:center;}
 .k-jd-tabel .k-jd-c{text-align:center;}
 .k-jd-kosong{text-align:center;font-size:8pt;color:#555;padding-top:12mm;}
@@ -1993,14 +1994,14 @@ isi += '<tr><td class="k-jd-c">' + (i + 1) + '</td><td>' + esc(baris[i].mapel) +
 isi += '</tbody></table></div>';
 }
 return '<div class="kartu">' +
-'<div class="k-head"><img class="k-logo" src="logo.png" alt="" onerror="this.style.display=\'none\'">' +
-'<div class="k-judul"><div class="k-t1">JADWAL ASESMEN</div><div class="k-t2">SMP NEGERI 8 SURABAYA</div><div class="k-t3">TAHUN AJARAN ' + esc(cfg.tahun) + '</div></div></div>' +
+'<div class="k-jd-judul">JADWAL ASESMEN</div>' +
 '<div class="k-garis k-garis-jd"></div>' + (baris.length ? isi.replace('<table class="k-jd-tabel"', '<table data-jenis="' + esc(jenis) + '" class="k-jd-tabel"') : isi) + '</div>';
 }
 
 // Menyesuaikan ukuran font tabel jadwal agar seluruh baris dan kolom muat dalam satu kartu (satu baris per sel)
 function sesuaikanTabelJadwal() {
 var root = document.getElementById('kartuPreview');
+if (!root) return;
 var tabel = root.querySelectorAll('table.k-jd-tabel');
 var selesai = {};
 for (var i = 0; i < tabel.length; i++) {
@@ -2008,15 +2009,16 @@ var jenis = tabel[i].getAttribute('data-jenis');
 if (selesai[jenis] === undefined) {
 var t = tabel[i], wrap = t.parentNode, kartu = wrap.parentNode;
 if (!kartu.clientWidth) return;
-var cs = window.getComputedStyle(kartu);
-var padKanan = parseFloat(cs.paddingRight) || 0, padBawah = parseFloat(cs.paddingBottom) || 0;
+var padBawah = parseFloat(window.getComputedStyle(kartu).paddingBottom) || 0;
 var ukuran = 8;
+t.style.width = 'auto';
 for (; ukuran > 3.5; ukuran -= 0.25) {
 t.style.fontSize = ukuran + 'pt';
-var lebarOk = t.offsetWidth <= wrap.clientWidth + 0.5;
-var tinggiOk = (wrap.offsetTop + t.offsetHeight) <= (kartu.clientHeight - padBawah);
+var lebarOk = t.getBoundingClientRect().width <= wrap.getBoundingClientRect().width - 1;
+var tinggiOk = (wrap.offsetTop + t.getBoundingClientRect().height) <= (kartu.clientHeight - padBawah - 1);
 if (lebarOk && tinggiOk) break;
 }
+t.style.width = '';
 selesai[jenis] = ukuran;
 }
 tabel[i].style.fontSize = selesai[jenis] + 'pt';
@@ -2058,6 +2060,7 @@ html += '</div>';
 }
 document.getElementById('kartuPreview').innerHTML = html;
 sesuaikanTabelJadwal();
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(sesuaikanTabelJadwal);
 var info = daftar.length + ' kartu peserta (' + Math.ceil(daftar.length / 3) + ' lembar, tiap lembar 3 kartu + 3 jadwal).';
 if (tanpaKode > 0) info += ' ' + tanpaKode + ' siswa belum punya Kode Peserta dan tidak dicetak. Isi dulu di menu Data Peserta.';
 document.getElementById('kartuInfo').innerText = info;
