@@ -60,6 +60,14 @@ select:disabled { background-color: #f8fafc; cursor: not-allowed; opacity: 0.7; 
 .k-ttd-img{height:13mm;display:flex;align-items:center;}
 .k-ttd-img img{max-height:13mm;max-width:40mm;}
 .k-kepsek{font-weight:700;text-decoration:underline;}
+.k-garis-jd{margin:1.5mm 0 1.5mm 0;}
+.k-jd-tabel{width:100%;border-collapse:collapse;table-layout:fixed;font-size:7pt;line-height:1.2;}
+.k-jd-tabel th,.k-jd-tabel td{border:0.25mm solid #000;padding:0.4mm 1mm;vertical-align:middle;word-wrap:break-word;overflow-wrap:anywhere;}
+.k-jd-tabel th{background:#e8e8e8;font-weight:700;text-align:center;}
+.k-jd-tabel .k-jd-c{text-align:center;}
+.k-jd-padat{font-size:6.3pt;}
+.k-jd-sangat{font-size:5.6pt;}
+.k-jd-kosong{text-align:center;font-size:8pt;color:#555;padding-top:12mm;}
 #printRoot{display:none;}
 @media print {
 @page{size:A4;margin:0;}
@@ -403,7 +411,8 @@ Pastikan Anda mengklik "Simpan" setelah mengubah data. Perubahan otomatis disink
 <div id="view-admin-kartu" class="tab-content max-w-6xl mx-auto hidden mt-2">
 <div class="bg-white rounded-xl md:rounded-2xl shadow-sm border border-slate-200 p-4 md:p-6">
 <h3 class="text-lg md:text-xl font-bold text-slate-800 flex items-center gap-2"><i class="fa-solid fa-id-card text-blue-600"></i> Cetak Kartu Peserta</h3>
-<p class="text-slate-500 text-xs md:text-sm mt-1 mb-4">Satu lembar A4 memuat 6 kartu. Isi pengaturan di bawah, klik Pratinjau, lalu Cetak (bisa juga disimpan sebagai PDF lewat dialog cetak).</p>
+<p class="text-slate-500 text-xs md:text-sm mt-1 mb-4">Satu lembar A4 memuat 6 kotak: 3 kartu peserta (kiri) dan 3 jadwal asesmen (kanan). Isi pengaturan di bawah, klik Pratinjau, lalu Cetak (bisa juga disimpan sebagai PDF lewat dialog cetak).</p>
+<p class="text-[11px] md:text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2 mb-4">Tahun Ajaran, Nama &amp; NIP Kepala Sekolah, dan tanda tangan (file <b>ttd-kepsek.png</b> di GitHub) diambil otomatis dari Setting Ujian &rsaquo; Administrasi, jadi tidak bisa diubah di sini. Jadwal asesmen diatur per mata pelajaran di Setting Ujian.</p>
 <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
 <div><label class="block text-xs md:text-sm font-bold text-slate-700 mb-1">Tahun Ajaran</label><input id="kartuTahun" type="text" oninput="simpanPengaturanKartu()" placeholder="2026-2027" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm"></div>
 <div><label class="block text-xs md:text-sm font-bold text-slate-700 mb-1">Tempat &amp; Tanggal</label><input id="kartuTanggal" type="text" oninput="simpanPengaturanKartu()" placeholder="Surabaya, 23 November 2026" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm"></div>
@@ -418,6 +427,7 @@ Pastikan Anda mengklik "Simpan" setelah mengubah data. Perubahan otomatis disink
 </div>
 </div>
 <div><label class="block text-xs md:text-sm font-bold text-slate-700 mb-1">Kelas yang dicetak</label><select id="kartuKelas" onchange="buatPratinjauKartu()" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white text-sm"><option value="">Semua Kelas</option></select></div>
+<div><label class="block text-xs md:text-sm font-bold text-slate-700 mb-1">Jadwal asesmen pada kartu</label><select id="kartuJadwalJenis" onchange="buatPratinjauKartu()" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white text-sm"><option value="">Otomatis sesuai tingkat kelas (7 / 8 / 9)</option><option value="USP">USP</option><option value="SAS KELAS 7">SAS KELAS 7</option><option value="SAS KELAS 8">SAS KELAS 8</option><option value="SAS KELAS 9">SAS KELAS 9</option></select></div>
 </div>
 <div class="flex flex-wrap gap-2 mt-4">
 <button onclick="buatPratinjauKartu()" class="bg-blue-50 border border-blue-200 text-blue-700 px-4 py-2 rounded-lg font-semibold text-sm flex items-center gap-2 hover:bg-blue-100 transition"><i class="fa-solid fa-eye"></i> Pratinjau</button>
@@ -692,6 +702,15 @@ var currentUser = null;
 var currentTab = '';
 var activeSettingType = 'USP';
 var cachedLinks = {};
+var daftarMapel = {};
+var modeHapusMapel = false;
+var dataAdministrasi = { tahun: '', kepsek: '', nip: '', proktor: '', ttdKepsek: '', ttdProktor: '' };
+try {
+var savedMapel = localStorage.getItem('smpn8_mapel');
+if (savedMapel && savedMapel !== 'null') { daftarMapel = JSON.parse(savedMapel) || {}; }
+} catch(e) {
+daftarMapel = {};
+}
 
 try {
 var savedLinks = localStorage.getItem('smpn8_links');
@@ -700,6 +719,14 @@ cachedLinks = JSON.parse(savedLinks);
 }
 } catch(e) {
 cachedLinks = {};
+}
+
+var dataJadwal = {};
+try {
+var savedJadwal = localStorage.getItem('smpn8_jadwal');
+if (savedJadwal && savedJadwal !== 'null') { dataJadwal = JSON.parse(savedJadwal) || {}; }
+} catch(e) {
+dataJadwal = {};
 }
 
 var mapDataPeserta = {};
@@ -1115,7 +1142,7 @@ else if (currentUser.role === 'admin') {
 if (tabId === 'admin-home') { displayTitle = 'DASHBOARD'; document.getElementById('view-admin-home').classList.add('active'); }
 else if (tabId === 'admin-peserta') { displayTitle = 'DATA PESERTA'; document.getElementById('view-admin-peserta').classList.add('active'); loadAdminPesertaData(); }
 else if (tabId === 'admin-kartu') { displayTitle = 'CETAK KARTU PESERTA'; document.getElementById('view-admin-kartu').classList.add('active'); siapkanHalamanKartu(); }
-else if (tabId === 'admin-setting') { displayTitle = 'SETTING UJIAN'; document.getElementById('view-admin-setting').classList.add('active'); renderAdminSettingTabs(); }
+else if (tabId === 'admin-setting') { displayTitle = 'SETTING UJIAN'; document.getElementById('view-admin-setting').classList.add('active'); renderAdminSettingTabs(); muatDaftarMapel(function(berubah) { if (berubah && currentTab === 'admin-setting' && activeSettingType !== 'Administrasi') renderAdminSettingForm(activeSettingType); }); muatJadwal(function(berubah) { if (berubah && currentTab === 'admin-setting' && activeSettingType !== 'Administrasi') renderAdminSettingForm(activeSettingType); }); }
 else if (tabId === 'shared-belum') { displayTitle = 'BELUM MENGERJAKAN'; document.getElementById('view-shared-belum').classList.add('active'); loadBelumMengerjakan(); }
 else if (tabId === 'shared-hasil') { displayTitle = 'HASIL UJIAN'; document.getElementById('view-shared-hasil').classList.add('active'); loadHasilUjian(); }
 else if (tabId === 'guru-analisis') { displayTitle = 'ANALISIS HASIL'; document.getElementById('view-guru-analisis').classList.add('active'); loadAnalisisData(); }
@@ -1813,7 +1840,9 @@ showLoading(false); showToast((err && err.message) ? err.message.replace(/^Error
 
 // ==== CETAK KARTU PESERTA ====
 var dataKartu = [];
-var ttdKartu = '';
+var TTD_KEPSEK_URL = 'ttd-kepsek.png';
+var TTD_PROKTOR_URL = 'ttd-proktor.png';
+var ttdKartu = TTD_KEPSEK_URL;
 var KARTU_KEY = 'smpn8_kartu_setting';
 
 function hariIniIndonesia() {
@@ -1833,7 +1862,7 @@ document.getElementById('kartuTahun').value = st.tahun || '2026-2027';
 document.getElementById('kartuTanggal').value = st.tanggal || ('Surabaya, ' + hariIniIndonesia());
 document.getElementById('kartuKepsek').value = st.kepsek || '';
 document.getElementById('kartuNip').value = st.nip || '';
-ttdKartu = st.ttd || '';
+ttdKartu = TTD_KEPSEK_URL;
 tampilkanTtd();
 }
 
@@ -1852,8 +1881,10 @@ ttd: ttdKartu
 function tampilkanTtd() {
 var img = document.getElementById('kartuTtdPreview');
 var btn = document.getElementById('kartuTtdHapus');
-if (ttdKartu) { img.src = ttdKartu; img.classList.remove('hidden'); btn.classList.remove('hidden'); }
-else { img.removeAttribute('src'); img.classList.add('hidden'); btn.classList.add('hidden'); }
+btn.classList.add('hidden');
+img.onload = function() { this.classList.remove('hidden'); };
+img.onerror = function() { this.classList.add('hidden'); };
+img.src = TTD_KEPSEK_URL;
 }
 
 function unggahTandaTangan(input) {
@@ -1882,6 +1913,9 @@ tampilkanTtd(); simpanPengaturanKartu(); buatPratinjauKartu();
 
 function siapkanHalamanKartu() {
 muatPengaturanKartu();
+terapkanAdministrasiKeKartu();
+muatDaftarMapel(function(berubah) { if (berubah && currentTab === 'admin-kartu') buatPratinjauKartu(); });
+muatJadwal(function(berubah) { if (berubah && currentTab === 'admin-kartu') buatPratinjauKartu(); });
 showLoading(true);
 google.script.run.withSuccessHandler(function(data) {
 showLoading(false);
@@ -1904,7 +1938,7 @@ showLoading(false); showToast("Gagal memuat data peserta", "error");
 }
 
 function htmlSatuKartu(r, cfg) {
-var ttd = cfg.ttd ? '<img src="' + cfg.ttd + '" alt="">' : '';
+var ttd = cfg.ttd ? '<img src="' + cfg.ttd + '" alt="" onerror="this.style.display=\'none\'">' : '';
 return '<div class="kartu">' +
 '<div class="k-head"><img class="k-logo" src="logo.png" alt="" onerror="this.style.display=\'none\'">' +
 '<div class="k-judul"><div class="k-t1">KARTU PESERTA ASESMEN</div><div class="k-t2">SMP NEGERI 8 SURABAYA</div><div class="k-t3">Tahun Ajaran ' + esc(cfg.tahun) + '</div></div></div>' +
@@ -1916,6 +1950,54 @@ return '<div class="kartu">' +
 '<div class="k-baris"><span class="k-lbl">Password</span><span class="k-sep">:</span><span class="k-val"><span class="k-box">' + esc(r[2]) + '</span></span></div>' +
 '<div class="k-ttd"><div>' + esc(cfg.tanggal) + '</div><div>Kepala Sekolah,</div><div class="k-ttd-img">' + ttd + '</div><div class="k-kepsek">' + esc(cfg.kepsek) + '</div><div>NIP. ' + esc(cfg.nip) + '</div></div>' +
 '</div>';
+}
+
+function jenisJadwalUntukKelas(kelas) {
+var pilih = document.getElementById('kartuJadwalJenis').value;
+if (pilih) return pilih;
+var m = /^\s*(7|8|9)/.exec(String(kelas || ''));
+return m ? 'SAS KELAS ' + m[1] : '';
+}
+
+function barisJadwalJenis(jenis) {
+var hasil = [];
+var urut = getMapelJenis(jenis);
+var peta = dataJadwal[jenis] || {};
+for (var mapel in peta) {
+if (!Object.prototype.hasOwnProperty.call(peta, mapel)) continue;
+var tgl = peta[mapel] && peta[mapel].tgl;
+if (!tgl || !parseTanggalJadwal(tgl)) continue;
+var o = urut.indexOf(mapel);
+if (o === -1) continue;
+hasil.push({ mapel: mapel, tgl: tgl, jam: peta[mapel].jam || '', o: o });
+}
+hasil.sort(function(a, b) {
+if (a.tgl !== b.tgl) return a.tgl < b.tgl ? -1 : 1;
+if (a.jam !== b.jam) return a.jam < b.jam ? -1 : 1;
+return a.o - b.o;
+});
+return hasil;
+}
+
+function htmlJadwalKartu(jenis, cfg) {
+var baris = jenis ? barisJadwalJenis(jenis) : [];
+var isi;
+if (!baris.length) {
+isi = '<div class="k-jd-kosong">Jadwal belum diatur.</div>';
+} else {
+var kls = baris.length > 12 ? ' k-jd-sangat' : (baris.length > 9 ? ' k-jd-padat' : '');
+isi = '<table class="k-jd-tabel' + kls + '"><colgroup><col style="width:7mm"><col style="width:31mm"><col style="width:33mm"><col style="width:14.5mm"></colgroup>' +
+'<thead><tr><th>No.</th><th>Mata Pelajaran</th><th>Hari/Tanggal</th><th>Waktu</th></tr></thead><tbody>';
+for (var i = 0; i < baris.length; i++) {
+var w = teksWaktuJadwal(baris[i].jam);
+isi += '<tr><td class="k-jd-c">' + (i + 1) + '</td><td>' + esc(baris[i].mapel) + '</td><td>' + esc(teksTanggalJadwal(baris[i].tgl)) + '</td><td class="k-jd-c">' + (w || '-') + '</td></tr>';
+}
+isi += '</tbody></table>';
+}
+return '<div class="kartu">' +
+'<div class="k-head"><img class="k-logo" src="logo.png" alt="" onerror="this.style.display=\'none\'">' +
+'<div class="k-judul"><div class="k-t1">JADWAL ASESMEN</div><div class="k-t2">SMP NEGERI 8 SURABAYA</div><div class="k-t3">TAHUN AJARAN ' + esc(cfg.tahun) + '</div></div></div>' +
+'<div class="k-garis k-garis-jd"></div>' + isi + '</div>';
 }
 
 function buatPratinjauKartu() {
@@ -1939,14 +2021,20 @@ daftar.sort(function(a, b) {
 var c = a[0].localeCompare(b[0], 'id', { numeric: true });
 return c !== 0 ? c : a[1].localeCompare(b[1], 'id');
 });
+var cacheJadwal = {};
 var html = '';
-for (var j = 0; j < daftar.length; j += 6) {
+// Tiap baris: kartu peserta (kiri) + jadwal asesmen kelasnya (kanan); 3 baris per lembar = 6 kotak
+for (var j = 0; j < daftar.length; j += 3) {
 html += '<div class="sheet-kartu">';
-for (var k = j; k < j + 6 && k < daftar.length; k++) { html += htmlSatuKartu(daftar[k], cfg); }
+for (var k = j; k < j + 3 && k < daftar.length; k++) {
+var jenis = jenisJadwalUntukKelas(daftar[k][0]);
+if (cacheJadwal[jenis] === undefined) cacheJadwal[jenis] = htmlJadwalKartu(jenis, cfg);
+html += htmlSatuKartu(daftar[k], cfg) + cacheJadwal[jenis];
+}
 html += '</div>';
 }
 document.getElementById('kartuPreview').innerHTML = html;
-var info = daftar.length + ' kartu (' + Math.ceil(daftar.length / 6) + ' lembar).';
+var info = daftar.length + ' kartu peserta (' + Math.ceil(daftar.length / 3) + ' lembar, tiap lembar 3 kartu + 3 jadwal).';
 if (tanpaKode > 0) info += ' ' + tanpaKode + ' siswa belum punya Kode Peserta dan tidak dicetak. Isi dulu di menu Data Peserta.';
 document.getElementById('kartuInfo').innerText = info;
 return daftar.length;
@@ -1967,7 +2055,9 @@ setTimeout(function() { window.print(); }, 300);
 function renderStudentGrid(jenisAsesmen) {
 var grid = document.getElementById('mapelGrid');
 grid.innerHTML = '';
-for (var i = 0; i < SUBJECTS.length; i++) {
+var daftarSiswa = getMapelJenis(jenisAsesmen);
+if (daftarSiswa.length === 0) { grid.innerHTML = '<p class="text-slate-500 text-sm">Belum ada mata pelajaran untuk asesmen ini.</p>'; return; }
+for (var i = 0; i < daftarSiswa.length; i++) {
 (function(subject) {
 var card = document.createElement('div');
 card.className = "group bg-white p-3 md:p-4 rounded-xl shadow-sm border border-slate-200 hover:border-blue-400 hover:shadow-md hover:shadow-blue-100 transition-all text-left flex items-center gap-3 md:gap-4 cursor-pointer active:scale-[0.98]";
@@ -1975,7 +2065,7 @@ card.innerHTML = '<div class="w-10 h-10 md:w-12 md:h-12 shrink-0 rounded-lg bg-b
 '<i class="fa-solid fa-book text-blue-600 group-hover:text-white"></i>' +
 '</div>' +
 '<div class="flex-1 overflow-hidden">' +
-'<h4 class="font-bold text-slate-800 text-sm md:text-[15px] leading-tight group-hover:text-blue-700 transition-colors truncate">' + subject + '</h4>' +
+'<h4 class="font-bold text-slate-800 text-sm md:text-[15px] leading-tight group-hover:text-blue-700 transition-colors truncate">' + esc(subject) + '</h4>' +
 '<p class="text-[9px] md:text-[11px] text-slate-400 mt-1 uppercase tracking-wider font-bold">Mulai Kerjakan</p>' +
 '</div>' +
 '<div class="w-7 h-7 shrink-0 flex items-center justify-center text-slate-300 group-hover:text-blue-600 transition-colors">' +
@@ -1994,13 +2084,13 @@ showToast("Admin belum memasukkan link untuk mapel ini.", "error");
 }
 };
 grid.appendChild(card);
-})(SUBJECTS[i]);
+})(daftarSiswa[i]);
 }
 }
 
 function renderAdminSettingTabs() {
 var tabsContainer = document.getElementById('settingTabs'); tabsContainer.innerHTML = '';
-var tabs = [];
+var tabs = ['Administrasi'];
 for(var k=0; k<ASSESSMENT_TYPES.length; k++){ tabs.push(ASSESSMENT_TYPES[k]); }
 
 tabs.forEach(function(type) {
@@ -2010,6 +2100,7 @@ btn.className = 'px-5 py-3 font-bold text-xs md:text-sm whitespace-nowrap transi
 btn.innerText = type;
 btn.onclick = function() {
 activeSettingType = type;
+modeHapusMapel = false;
 renderAdminSettingTabs();
 };
 tabsContainer.appendChild(btn);
@@ -2019,20 +2110,308 @@ renderAdminSettingForm(activeSettingType);
 }
 
 function renderAdminSettingForm(jenisAsesmen) {
+if (jenisAsesmen === 'Administrasi') { renderFormAdministrasi(); return; }
 var container = document.getElementById('settingContent');
-container.innerHTML = '<h4 class="font-bold text-base md:text-lg text-slate-800 mb-3 md:mb-4 border-b border-slate-100 pb-2 md:pb-3">Link Mapel: <span class="text-blue-600">' + jenisAsesmen + '</span></h4>';
+container.innerHTML = '<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3 md:mb-4 border-b border-slate-100 pb-2 md:pb-3"><h4 class="font-bold text-base md:text-lg text-slate-800">Link Mapel: <span class="text-blue-600">' + esc(jenisAsesmen) + '</span></h4>' +
+'<div class="flex flex-wrap gap-2">' +
+'<button type="button" id="btnTambahMapel" class="bg-blue-50 border border-blue-200 text-blue-700 px-3 py-1.5 rounded-lg font-semibold text-xs md:text-sm flex items-center gap-1.5 hover:bg-blue-100 transition"><i class="fa-solid fa-plus"></i> Tambah Mata Pelajaran</button>' +
+'<button type="button" id="btnHapusMapel" class="' + (modeHapusMapel ? 'bg-red-600 border-red-600 text-white' : 'bg-red-50 border-red-200 text-red-700 hover:bg-red-100') + ' border px-3 py-1.5 rounded-lg font-semibold text-xs md:text-sm flex items-center gap-1.5 transition"><i class="fa-solid fa-trash-can"></i> ' + (modeHapusMapel ? 'Selesai Menghapus' : 'Hapus Mata Pelajaran') + '</button>' +
+'</div></div>' +
+'<div id="formTambahMapel" class="hidden mb-4 p-3 bg-blue-50 border border-blue-200 rounded-xl flex flex-col sm:flex-row gap-2">' +
+'<input id="inputMapelBaru" type="text" maxlength="80" placeholder="Nama mata pelajaran baru" class="flex-1 px-3 py-2 bg-white border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 outline-none text-xs md:text-sm">' +
+'<div class="flex gap-2"><button type="button" id="btnSimpanMapelBaru" class="bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold text-xs md:text-sm hover:bg-blue-700 transition">Simpan</button>' +
+'<button type="button" id="btnBatalMapelBaru" class="bg-white border border-slate-200 text-slate-600 px-4 py-2 rounded-lg font-semibold text-xs md:text-sm hover:bg-slate-50 transition">Batal</button></div></div>';
+
+var formTambah = document.getElementById('formTambahMapel');
+var inputBaru = document.getElementById('inputMapelBaru');
+document.getElementById('btnTambahMapel').addEventListener('click', function() {
+formTambah.classList.toggle('hidden');
+if (!formTambah.classList.contains('hidden')) inputBaru.focus();
+});
+document.getElementById('btnBatalMapelBaru').addEventListener('click', function() { inputBaru.value = ''; formTambah.classList.add('hidden'); });
+document.getElementById('btnSimpanMapelBaru').addEventListener('click', function() { tambahMapelBaru(jenisAsesmen, inputBaru.value); });
+inputBaru.addEventListener('keydown', function(e) { if (e.key === 'Enter') { e.preventDefault(); tambahMapelBaru(jenisAsesmen, inputBaru.value); } });
+document.getElementById('btnHapusMapel').addEventListener('click', function() { modeHapusMapel = !modeHapusMapel; renderAdminSettingForm(jenisAsesmen); });
+
 var grid = document.createElement('div');
 grid.className = "grid grid-cols-1 md:grid-cols-2 gap-3 lg:gap-5";
+var daftar = getMapelJenis(jenisAsesmen);
+if (daftar.length === 0) {
+grid.innerHTML = '<p class="text-slate-500 text-xs md:text-sm md:col-span-2">Belum ada mata pelajaran. Klik "Tambah Mata Pelajaran".</p>';
+}
+daftar.forEach(function(subject) { grid.appendChild(bangunKartuMapel(jenisAsesmen, subject)); });
+container.appendChild(grid);
+}
 
-SUBJECTS.forEach(function(subject) {
+// ==== MATA PELAJARAN PER JENIS ASESMEN (disimpan di server, sheet MataPelajaran) ====
+function pesanErrorServer(err, cadangan) {
+return (err && err.message) ? String(err.message).replace(/^(Error:\s*)+/, '') : cadangan;
+}
+
+function getMapelJenis(jenis) {
+if (daftarMapel && Object.prototype.toString.call(daftarMapel[jenis]) === '[object Array]') return daftarMapel[jenis];
+return SUBJECTS;
+}
+
+function simpanCacheMapel() {
+try { localStorage.setItem('smpn8_mapel', JSON.stringify(daftarMapel)); } catch (e) {}
+}
+
+function muatDaftarMapel(sesudah) {
+if (typeof google === 'undefined' || !google.script) return;
+google.script.run.withSuccessHandler(function(data) {
+var baru = data || {};
+var berubah = JSON.stringify(baru) !== JSON.stringify(daftarMapel);
+daftarMapel = baru; simpanCacheMapel();
+if (berubah && currentUser && currentUser.role === 'student' && ASSESSMENT_TYPES.indexOf(currentTab) !== -1) renderStudentGrid(currentTab);
+if (sesudah) sesudah(berubah);
+}).withFailureHandler(function() {
+if (sesudah) sesudah(false);
+}).getDaftarMapel();
+}
+
+function tambahMapelBaru(jenis, nama) {
+var bersih = String(nama || '').replace(/\s+/g, ' ').trim();
+if (!bersih) { showToast("Nama mata pelajaran wajib diisi.", "error"); return; }
+showToast("Menyimpan...", "info");
+google.script.run.withSuccessHandler(function(daftar) {
+daftarMapel[jenis] = daftar || []; simpanCacheMapel();
+showToast("Mata pelajaran ditambahkan: " + bersih, "success");
+if (currentTab === 'admin-setting' && activeSettingType === jenis) renderAdminSettingForm(jenis);
+}).withFailureHandler(function(err) {
+showToast(pesanErrorServer(err, "Gagal menambah mata pelajaran."), "error");
+}).tambahMapel(jenis, bersih);
+}
+
+function hapusMapelJenis(jenis, mapel) {
+showToast("Menghapus...", "info");
+google.script.run.withSuccessHandler(function(daftar) {
+daftarMapel[jenis] = daftar || []; simpanCacheMapel();
+showToast("Mata pelajaran dihapus: " + mapel, "success");
+if (currentTab === 'admin-setting' && activeSettingType === jenis) renderAdminSettingForm(jenis);
+}).withFailureHandler(function(err) {
+showToast(pesanErrorServer(err, "Gagal menghapus mata pelajaran."), "error");
+}).hapusMapel(jenis, mapel);
+}
+
+function tampilkanTombolHapusMapel(wadah, jenis, mapel) {
+wadah.innerHTML = '<button type="button" class="text-[11px] font-bold text-red-600 bg-red-50 border border-red-200 rounded px-2 py-0.5 hover:bg-red-100"><i class="fa-solid fa-trash-can"></i> Hapus</button>';
+wadah.querySelector('button').addEventListener('click', function() {
+wadah.innerHTML = '<span class="text-[11px] font-semibold text-slate-600 mr-1">Yakin?</span>' +
+'<button type="button" data-aksi="ya" class="text-[11px] font-bold text-white bg-red-600 rounded px-2 py-0.5 mr-1">Ya</button>' +
+'<button type="button" data-aksi="batal" class="text-[11px] font-bold text-slate-600 bg-slate-100 border border-slate-200 rounded px-2 py-0.5">Batal</button>';
+wadah.querySelector('[data-aksi="ya"]').addEventListener('click', function() { hapusMapelJenis(jenis, mapel); });
+wadah.querySelector('[data-aksi="batal"]').addEventListener('click', function() { tampilkanTombolHapusMapel(wadah, jenis, mapel); });
+});
+}
+
+function bangunKartuMapel(jenisAsesmen, subject) {
 var val = '';
-if(cachedLinks && cachedLinks[jenisAsesmen] && cachedLinks[jenisAsesmen][subject]) {
+if (cachedLinks && cachedLinks[jenisAsesmen] && cachedLinks[jenisAsesmen][subject]) {
 val = cachedLinks[jenisAsesmen][subject];
 }
+var jd = getJadwal(jenisAsesmen, subject);
+var cls = 'w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 outline-none text-xs md:text-sm transition-all hover:border-slate-300';
+var lbl = 'block text-[10px] md:text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-1';
 var card = document.createElement('div');
-card.innerHTML = '<label class="block text-xs md:text-sm font-bold text-slate-700 mb-1.5 truncate">' + subject + '</label><div class="flex relative group"><div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"><i class="fa-solid fa-link text-slate-400 text-xs group-focus-within:text-blue-500 transition-colors"></i></div><input type="url" placeholder="https://forms.gle/..." value="' + val + '" onchange="simpanLinkInstan(\'' + jenisAsesmen + '\', \'' + subject + '\', this.value)" class="w-full pl-8 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 outline-none text-xs md:text-sm transition-all hover:border-slate-300"></div>';
-grid.appendChild(card);
-}); container.appendChild(grid);
+card.innerHTML = '<div class="flex items-center justify-between gap-2 mb-1.5"><label class="block text-xs md:text-sm font-bold text-slate-700 truncate">' + esc(subject) + '</label><span class="aksi-hapus-mapel shrink-0"></span></div><div class="flex relative group"><div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"><i class="fa-solid fa-link text-slate-400 text-xs group-focus-within:text-blue-500 transition-colors"></i></div><input type="url" placeholder="https://forms.gle/..." value="' + escapeHtmlAttr(val) + '" class="w-full pl-8 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 outline-none text-xs md:text-sm transition-all hover:border-slate-300"></div>' +
+'<div class="grid grid-cols-2 gap-2 mt-2"><div><label class="' + lbl + '">Jadwal (Tanggal)</label><input type="date" data-jd="tgl" value="' + escapeHtmlAttr(jd.tgl) + '" class="' + cls + '"></div>' +
+'<div><label class="' + lbl + '">Waktu</label><input type="time" step="60" data-jd="jam" value="' + escapeHtmlAttr(jd.jam) + '" class="' + cls + '"></div></div>' +
+'<div class="flex items-center justify-between gap-2 mt-1 min-h-[18px]"><span data-jd="hari" class="text-[11px] text-slate-500"></span><button type="button" data-jd="reset" class="hidden text-[11px] font-semibold text-red-600 hover:underline">Kosongkan jadwal</button></div>';
+card.querySelector('input').addEventListener('change', function() { simpanLinkInstan(jenisAsesmen, subject, this.value); });
+var inTgl = card.querySelector('[data-jd="tgl"]');
+var inJam = card.querySelector('[data-jd="jam"]');
+var ketHari = card.querySelector('[data-jd="hari"]');
+var btnReset = card.querySelector('[data-jd="reset"]');
+function segarkan() {
+var t = teksTanggalJadwal(inTgl.value);
+var w = teksWaktuJadwal(inJam.value);
+ketHari.innerText = t ? (t + (w ? ', pukul ' + w : '')) : (w ? 'Pukul ' + w + ' (tanggal belum dipilih)' : '');
+if (inTgl.value || inJam.value) btnReset.classList.remove('hidden'); else btnReset.classList.add('hidden');
+}
+function simpanJadwalKartu() { segarkan(); simpanJadwalInstan(jenisAsesmen, subject, inTgl.value, inJam.value); }
+[inTgl, inJam].forEach(function(el) {
+el.addEventListener('click', function() { try { if (this.showPicker) this.showPicker(); } catch (e) {} });
+el.addEventListener('change', simpanJadwalKartu);
+});
+btnReset.addEventListener('click', function() { inTgl.value = ''; inJam.value = ''; simpanJadwalKartu(); });
+segarkan();
+if (modeHapusMapel) tampilkanTombolHapusMapel(card.querySelector('.aksi-hapus-mapel'), jenisAsesmen, subject);
+return card;
+}
+
+// ==== JADWAL ASESMEN (per link ujian; disimpan di server, sheet JadwalUjian) ====
+var HARI_ID = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', "Jum'at", 'Sabtu'];
+var BULAN_ID = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+
+function parseTanggalJadwal(tgl) {
+var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(tgl || ''));
+if (!m) return null;
+var y = parseInt(m[1], 10), mo = parseInt(m[2], 10) - 1, d = parseInt(m[3], 10);
+var dt = new Date(y, mo, d);
+if (dt.getFullYear() !== y || dt.getMonth() !== mo || dt.getDate() !== d) return null;
+return dt;
+}
+
+function teksTanggalJadwal(tgl) {
+var dt = parseTanggalJadwal(tgl);
+if (!dt) return '';
+return HARI_ID[dt.getDay()] + ', ' + dt.getDate() + ' ' + BULAN_ID[dt.getMonth()] + ' ' + dt.getFullYear();
+}
+
+function teksWaktuJadwal(jam) {
+var m = /^(\d{1,2}):(\d{2})/.exec(String(jam || ''));
+if (!m) return '';
+return ('0' + m[1]).slice(-2) + '.' + m[2];
+}
+
+function getJadwal(jenis, mapel) {
+var j = dataJadwal && dataJadwal[jenis] && dataJadwal[jenis][mapel];
+return { tgl: (j && j.tgl) || '', jam: (j && j.jam) || '' };
+}
+
+function simpanCacheJadwal() {
+try { localStorage.setItem('smpn8_jadwal', JSON.stringify(dataJadwal)); } catch (e) {}
+}
+
+function muatJadwal(sesudah) {
+if (typeof google === 'undefined' || !google.script) return;
+google.script.run.withSuccessHandler(function(data) {
+var baru = data || {};
+var berubah = JSON.stringify(baru) !== JSON.stringify(dataJadwal);
+dataJadwal = baru; simpanCacheJadwal();
+if (sesudah) sesudah(berubah);
+}).withFailureHandler(function() {
+if (sesudah) sesudah(false);
+}).getAllJadwal();
+}
+
+function simpanJadwalInstan(jenis, mapel, tgl, jam) {
+if (!dataJadwal[jenis]) dataJadwal[jenis] = {};
+if (!tgl && !jam) delete dataJadwal[jenis][mapel]; else dataJadwal[jenis][mapel] = { tgl: tgl, jam: jam };
+simpanCacheJadwal();
+showToast("Menyimpan...", "info");
+google.script.run.withSuccessHandler(function() {
+showToast((!tgl && !jam) ? "Jadwal dikosongkan: " + mapel : "Jadwal tersimpan: " + mapel, "success");
+}).withFailureHandler(function(err) {
+showToast(pesanErrorServer(err, "Gagal menyimpan jadwal. Periksa koneksi."), "error");
+}).simpanJadwalUjian(jenis, mapel, tgl, jam);
+}
+
+// ==== ADMINISTRASI (acuan data untuk halaman lain; disimpan di server, sheet Administrasi) ====
+var ADM_FIELD_TEKS = [
+{ key: 'tahun', label: 'Tahun Ajaran', ph: '2026-2027' },
+{ key: 'kepsek', label: 'Nama Kepala Sekolah', ph: 'Nama lengkap beserta gelar' },
+{ key: 'nip', label: 'NIP Kepala Sekolah', ph: 'NIP' },
+{ key: 'proktor', label: 'Nama Proktor', ph: 'Nama lengkap beserta gelar' }
+];
+// Gambar tanda tangan diambil dari GitHub (satu folder dengan index.html dan logo.png)
+var ADM_FIELD_GAMBAR = [
+{ key: 'ttdKepsek', label: 'Tanda Tangan Kepala Sekolah', file: 'ttd-kepsek.png' },
+{ key: 'ttdProktor', label: 'Tanda Tangan Proktor', file: 'ttd-proktor.png' }
+];
+
+function gabungAdministrasi(d) {
+d = d || {};
+var hasil = {};
+var semua = ADM_FIELD_TEKS;
+for (var i = 0; i < semua.length; i++) { hasil[semua[i].key] = (d[semua[i].key] === null || d[semua[i].key] === undefined) ? '' : String(d[semua[i].key]); }
+return hasil;
+}
+
+function simpanAdministrasiField(key, nilai, label, sesudah) {
+var payload = {}; payload[key] = nilai;
+showToast("Menyimpan...", "info");
+google.script.run.withSuccessHandler(function() {
+dataAdministrasi[key] = nilai;
+showToast(nilai === '' ? "Dikosongkan: " + label : "Tersimpan: " + label, "success");
+if (sesudah) sesudah();
+}).withFailureHandler(function(err) {
+showToast(pesanErrorServer(err, "Gagal menyimpan. Periksa koneksi."), "error");
+}).simpanAdministrasi(payload);
+}
+
+function renderFormAdministrasi() {
+var container = document.getElementById('settingContent');
+var inputCls = 'w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 outline-none text-xs md:text-sm transition-all hover:border-slate-300 disabled:opacity-60 disabled:cursor-not-allowed';
+var html = '<h4 class="font-bold text-base md:text-lg text-slate-800 mb-1 border-b border-slate-100 pb-2 md:pb-3">Administrasi</h4>' +
+'<p class="text-slate-500 text-xs md:text-sm mb-1 mt-2">Data di sini menjadi acuan untuk halaman lain (misalnya Cetak Kartu). Tersimpan otomatis ke server saat pindah kotak.</p>' +
+'<p id="admStatus" class="text-xs text-slate-500 mb-4">Memuat data dari server...</p>' +
+'<div class="grid grid-cols-1 md:grid-cols-2 gap-3 lg:gap-5">';
+for (var i = 0; i < ADM_FIELD_TEKS.length; i++) {
+var f = ADM_FIELD_TEKS[i];
+html += '<div><label class="block text-xs md:text-sm font-bold text-slate-700 mb-1.5">' + f.label + '</label><input id="adm_' + f.key + '" type="text" disabled placeholder="' + f.ph + '" value="' + escapeHtmlAttr(dataAdministrasi[f.key]) + '" class="' + inputCls + '"></div>';
+}
+var cacheUlang = '?v=' + Date.now();
+for (var j = 0; j < ADM_FIELD_GAMBAR.length; j++) {
+var g = ADM_FIELD_GAMBAR[j];
+html += '<div><label class="block text-xs md:text-sm font-bold text-slate-700 mb-1.5">' + g.label + ' (dari GitHub)</label>' +
+'<div class="flex items-center gap-3 flex-wrap p-2 bg-slate-50 border border-slate-200 rounded-lg">' +
+'<img id="adm_prev_' + g.key + '" src="' + g.file + cacheUlang + '" alt="" class="hidden h-12 border border-slate-200 rounded bg-white">' +
+'<span id="adm_ket_' + g.key + '" class="text-[11px] md:text-xs text-slate-500">Memeriksa file...</span></div>' +
+'<p class="text-[11px] text-slate-500 mt-1">Unggah file bernama <b>' + g.file + '</b> ke GitHub, satu folder dengan index.html dan logo.png.</p></div>';
+}
+html += '</div>';
+container.innerHTML = html;
+
+ADM_FIELD_GAMBAR.forEach(function(g) {
+var img = document.getElementById('adm_prev_' + g.key);
+var ket = document.getElementById('adm_ket_' + g.key);
+img.onload = function() { img.classList.remove('hidden'); ket.innerText = 'File ' + g.file + ' ditemukan.'; };
+img.onerror = function() { img.classList.add('hidden'); ket.innerText = 'File ' + g.file + ' belum ada di GitHub.'; };
+});
+
+ADM_FIELD_TEKS.forEach(function(f) {
+document.getElementById('adm_' + f.key).addEventListener('change', function() {
+var v = this.value.replace(/\s+/g, ' ').trim(); this.value = v;
+simpanAdministrasiField(f.key, v, f.label);
+});
+});
+
+google.script.run.withSuccessHandler(function(d) {
+dataAdministrasi = gabungAdministrasi(d);
+var status = document.getElementById('admStatus');
+if (!status) return;
+ADM_FIELD_TEKS.forEach(function(f) { var el = document.getElementById('adm_' + f.key); if (el) { el.value = dataAdministrasi[f.key]; el.disabled = false; } });
+status.innerText = 'Data dimuat dari server.';
+}).withFailureHandler(function() {
+var status = document.getElementById('admStatus');
+if (status) status.innerText = 'Gagal memuat data Administrasi dari server. Klik Sinkronisasi untuk mencoba lagi.';
+}).getAdministrasi();
+}
+
+// Kolom di halaman lain yang memakai data Administrasi dibekukan (tidak dihapus)
+function bekukanKolomKartu() {
+var ids = ['kartuTahun', 'kartuKepsek', 'kartuNip', 'kartuTtdFile'];
+for (var i = 0; i < ids.length; i++) {
+var el = document.getElementById(ids[i]);
+if (!el) continue;
+el.disabled = true;
+el.classList.add('bg-slate-100', 'cursor-not-allowed');
+el.title = 'Diatur di Setting Ujian > Administrasi';
+}
+var btn = document.getElementById('kartuTtdHapus');
+if (btn) btn.classList.add('hidden');
+}
+
+function isiKolomKartuDariAdministrasi(d) {
+document.getElementById('kartuTahun').value = d.tahun || '';
+document.getElementById('kartuKepsek').value = d.kepsek || '';
+document.getElementById('kartuNip').value = d.nip || '';
+ttdKartu = TTD_KEPSEK_URL;
+tampilkanTtd();
+bekukanKolomKartu();
+}
+
+function terapkanAdministrasiKeKartu() {
+isiKolomKartuDariAdministrasi(dataAdministrasi);
+google.script.run.withSuccessHandler(function(d) {
+dataAdministrasi = gabungAdministrasi(d);
+isiKolomKartuDariAdministrasi(dataAdministrasi);
+buatPratinjauKartu();
+}).withFailureHandler(function() {
+showToast("Gagal memuat data Administrasi", "error");
+}).getAdministrasi();
 }
 
 function simpanLinkInstan(jenis, mapel, url) {
@@ -2064,6 +2443,9 @@ var feedback = showFeedback || false;
 if (feedback && document.getElementById('syncIcon')) document.getElementById('syncIcon').classList.add('fa-spin');
 
 if (typeof google === 'undefined' || !google.script) return;
+
+muatDaftarMapel(function(berubah) { if (feedback && berubah && currentTab === 'admin-setting') renderAdminSettingTabs(); });
+if (feedback) muatJadwal(function(berubah) { if (berubah && currentTab === 'admin-setting' && activeSettingType !== 'Administrasi') renderAdminSettingForm(activeSettingType); });
 
 google.script.run.withSuccessHandler(function(dataLinks) {
 cachedLinks = dataLinks || {};
