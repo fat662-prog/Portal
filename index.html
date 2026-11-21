@@ -40,6 +40,35 @@ select:disabled { background-color: #f8fafc; cursor: not-allowed; opacity: 0.7; 
 .chevron-icon.open { transform: rotate(180deg); }
 .dash-card { transition: all 0.3s ease; cursor: pointer; }
 .dash-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.2); border-color: #93c5fd; }
+
+/* ==== KARTU PESERTA (ukuran mengikuti contoh: kartu 93,5 x 85 mm, 6 kartu per A4) ==== */
+.sheet-kartu{width:210mm;height:296mm;box-sizing:border-box;padding:9.9mm 10.2mm;display:grid;grid-template-columns:93.5mm 93.5mm;grid-auto-rows:85mm;gap:2.9mm;align-content:start;background:#fff;margin:0 auto 12px auto;box-shadow:0 2px 8px rgba(0,0,0,0.25);}
+.kartu{width:93.5mm;height:85mm;box-sizing:border-box;border:0.35mm solid #000;border-radius:4mm;padding:3mm 4mm;font-family:Arial,Helvetica,sans-serif;font-size:8.5pt;line-height:1.25;color:#000;position:relative;overflow:hidden;background:#fff;}
+.k-head{display:flex;align-items:center;gap:3mm;}
+.k-logo{width:13mm;height:13mm;object-fit:contain;flex-shrink:0;}
+.k-judul{flex:1;text-align:center;}
+.k-t1{font-weight:800;font-size:10pt;}
+.k-t2{font-weight:700;font-size:9pt;}
+.k-t3{font-size:8pt;}
+.k-garis{border-top:0.7mm solid #000;margin:2mm 0 2.5mm 0;}
+.k-baris{display:flex;margin-bottom:1.2mm;align-items:flex-start;}
+.k-lbl{width:24mm;flex-shrink:0;}
+.k-sep{width:3mm;flex-shrink:0;}
+.k-val{font-weight:700;flex:1;}
+.k-box{font-family:'Courier New',monospace;border:0.3mm solid #555;border-radius:1mm;padding:0 1.5mm;background:#f5f5f5;display:inline-block;letter-spacing:0.3mm;}
+.k-ttd{position:absolute;right:4mm;bottom:3mm;width:46mm;font-size:7.5pt;line-height:1.25;text-align:left;}
+.k-ttd-img{height:13mm;display:flex;align-items:center;}
+.k-ttd-img img{max-height:13mm;max-width:40mm;}
+.k-kepsek{font-weight:700;text-decoration:underline;}
+#printRoot{display:none;}
+@media print {
+@page{size:A4;margin:0;}
+body.printing{overflow:visible !important;background:#fff !important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+body.printing > *:not(#printRoot){display:none !important;}
+body.printing #printRoot{display:block !important;}
+body.printing .sheet-kartu{margin:0 !important;box-shadow:none !important;page-break-after:always;break-after:page;}
+body.printing .sheet-kartu:last-child{page-break-after:auto;break-after:auto;}
+}
 </style>
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans antialiased overflow-hidden no-select">
@@ -64,16 +93,8 @@ select:disabled { background-color: #f8fafc; cursor: not-allowed; opacity: 0.7; 
 
 <div id="formModeSiswa" class="space-y-4">
 <div>
-<label class="block text-sm font-bold text-gray-700 mb-1">Pilih Kelas</label>
-<select id="loginClass" onchange="updateNameDropdown()" required class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition bg-white text-slate-700 shadow-sm text-sm">
-<option value="">-- Sedang memuat data kelas... --</option>
-</select>
-</div>
-<div>
-<label class="block text-sm font-bold text-gray-700 mb-1">Pilih Nama Lengkap</label>
-<select id="loginName" disabled required class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition bg-white text-slate-700 shadow-sm text-sm">
-<option value="">-- Pilih Kelas Terlebih Dahulu --</option>
-</select>
+<label class="block text-sm font-bold text-gray-700 mb-1">Kode Peserta</label>
+<input id="loginKode" type="text" autocomplete="off" autocapitalize="characters" placeholder="Masukkan kode peserta" required class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition bg-white text-slate-700 shadow-sm text-sm">
 </div>
 <div>
 <label class="block text-sm font-bold text-gray-700 mb-1">Password Ujian</label>
@@ -185,6 +206,7 @@ select:disabled { background-color: #f8fafc; cursor: not-allowed; opacity: 0.7; 
 </div>
 <div class="relative z-10">
 <h2 class="text-xl md:text-3xl font-bold mb-3 uppercase tracking-wide leading-tight">Selamat Datang di Portal Asesmen</h2>
+<div class="inline-flex items-center gap-2 bg-white/20 border border-white/30 rounded-full px-4 py-1.5 mb-3 text-sm md:text-base font-bold"><i class="fa-solid fa-user"></i> <span id="studentHomeName"></span></div>
 <p class="text-blue-100 max-w-2xl mx-auto text-sm md:text-base italic">"Belajar hari ini adalah investasi terbaik untuk kehidupan yang lebih baik di masa depan."</p>
 </div>
 </div>
@@ -344,6 +366,9 @@ STATUS PENGERJAAN
 <button onclick="tambahBarisPeserta()" class="flex-1 sm:flex-none bg-blue-50 border border-blue-200 text-blue-700 px-3 py-2 rounded-lg font-semibold flex items-center justify-center gap-1.5 hover:bg-blue-100 transition shadow-sm text-xs md:text-sm">
 <i class="fa-solid fa-plus"></i> Tambah
 </button>
+<button onclick="isiKodeOtomatis()" class="flex-1 sm:flex-none bg-amber-50 border border-amber-200 text-amber-700 px-3 py-2 rounded-lg font-semibold flex items-center justify-center gap-1.5 hover:bg-amber-100 transition shadow-sm text-xs md:text-sm">
+<i class="fa-solid fa-wand-magic-sparkles"></i> Kode Otomatis
+</button>
 <button onclick="simpanDataPesertaAdmin()" class="flex-1 sm:flex-none bg-blue-600 border border-blue-600 text-white px-4 py-2 rounded-lg font-semibold flex items-center justify-center gap-1.5 hover:bg-blue-700 transition shadow-sm text-xs md:text-sm">
 <i class="fa-solid fa-floppy-disk"></i> Simpan
 </button>
@@ -355,9 +380,10 @@ STATUS PENGERJAAN
 <thead class="bg-white sticky top-0 z-10 shadow-sm ring-1 ring-slate-200 text-[11px] md:text-sm">
 <tr>
 <th class="font-bold text-slate-700 px-3 py-2.5 border-b border-r border-slate-200 w-12 text-center">No</th>
-<th class="font-bold text-slate-700 px-3 py-2.5 border-b border-r border-slate-200 w-[20%]">Kelas</th>
-<th class="font-bold text-slate-700 px-3 py-2.5 border-b border-r border-slate-200 w-[45%]">Nama Lengkap</th>
-<th class="font-bold text-slate-700 px-3 py-2.5 border-b w-[25%]">Password</th>
+<th class="font-bold text-slate-700 px-3 py-2.5 border-b border-r border-slate-200 w-[12%]">Kelas</th>
+<th class="font-bold text-slate-700 px-3 py-2.5 border-b border-r border-slate-200 w-[36%]">Nama Lengkap</th>
+<th class="font-bold text-slate-700 px-3 py-2.5 border-b border-r border-slate-200 w-[20%]">Password</th>
+<th class="font-bold text-slate-700 px-3 py-2.5 border-b w-[22%]">Kode Peserta</th>
 <th class="font-bold text-slate-700 px-3 py-2.5 border-b w-10 text-center"><i class="fa-solid fa-trash"></i></th>
 </tr>
 </thead>
@@ -368,6 +394,34 @@ STATUS PENGERJAAN
 Pastikan Anda mengklik "Simpan" setelah mengubah data. Perubahan otomatis disinkronkan ke Spreadsheet Master!
 </div>
 </div>
+</div>
+
+<div id="view-admin-kartu" class="tab-content max-w-6xl mx-auto hidden mt-2">
+<div class="bg-white rounded-xl md:rounded-2xl shadow-sm border border-slate-200 p-4 md:p-6">
+<h3 class="text-lg md:text-xl font-bold text-slate-800 flex items-center gap-2"><i class="fa-solid fa-id-card text-blue-600"></i> Cetak Kartu Peserta</h3>
+<p class="text-slate-500 text-xs md:text-sm mt-1 mb-4">Satu lembar A4 memuat 6 kartu. Isi pengaturan di bawah, klik Pratinjau, lalu Cetak (bisa juga disimpan sebagai PDF lewat dialog cetak).</p>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
+<div><label class="block text-xs md:text-sm font-bold text-slate-700 mb-1">Tahun Ajaran</label><input id="kartuTahun" type="text" oninput="simpanPengaturanKartu()" placeholder="2026-2027" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm"></div>
+<div><label class="block text-xs md:text-sm font-bold text-slate-700 mb-1">Tempat &amp; Tanggal</label><input id="kartuTanggal" type="text" oninput="simpanPengaturanKartu()" placeholder="Surabaya, 23 November 2026" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm"></div>
+<div><label class="block text-xs md:text-sm font-bold text-slate-700 mb-1">Nama Kepala Sekolah</label><input id="kartuKepsek" type="text" oninput="simpanPengaturanKartu()" placeholder="Nama lengkap beserta gelar" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm"></div>
+<div><label class="block text-xs md:text-sm font-bold text-slate-700 mb-1">NIP Kepala Sekolah</label><input id="kartuNip" type="text" oninput="simpanPengaturanKartu()" placeholder="NIP" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm"></div>
+<div>
+<label class="block text-xs md:text-sm font-bold text-slate-700 mb-1">Tanda Tangan Kepala Sekolah (gambar)</label>
+<div class="flex items-center gap-2 flex-wrap">
+<input id="kartuTtdFile" type="file" accept="image/*" onchange="unggahTandaTangan(this)" class="text-xs md:text-sm">
+<img id="kartuTtdPreview" alt="" class="hidden h-10 border border-slate-200 rounded bg-white">
+<button type="button" id="kartuTtdHapus" onclick="hapusTandaTangan()" class="hidden text-xs text-red-600 font-semibold border border-red-200 bg-red-50 rounded px-2 py-1">Hapus</button>
+</div>
+</div>
+<div><label class="block text-xs md:text-sm font-bold text-slate-700 mb-1">Kelas yang dicetak</label><select id="kartuKelas" onchange="buatPratinjauKartu()" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white text-sm"><option value="">Semua Kelas</option></select></div>
+</div>
+<div class="flex flex-wrap gap-2 mt-4">
+<button onclick="buatPratinjauKartu()" class="bg-blue-50 border border-blue-200 text-blue-700 px-4 py-2 rounded-lg font-semibold text-sm flex items-center gap-2 hover:bg-blue-100 transition"><i class="fa-solid fa-eye"></i> Pratinjau</button>
+<button onclick="cetakKartu()" class="bg-blue-600 border border-blue-600 text-white px-4 py-2 rounded-lg font-semibold text-sm flex items-center gap-2 hover:bg-blue-700 transition"><i class="fa-solid fa-print"></i> Cetak</button>
+</div>
+<p id="kartuInfo" class="text-xs md:text-sm text-slate-600 mt-3"></p>
+</div>
+<div class="mt-4 bg-slate-200 rounded-xl p-3 overflow-auto custom-scrollbar" style="max-height:75vh;"><div id="kartuPreview"></div></div>
 </div>
 
 <div id="view-admin-setting" class="tab-content max-w-6xl mx-auto hidden mt-2">
@@ -653,7 +707,6 @@ var globalBelumData = {};
 var apiKey = "";
 
 window.onload = function() {
-loadDropdownPeserta();
 try {
 var savedUserStr = localStorage.getItem('smpn8_user');
 var savedTab = localStorage.getItem('smpn8_tab');
@@ -767,8 +820,7 @@ trs[i].style.display = (matchText && matchAsesmen) ? '' : 'none';
 
 function switchLoginMode(mode) {
 document.getElementById('loginError').classList.add('hidden');
-var classSelect = document.getElementById('loginClass');
-var nameSelect = document.getElementById('loginName');
+var kodeInput = document.getElementById('loginKode');
 var passSiswa = document.getElementById('loginPasswordSiswa');
 var passGuru = document.getElementById('loginPasswordGuru');
 var passAdmin = document.getElementById('loginPasswordAdmin');
@@ -784,7 +836,7 @@ var activeTabName = mode.charAt(0).toUpperCase() + mode.slice(1);
 document.getElementById('btnTab' + activeTabName).className = "flex-1 font-bold text-blue-600 border-b-2 border-blue-600 pb-2";
 document.getElementById('formMode' + activeTabName).classList.remove('hidden');
 
-classSelect.required = (mode === 'siswa'); passSiswa.required = (mode === 'siswa');
+kodeInput.required = (mode === 'siswa'); passSiswa.required = (mode === 'siswa');
 passGuru.required = (mode === 'guru'); passAdmin.required = (mode === 'admin');
 }
 
@@ -946,10 +998,9 @@ else if (!isSiswaMode && !isGuruMode) {
 loginStafServer('admin', document.getElementById('loginPasswordAdmin').value, 'Administrator', 'admin-home', true);
 }
 else {
-var kelas = document.getElementById('loginClass').value;
-var nama = document.getElementById('loginName').value;
+var kode = document.getElementById('loginKode').value.trim();
 var password = document.getElementById('loginPasswordSiswa').value;
-if (!kelas || !nama) { showError("Silakan pilih Kelas and Nama!"); return; }
+if (!kode) { showError("Silakan isi Kode Peserta!"); return; }
 
 btnText.classList.add('hidden'); spinner.style.display = 'block'; document.getElementById('btnLogin').disabled = true;
 
@@ -962,13 +1013,13 @@ google.script.run
 .withSuccessHandler(function(response) {
 btnText.classList.remove('hidden'); spinner.style.display = 'none'; document.getElementById('btnLogin').disabled = false;
 if (response.status === 'success') {
-currentUser = { name: nama, kelas: kelas, role: 'student' }; finalizeLogin('student-home'); showToast("Login berhasil!", "success"); fetchLinksBackground(false);
+currentUser = { name: response.nama, kelas: response.kelas, role: 'student' }; finalizeLogin('student-home'); showToast("Login berhasil!", "success"); fetchLinksBackground(false);
 } else { showError(response.message); }
 })
 .withFailureHandler(function(err) {
 btnText.classList.remove('hidden'); spinner.style.display = 'none'; document.getElementById('btnLogin').disabled = false; showError("Terjadi kesalahan koneksi.");
 })
-.verifikasiLogin(kelas, nama, password);
+.loginDenganKode(kode, password);
 }
 }
 
@@ -982,20 +1033,21 @@ document.getElementById('login-page').style.display = 'none'; document.getElemen
 var roleText = currentUser.role === 'admin' ? 'Administrator' : (currentUser.role === 'guru' ? 'Pengajar' : 'Kelas: ' + currentUser.kelas);
 
 document.getElementById('headerUserName').innerText = currentUser.name;
+var hn = document.getElementById('studentHomeName'); if (hn) { hn.innerText = (currentUser.role === 'student') ? (currentUser.name + ' \u2022 Kelas ' + currentUser.kelas) : ''; }
 document.getElementById('headerUserClass').innerText = roleText;
 
 renderMenu(); openTab(currentTab);
 }
 
 function logout() {
-localStorage.removeItem('smpn8_token'); localStorage.removeItem('smpn8_user'); localStorage.removeItem('smpn8_tab'); currentUser = null; document.getElementById('loginForm').reset(); updateNameDropdown();
+localStorage.removeItem('smpn8_token'); localStorage.removeItem('smpn8_user'); localStorage.removeItem('smpn8_tab'); currentUser = null; document.getElementById('loginForm').reset();
 var modes = ['Siswa', 'Guru', 'Admin'];
 for (var i = 0; i < modes.length; i++) {
 var p = document.getElementById('loginPassword' + modes[i]); var eye = document.getElementById('eyeIcon' + modes[i]);
 if(p) p.type = 'password'; if(eye) eye.className = 'fa-solid fa-eye';
 }
 document.getElementById('loginError').classList.add('hidden'); document.getElementById('dashboard-page').classList.add('hidden');
-switchLoginMode('siswa'); document.getElementById('login-page').style.display = 'flex'; loadDropdownPeserta();
+switchLoginMode('siswa'); document.getElementById('login-page').style.display = 'flex';
 }
 
 function renderMenu() {
@@ -1004,6 +1056,7 @@ if (currentUser.role === 'admin') {
 menus = [ 
 { id: 'admin-home', label: 'Dashboard', icon: 'fa-solid fa-house' },
 { id: 'admin-peserta', label: 'Data Peserta', icon: 'fa-solid fa-users-gear' },
+{ id: 'admin-kartu', label: 'Cetak Kartu', icon: 'fa-solid fa-id-card' },
 { id: 'admin-setting', label: 'Setting Ujian', icon: 'fa-solid fa-sliders' },
 { id: 'shared-belum', label: 'Belum Mengerjakan', icon: 'fa-solid fa-user-clock' },
 { id: 'shared-hasil', label: 'Hasil Ujian', icon: 'fa-solid fa-square-poll-vertical' },
@@ -1057,6 +1110,7 @@ else if (tabId === 'guru-ai') { displayTitle = 'GENERATOR SOAL AI ✨'; document
 else if (currentUser.role === 'admin') {
 if (tabId === 'admin-home') { displayTitle = 'DASHBOARD'; document.getElementById('view-admin-home').classList.add('active'); }
 else if (tabId === 'admin-peserta') { displayTitle = 'DATA PESERTA'; document.getElementById('view-admin-peserta').classList.add('active'); loadAdminPesertaData(); }
+else if (tabId === 'admin-kartu') { displayTitle = 'CETAK KARTU PESERTA'; document.getElementById('view-admin-kartu').classList.add('active'); siapkanHalamanKartu(); }
 else if (tabId === 'admin-setting') { displayTitle = 'SETTING UJIAN'; document.getElementById('view-admin-setting').classList.add('active'); renderAdminSettingTabs(); }
 else if (tabId === 'shared-belum') { displayTitle = 'BELUM MENGERJAKAN'; document.getElementById('view-shared-belum').classList.add('active'); loadBelumMengerjakan(); }
 else if (tabId === 'shared-hasil') { displayTitle = 'HASIL UJIAN'; document.getElementById('view-shared-hasil').classList.add('active'); loadHasilUjian(); }
@@ -1597,7 +1651,21 @@ trBody += '</tr>'; tbody.innerHTML += trBody;
 // ==========================================
 // BAGIAN BAWAH (FUNGSI PENDUKUNG)
 // ==========================================
-function loadAdminPesertaData() { showLoading(true); google.script.run.withSuccessHandler(function(data) { showLoading(false); listPesertaAdmin = data || []; if(listPesertaAdmin.length === 0) listPesertaAdmin = [['', '', '']]; renderTabelPeserta(); }).withFailureHandler(function(err) { showLoading(false); showToast("Gagal memuat data peserta", "error"); }).getSemuaDataPeserta(); }
+function normalisasiBarisPeserta(data) {
+var hasil = [];
+for (var i = 0; i < (data ? data.length : 0); i++) {
+var r = data[i] || [];
+hasil.push([
+(r[0] === null || r[0] === undefined) ? '' : String(r[0]),
+(r[1] === null || r[1] === undefined) ? '' : String(r[1]),
+(r[2] === null || r[2] === undefined) ? '' : String(r[2]),
+(r[3] === null || r[3] === undefined) ? '' : String(r[3])
+]);
+}
+return hasil;
+}
+
+function loadAdminPesertaData() { showLoading(true); google.script.run.withSuccessHandler(function(data) { showLoading(false); listPesertaAdmin = normalisasiBarisPeserta(data); if(listPesertaAdmin.length === 0) listPesertaAdmin = [['', '', '', '']]; renderTabelPeserta(); }).withFailureHandler(function(err) { showLoading(false); showToast("Gagal memuat data peserta", "error"); }).getSemuaDataPeserta(); }
 
 function renderTabelPeserta() {
 var tbody = document.getElementById('pesertaTableBody');
@@ -1608,35 +1676,230 @@ var row = listPesertaAdmin[idx];
 var tr = document.createElement('tr');
 tr.className = "hover:bg-slate-50 transition-colors border-b border-slate-100";
 tr.innerHTML = '<td class="px-2 py-1.5 text-center text-slate-500 font-bold border-r border-slate-200">' + (idx + 1) + '</td>' +
-'<td class="px-2 py-1.5 border-r border-slate-200"><input type="text" value="' + (row[0] || '') + '" onchange="updateRowPeserta(' + idx + ', 0, this.value)" placeholder="Misal: 9A" class="w-full px-2 py-1.5 border border-slate-300 rounded focus:ring-1 focus:ring-blue-500 outline-none text-xs md:text-sm bg-transparent"></td>' +
-'<td class="px-2 py-1.5 border-r border-slate-200"><input type="text" value="' + (row[1] || '') + '" onchange="updateRowPeserta(' + idx + ', 1, this.value)" placeholder="Nama Lengkap" class="w-full px-2 py-1.5 border border-slate-300 rounded focus:ring-1 focus:ring-blue-500 outline-none text-xs md:text-sm bg-transparent"></td>' +
-'<td class="px-2 py-1.5 border-r border-slate-200"><input type="text" value="' + (row[2] || '') + '" onchange="updateRowPeserta(' + idx + ', 2, this.value)" placeholder="Password" class="w-full px-2 py-1.5 border border-slate-300 rounded focus:ring-1 focus:ring-blue-500 outline-none text-xs md:text-sm bg-transparent"></td>' +
+'<td class="px-2 py-1.5 border-r border-slate-200"><input type="text" value="' + escapeHtmlAttr(row[0]) + '" onchange="updateRowPeserta(' + idx + ', 0, this.value)" placeholder="Misal: 9A" class="w-full px-2 py-1.5 border border-slate-300 rounded focus:ring-1 focus:ring-blue-500 outline-none text-xs md:text-sm bg-transparent"></td>' +
+'<td class="px-2 py-1.5 border-r border-slate-200"><input type="text" value="' + escapeHtmlAttr(row[1]) + '" onchange="updateRowPeserta(' + idx + ', 1, this.value)" placeholder="Nama Lengkap" class="w-full px-2 py-1.5 border border-slate-300 rounded focus:ring-1 focus:ring-blue-500 outline-none text-xs md:text-sm bg-transparent"></td>' +
+'<td class="px-2 py-1.5 border-r border-slate-200"><input type="text" value="' + escapeHtmlAttr(row[2]) + '" onchange="updateRowPeserta(' + idx + ', 2, this.value)" placeholder="Password" class="w-full px-2 py-1.5 border border-slate-300 rounded focus:ring-1 focus:ring-blue-500 outline-none text-xs md:text-sm bg-transparent"></td>' +
+'<td class="px-2 py-1.5 border-r border-slate-200"><input type="text" value="' + escapeHtmlAttr(row[3]) + '" onchange="updateRowPeserta(' + idx + ', 3, this.value)" placeholder="Kode Peserta" class="w-full px-2 py-1.5 border border-slate-300 rounded focus:ring-1 focus:ring-blue-500 outline-none text-xs md:text-sm bg-transparent"></td>' +
 '<td class="px-2 py-1.5 text-center"><button onclick="hapusBarisPeserta(' + idx + ')" class="text-red-400 hover:text-red-600 hover:bg-red-50 p-1.5 rounded transition"><i class="fa-solid fa-trash-can"></i></button></td>';
 tbody.appendChild(tr);
 })(index);
 }
 }
 
+function escapeHtmlAttr(v) {
+return String(v === null || v === undefined ? '' : v).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
 function updateRowPeserta(index, col, val) { listPesertaAdmin[index][col] = val; }
-function tambahBarisPeserta() { listPesertaAdmin.push(['', '', '']); renderTabelPeserta(); var container = document.getElementById('view-admin-peserta').querySelector('.overflow-auto'); setTimeout(function(){ container.scrollTop = container.scrollHeight; }, 100); }
-function hapusBarisPeserta(index) { listPesertaAdmin.splice(index, 1); if(listPesertaAdmin.length === 0) listPesertaAdmin.push(['', '', '']); renderTabelPeserta(); }
+function tambahBarisPeserta() { listPesertaAdmin.push(['', '', '', '']); renderTabelPeserta(); var container = document.getElementById('view-admin-peserta').querySelector('.overflow-auto'); setTimeout(function(){ container.scrollTop = container.scrollHeight; }, 100); }
+function hapusBarisPeserta(index) { listPesertaAdmin.splice(index, 1); if(listPesertaAdmin.length === 0) listPesertaAdmin.push(['', '', '', '']); renderTabelPeserta(); }
+
+function normKodeClient(v) {
+var k = String(v === null || v === undefined ? '' : v).trim().toUpperCase();
+if (/^[0-9]+$/.test(k)) { k = k.replace(/^0+/, ''); if (k === '') k = '0'; }
+return k;
+}
+
+function isiKodeOtomatis() {
+var dipakai = {};
+for (var i = 0; i < listPesertaAdmin.length; i++) {
+var k = normKodeClient(listPesertaAdmin[i][3]);
+if (k) dipakai[k] = true;
+}
+var jumlah = 0;
+for (var j = 0; j < listPesertaAdmin.length; j++) {
+var baris = listPesertaAdmin[j];
+if (String(baris[3]).trim() === '' && (String(baris[0]).trim() !== '' || String(baris[1]).trim() !== '')) {
+var kode = '';
+do {
+kode = '01';
+for (var d = 0; d < 8; d++) { kode += Math.floor(Math.random() * 10); }
+} while (dipakai[normKodeClient(kode)]);
+dipakai[normKodeClient(kode)] = true;
+baris[3] = kode; jumlah++;
+}
+}
+renderTabelPeserta();
+showToast(jumlah + " kode peserta dibuat. Klik Simpan untuk menyimpan.", "success");
+}
 
 function simpanDataPesertaAdmin() {
 var cleanData = [];
 for(var i=0; i<listPesertaAdmin.length; i++){
-if(listPesertaAdmin[i][0].trim() !== '' || listPesertaAdmin[i][1].trim() !== '') {
-cleanData.push(listPesertaAdmin[i]);
+var r = listPesertaAdmin[i];
+if(String(r[0]).trim() !== '' || String(r[1]).trim() !== '') {
+cleanData.push([String(r[0]).trim(), String(r[1]).trim(), String(r[2]), String(r[3]).trim()]);
+}
+}
+var sudahAda = {};
+for (var c = 0; c < cleanData.length; c++) {
+var nk = normKodeClient(cleanData[c][3]);
+if (nk) {
+if (sudahAda[nk]) { showToast("Kode peserta ganda: " + cleanData[c][3], "error"); return; }
+sudahAda[nk] = true;
 }
 }
 showLoading(true);
 google.script.run.withSuccessHandler(function() {
 showLoading(false); showToast("Data peserta berhasil disimpan!", "success");
 listPesertaAdmin = cleanData;
-if(listPesertaAdmin.length === 0) listPesertaAdmin.push(['', '', '']);
+if(listPesertaAdmin.length === 0) listPesertaAdmin.push(['', '', '', '']);
 renderTabelPeserta();
+}).withFailureHandler(function(err) {
+showLoading(false); showToast((err && err.message) ? err.message.replace(/^Error:\s*/, '') : "Gagal menyimpan data", "error");
+}).simpanDataPesertaKode(cleanData);
+}
+
+// ==== CETAK KARTU PESERTA ====
+var dataKartu = [];
+var ttdKartu = '';
+var KARTU_KEY = 'smpn8_kartu_setting';
+
+function hariIniIndonesia() {
+var bln = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+var d = new Date();
+return d.getDate() + ' ' + bln[d.getMonth()] + ' ' + d.getFullYear();
+}
+
+function esc(v) {
+return String(v === null || v === undefined ? '' : v).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+function muatPengaturanKartu() {
+var st = {};
+try { st = JSON.parse(localStorage.getItem(KARTU_KEY) || '{}') || {}; } catch (e) { st = {}; }
+document.getElementById('kartuTahun').value = st.tahun || '2026-2027';
+document.getElementById('kartuTanggal').value = st.tanggal || ('Surabaya, ' + hariIniIndonesia());
+document.getElementById('kartuKepsek').value = st.kepsek || '';
+document.getElementById('kartuNip').value = st.nip || '';
+ttdKartu = st.ttd || '';
+tampilkanTtd();
+}
+
+function simpanPengaturanKartu() {
+try {
+localStorage.setItem(KARTU_KEY, JSON.stringify({
+tahun: document.getElementById('kartuTahun').value,
+tanggal: document.getElementById('kartuTanggal').value,
+kepsek: document.getElementById('kartuKepsek').value,
+nip: document.getElementById('kartuNip').value,
+ttd: ttdKartu
+}));
+} catch (e) { showToast("Pengaturan tidak bisa disimpan di browser ini.", "error"); }
+}
+
+function tampilkanTtd() {
+var img = document.getElementById('kartuTtdPreview');
+var btn = document.getElementById('kartuTtdHapus');
+if (ttdKartu) { img.src = ttdKartu; img.classList.remove('hidden'); btn.classList.remove('hidden'); }
+else { img.removeAttribute('src'); img.classList.add('hidden'); btn.classList.add('hidden'); }
+}
+
+function unggahTandaTangan(input) {
+var f = input.files && input.files[0];
+if (!f) return;
+var reader = new FileReader();
+reader.onload = function(e) {
+var img = new Image();
+img.onload = function() {
+var skala = Math.min(1, 500 / img.width);
+var c = document.createElement('canvas');
+c.width = Math.round(img.width * skala); c.height = Math.round(img.height * skala);
+c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+ttdKartu = c.toDataURL('image/png');
+tampilkanTtd(); simpanPengaturanKartu(); buatPratinjauKartu();
+};
+img.src = e.target.result;
+};
+reader.readAsDataURL(f);
+}
+
+function hapusTandaTangan() {
+ttdKartu = ''; document.getElementById('kartuTtdFile').value = '';
+tampilkanTtd(); simpanPengaturanKartu(); buatPratinjauKartu();
+}
+
+function siapkanHalamanKartu() {
+muatPengaturanKartu();
+showLoading(true);
+google.script.run.withSuccessHandler(function(data) {
+showLoading(false);
+dataKartu = normalisasiBarisPeserta(data);
+var sel = document.getElementById('kartuKelas');
+var pilihan = sel.value;
+var daftarKelas = [], ada = {};
+for (var i = 0; i < dataKartu.length; i++) {
+var k = dataKartu[i][0].trim();
+if (k && !ada[k]) { ada[k] = true; daftarKelas.push(k); }
+}
+daftarKelas.sort(function(a, b) { return a.localeCompare(b, 'id', { numeric: true }); });
+sel.innerHTML = '<option value="">Semua Kelas</option>';
+for (var j = 0; j < daftarKelas.length; j++) { sel.innerHTML += '<option value="' + esc(daftarKelas[j]) + '">' + esc(daftarKelas[j]) + '</option>'; }
+sel.value = pilihan;
+buatPratinjauKartu();
 }).withFailureHandler(function() {
-showLoading(false); showToast("Gagal menyimpan data", "error");
-}).simpanDataPesertaAdmin(cleanData);
+showLoading(false); showToast("Gagal memuat data peserta", "error");
+}).getSemuaDataPeserta();
+}
+
+function htmlSatuKartu(r, cfg) {
+var ttd = cfg.ttd ? '<img src="' + cfg.ttd + '" alt="">' : '';
+return '<div class="kartu">' +
+'<div class="k-head"><img class="k-logo" src="logo.png" alt="" onerror="this.style.display=\'none\'">' +
+'<div class="k-judul"><div class="k-t1">KARTU PESERTA ASESMEN</div><div class="k-t2">SMP NEGERI 8 SURABAYA</div><div class="k-t3">Tahun Ajaran ' + esc(cfg.tahun) + '</div></div></div>' +
+'<div class="k-garis"></div>' +
+'<div class="k-baris"><span class="k-lbl">Nama</span><span class="k-sep">:</span><span class="k-val">' + esc(r[1]) + '</span></div>' +
+'<div class="k-baris"><span class="k-lbl">Kelas</span><span class="k-sep">:</span><span class="k-val">' + esc(r[0]) + '</span></div>' +
+'<div class="k-baris"><span class="k-lbl">Kode Peserta</span><span class="k-sep">:</span><span class="k-val"><span class="k-box">' + esc(r[3]) + '</span></span></div>' +
+'<div class="k-baris"><span class="k-lbl">Password</span><span class="k-sep">:</span><span class="k-val"><span class="k-box">' + esc(r[2]) + '</span></span></div>' +
+'<div class="k-ttd"><div>' + esc(cfg.tanggal) + '</div><div>Kepala Sekolah,</div><div class="k-ttd-img">' + ttd + '</div><div class="k-kepsek">' + esc(cfg.kepsek) + '</div><div>NIP. ' + esc(cfg.nip) + '</div></div>' +
+'</div>';
+}
+
+function buatPratinjauKartu() {
+var cfg = {
+tahun: document.getElementById('kartuTahun').value,
+tanggal: document.getElementById('kartuTanggal').value,
+kepsek: document.getElementById('kartuKepsek').value,
+nip: document.getElementById('kartuNip').value,
+ttd: ttdKartu
+};
+var kelasPilih = document.getElementById('kartuKelas').value;
+var daftar = [], tanpaKode = 0;
+for (var i = 0; i < dataKartu.length; i++) {
+var r = dataKartu[i];
+if (r[1].trim() === '') continue;
+if (kelasPilih && r[0].trim() !== kelasPilih) continue;
+if (r[3].trim() === '') { tanpaKode++; continue; }
+daftar.push(r);
+}
+daftar.sort(function(a, b) {
+var c = a[0].localeCompare(b[0], 'id', { numeric: true });
+return c !== 0 ? c : a[1].localeCompare(b[1], 'id');
+});
+var html = '';
+for (var j = 0; j < daftar.length; j += 6) {
+html += '<div class="sheet-kartu">';
+for (var k = j; k < j + 6 && k < daftar.length; k++) { html += htmlSatuKartu(daftar[k], cfg); }
+html += '</div>';
+}
+document.getElementById('kartuPreview').innerHTML = html;
+var info = daftar.length + ' kartu (' + Math.ceil(daftar.length / 6) + ' lembar).';
+if (tanpaKode > 0) info += ' ' + tanpaKode + ' siswa belum punya Kode Peserta dan tidak dicetak. Isi dulu di menu Data Peserta.';
+document.getElementById('kartuInfo').innerText = info;
+return daftar.length;
+}
+
+function cetakKartu() {
+var jml = buatPratinjauKartu();
+if (!jml) { showToast("Tidak ada kartu untuk dicetak.", "error"); return; }
+var root = document.getElementById('printRoot');
+if (!root) { root = document.createElement('div'); root.id = 'printRoot'; document.body.appendChild(root); }
+root.innerHTML = document.getElementById('kartuPreview').innerHTML;
+document.body.classList.add('printing');
+var bersih = function() { document.body.classList.remove('printing'); root.innerHTML = ''; window.removeEventListener('afterprint', bersih); };
+window.addEventListener('afterprint', bersih);
+setTimeout(function() { window.print(); }, 300);
 }
 
 function renderStudentGrid(jenisAsesmen) {
