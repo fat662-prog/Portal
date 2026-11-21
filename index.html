@@ -61,12 +61,11 @@ select:disabled { background-color: #f8fafc; cursor: not-allowed; opacity: 0.7; 
 .k-ttd-img img{max-height:13mm;max-width:40mm;}
 .k-kepsek{font-weight:700;text-decoration:underline;}
 .k-garis-jd{margin:1.5mm 0 1.5mm 0;}
-.k-jd-tabel{width:100%;border-collapse:collapse;table-layout:fixed;font-size:7pt;line-height:1.2;}
-.k-jd-tabel th,.k-jd-tabel td{border:0.25mm solid #000;padding:0.4mm 1mm;vertical-align:middle;word-wrap:break-word;overflow-wrap:anywhere;}
+.k-jd-wrap{width:100%;}
+.k-jd-tabel{width:100%;border-collapse:collapse;table-layout:auto;font-size:7pt;line-height:1.2;white-space:nowrap;}
+.k-jd-tabel th,.k-jd-tabel td{border:0.25mm solid #000;padding:0.4mm 1mm;vertical-align:middle;white-space:nowrap;}
 .k-jd-tabel th{background:#e8e8e8;font-weight:700;text-align:center;}
 .k-jd-tabel .k-jd-c{text-align:center;}
-.k-jd-padat{font-size:6.3pt;}
-.k-jd-sangat{font-size:5.6pt;}
 .k-jd-kosong{text-align:center;font-size:8pt;color:#555;padding-top:12mm;}
 #printRoot{display:none;}
 @media print {
@@ -1985,19 +1984,43 @@ var isi;
 if (!baris.length) {
 isi = '<div class="k-jd-kosong">Jadwal belum diatur.</div>';
 } else {
-var kls = baris.length > 12 ? ' k-jd-sangat' : (baris.length > 9 ? ' k-jd-padat' : '');
-isi = '<table class="k-jd-tabel' + kls + '"><colgroup><col style="width:7mm"><col style="width:31mm"><col style="width:33mm"><col style="width:14.5mm"></colgroup>' +
+isi = '<div class="k-jd-wrap"><table class="k-jd-tabel">' +
 '<thead><tr><th>No.</th><th>Mata Pelajaran</th><th>Hari/Tanggal</th><th>Waktu</th></tr></thead><tbody>';
 for (var i = 0; i < baris.length; i++) {
 var w = teksWaktuJadwal(baris[i].jam);
-isi += '<tr><td class="k-jd-c">' + (i + 1) + '</td><td>' + esc(baris[i].mapel) + '</td><td>' + esc(teksTanggalJadwal(baris[i].tgl)) + '</td><td class="k-jd-c">' + (w || '-') + '</td></tr>';
+isi += '<tr><td class="k-jd-c">' + (i + 1) + '</td><td>' + esc(baris[i].mapel) + '</td><td>' + esc(teksTanggalJadwal(baris[i].tgl)) + '</td><td class="k-jd-c">' + (w ? w + ' WIB' : '-') + '</td></tr>';
 }
-isi += '</tbody></table>';
+isi += '</tbody></table></div>';
 }
 return '<div class="kartu">' +
 '<div class="k-head"><img class="k-logo" src="logo.png" alt="" onerror="this.style.display=\'none\'">' +
 '<div class="k-judul"><div class="k-t1">JADWAL ASESMEN</div><div class="k-t2">SMP NEGERI 8 SURABAYA</div><div class="k-t3">TAHUN AJARAN ' + esc(cfg.tahun) + '</div></div></div>' +
-'<div class="k-garis k-garis-jd"></div>' + isi + '</div>';
+'<div class="k-garis k-garis-jd"></div>' + (baris.length ? isi.replace('<table class="k-jd-tabel"', '<table data-jenis="' + esc(jenis) + '" class="k-jd-tabel"') : isi) + '</div>';
+}
+
+// Menyesuaikan ukuran font tabel jadwal agar seluruh baris dan kolom muat dalam satu kartu (satu baris per sel)
+function sesuaikanTabelJadwal() {
+var root = document.getElementById('kartuPreview');
+var tabel = root.querySelectorAll('table.k-jd-tabel');
+var selesai = {};
+for (var i = 0; i < tabel.length; i++) {
+var jenis = tabel[i].getAttribute('data-jenis');
+if (selesai[jenis] === undefined) {
+var t = tabel[i], wrap = t.parentNode, kartu = wrap.parentNode;
+if (!kartu.clientWidth) return;
+var cs = window.getComputedStyle(kartu);
+var padKanan = parseFloat(cs.paddingRight) || 0, padBawah = parseFloat(cs.paddingBottom) || 0;
+var ukuran = 8;
+for (; ukuran > 3.5; ukuran -= 0.25) {
+t.style.fontSize = ukuran + 'pt';
+var lebarOk = t.offsetWidth <= wrap.clientWidth + 0.5;
+var tinggiOk = (wrap.offsetTop + t.offsetHeight) <= (kartu.clientHeight - padBawah);
+if (lebarOk && tinggiOk) break;
+}
+selesai[jenis] = ukuran;
+}
+tabel[i].style.fontSize = selesai[jenis] + 'pt';
+}
 }
 
 function buatPratinjauKartu() {
@@ -2034,6 +2057,7 @@ html += htmlSatuKartu(daftar[k], cfg) + cacheJadwal[jenis];
 html += '</div>';
 }
 document.getElementById('kartuPreview').innerHTML = html;
+sesuaikanTabelJadwal();
 var info = daftar.length + ' kartu peserta (' + Math.ceil(daftar.length / 3) + ' lembar, tiap lembar 3 kartu + 3 jadwal).';
 if (tanpaKode > 0) info += ' ' + tanpaKode + ' siswa belum punya Kode Peserta dan tidak dicetak. Isi dulu di menu Data Peserta.';
 document.getElementById('kartuInfo').innerText = info;
