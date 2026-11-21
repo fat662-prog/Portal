@@ -359,15 +359,18 @@ STATUS PENGERJAAN
 <div class="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
 <div class="relative w-full sm:w-48">
 <!-- Anti-lag debounce -->
-<input type="text" id="searchPesertaAdmin" onkeyup="delayFilterPeserta()" placeholder="Cari nama/kelas..." class="w-full pl-9 pr-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-xs md:text-sm bg-white transition-all shadow-sm">
+<input type="text" id="searchPesertaAdmin" onkeyup="delayFilterPeserta()" placeholder="Cari nama/kelas/ruang..." class="w-full pl-9 pr-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-xs md:text-sm bg-white transition-all shadow-sm">
 <i class="fa-solid fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs md:text-sm"></i>
 </div>
-<div class="flex gap-2 w-full sm:w-auto">
+<div class="flex flex-wrap gap-2 w-full sm:w-auto">
 <button onclick="tambahBarisPeserta()" class="flex-1 sm:flex-none bg-blue-50 border border-blue-200 text-blue-700 px-3 py-2 rounded-lg font-semibold flex items-center justify-center gap-1.5 hover:bg-blue-100 transition shadow-sm text-xs md:text-sm">
 <i class="fa-solid fa-plus"></i> Tambah
 </button>
 <button onclick="isiKodeOtomatis()" class="flex-1 sm:flex-none bg-amber-50 border border-amber-200 text-amber-700 px-3 py-2 rounded-lg font-semibold flex items-center justify-center gap-1.5 hover:bg-amber-100 transition shadow-sm text-xs md:text-sm">
 <i class="fa-solid fa-wand-magic-sparkles"></i> Kode Otomatis
+</button>
+<button onclick="isiPasswordOtomatis()" class="flex-1 sm:flex-none bg-amber-50 border border-amber-200 text-amber-700 px-3 py-2 rounded-lg font-semibold flex items-center justify-center gap-1.5 hover:bg-amber-100 transition shadow-sm text-xs md:text-sm">
+<i class="fa-solid fa-key"></i> Password Otomatis
 </button>
 <button onclick="simpanDataPesertaAdmin()" class="flex-1 sm:flex-none bg-blue-600 border border-blue-600 text-white px-4 py-2 rounded-lg font-semibold flex items-center justify-center gap-1.5 hover:bg-blue-700 transition shadow-sm text-xs md:text-sm">
 <i class="fa-solid fa-floppy-disk"></i> Simpan
@@ -380,10 +383,11 @@ STATUS PENGERJAAN
 <thead class="bg-white sticky top-0 z-10 shadow-sm ring-1 ring-slate-200 text-[11px] md:text-sm">
 <tr>
 <th class="font-bold text-slate-700 px-3 py-2.5 border-b border-r border-slate-200 w-12 text-center">No</th>
-<th class="font-bold text-slate-700 px-3 py-2.5 border-b border-r border-slate-200 w-[12%]">Kelas</th>
-<th class="font-bold text-slate-700 px-3 py-2.5 border-b border-r border-slate-200 w-[36%]">Nama Lengkap</th>
-<th class="font-bold text-slate-700 px-3 py-2.5 border-b border-r border-slate-200 w-[20%]">Password</th>
-<th class="font-bold text-slate-700 px-3 py-2.5 border-b w-[22%]">Kode Peserta</th>
+<th class="font-bold text-slate-700 px-3 py-2.5 border-b border-r border-slate-200 w-[10%]">Kelas</th>
+<th class="font-bold text-slate-700 px-3 py-2.5 border-b border-r border-slate-200 w-[30%]">Nama Lengkap</th>
+<th class="font-bold text-slate-700 px-3 py-2.5 border-b border-r border-slate-200 w-[18%]">Password</th>
+<th class="font-bold text-slate-700 px-3 py-2.5 border-b border-r border-slate-200 w-[20%]">Kode Peserta</th>
+<th class="font-bold text-slate-700 px-3 py-2.5 border-b border-r border-slate-200 w-[10%]">Ruang</th>
 <th class="font-bold text-slate-700 px-3 py-2.5 border-b w-10 text-center"><i class="fa-solid fa-trash"></i></th>
 </tr>
 </thead>
@@ -1659,13 +1663,14 @@ hasil.push([
 (r[0] === null || r[0] === undefined) ? '' : String(r[0]),
 (r[1] === null || r[1] === undefined) ? '' : String(r[1]),
 (r[2] === null || r[2] === undefined) ? '' : String(r[2]),
-(r[3] === null || r[3] === undefined) ? '' : String(r[3])
+(r[3] === null || r[3] === undefined) ? '' : String(r[3]),
+(r[4] === null || r[4] === undefined) ? '' : String(r[4])
 ]);
 }
 return hasil;
 }
 
-function loadAdminPesertaData() { showLoading(true); google.script.run.withSuccessHandler(function(data) { showLoading(false); listPesertaAdmin = normalisasiBarisPeserta(data); if(listPesertaAdmin.length === 0) listPesertaAdmin = [['', '', '', '']]; renderTabelPeserta(); }).withFailureHandler(function(err) { showLoading(false); showToast("Gagal memuat data peserta", "error"); }).getSemuaDataPeserta(); }
+function loadAdminPesertaData() { showLoading(true); google.script.run.withSuccessHandler(function(data) { showLoading(false); listPesertaAdmin = normalisasiBarisPeserta(data); if(listPesertaAdmin.length === 0) listPesertaAdmin = [['', '', '', '', '']]; renderTabelPeserta(); }).withFailureHandler(function(err) { showLoading(false); showToast("Gagal memuat data peserta", "error"); }).getSemuaDataPeserta(); }
 
 function renderTabelPeserta() {
 var tbody = document.getElementById('pesertaTableBody');
@@ -1680,6 +1685,7 @@ tr.innerHTML = '<td class="px-2 py-1.5 text-center text-slate-500 font-bold bord
 '<td class="px-2 py-1.5 border-r border-slate-200"><input type="text" value="' + escapeHtmlAttr(row[1]) + '" onchange="updateRowPeserta(' + idx + ', 1, this.value)" placeholder="Nama Lengkap" class="w-full px-2 py-1.5 border border-slate-300 rounded focus:ring-1 focus:ring-blue-500 outline-none text-xs md:text-sm bg-transparent"></td>' +
 '<td class="px-2 py-1.5 border-r border-slate-200"><input type="text" value="' + escapeHtmlAttr(row[2]) + '" onchange="updateRowPeserta(' + idx + ', 2, this.value)" placeholder="Password" class="w-full px-2 py-1.5 border border-slate-300 rounded focus:ring-1 focus:ring-blue-500 outline-none text-xs md:text-sm bg-transparent"></td>' +
 '<td class="px-2 py-1.5 border-r border-slate-200"><input type="text" value="' + escapeHtmlAttr(row[3]) + '" onchange="updateRowPeserta(' + idx + ', 3, this.value)" placeholder="Kode Peserta" class="w-full px-2 py-1.5 border border-slate-300 rounded focus:ring-1 focus:ring-blue-500 outline-none text-xs md:text-sm bg-transparent"></td>' +
+'<td class="px-2 py-1.5 border-r border-slate-200"><input type="text" inputmode="numeric" maxlength="3" value="' + escapeHtmlAttr(row[4]) + '" onchange="updateRowPeserta(' + idx + ', 4, this.value)" placeholder="Ruang" class="w-full px-2 py-1.5 border border-slate-300 rounded focus:ring-1 focus:ring-blue-500 outline-none text-xs md:text-sm bg-transparent text-center"></td>' +
 '<td class="px-2 py-1.5 text-center"><button onclick="hapusBarisPeserta(' + idx + ')" class="text-red-400 hover:text-red-600 hover:bg-red-50 p-1.5 rounded transition"><i class="fa-solid fa-trash-can"></i></button></td>';
 tbody.appendChild(tr);
 })(index);
@@ -1691,8 +1697,8 @@ return String(v === null || v === undefined ? '' : v).replace(/&/g, '&amp;').rep
 }
 
 function updateRowPeserta(index, col, val) { listPesertaAdmin[index][col] = val; }
-function tambahBarisPeserta() { listPesertaAdmin.push(['', '', '', '']); renderTabelPeserta(); var container = document.getElementById('view-admin-peserta').querySelector('.overflow-auto'); setTimeout(function(){ container.scrollTop = container.scrollHeight; }, 100); }
-function hapusBarisPeserta(index) { listPesertaAdmin.splice(index, 1); if(listPesertaAdmin.length === 0) listPesertaAdmin.push(['', '', '', '']); renderTabelPeserta(); }
+function tambahBarisPeserta() { listPesertaAdmin.push(['', '', '', '', '']); renderTabelPeserta(); var container = document.getElementById('view-admin-peserta').querySelector('.overflow-auto'); setTimeout(function(){ container.scrollTop = container.scrollHeight; }, 100); }
+function hapusBarisPeserta(index) { listPesertaAdmin.splice(index, 1); if(listPesertaAdmin.length === 0) listPesertaAdmin.push(['', '', '', '', '']); renderTabelPeserta(); }
 
 function normKodeClient(v) {
 var k = String(v === null || v === undefined ? '' : v).trim().toUpperCase();
@@ -1723,12 +1729,60 @@ renderTabelPeserta();
 showToast(jumlah + " kode peserta dibuat. Klik Simpan untuk menyimpan.", "success");
 }
 
+// ==== PASSWORD OTOMATIS: identitas kelas + huruf kapital acak (contoh 9AKQTZ) ====
+var PASSWORD_PANJANG_ACAK = 4; // jumlah huruf acak di belakang identitas kelas (ubah angka ini jika ingin lebih panjang)
+
+function acakHurufKapital(panjang) {
+var huruf = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+var hasil = '';
+var buf = null;
+if (window.crypto && window.crypto.getRandomValues) { buf = new Uint32Array(panjang); window.crypto.getRandomValues(buf); }
+for (var i = 0; i < panjang; i++) {
+var n = buf ? buf[i] : Math.floor(Math.random() * 4294967296);
+hasil += huruf.charAt(n % huruf.length);
+}
+return hasil;
+}
+
+function isiPasswordOtomatis() {
+// kumpulkan semua password yang sudah ada (tanpa membedakan huruf besar/kecil) agar tidak ada yang kembar
+var dipakai = {};
+for (var i = 0; i < listPesertaAdmin.length; i++) {
+var p = String(listPesertaAdmin[i][2]).trim().toUpperCase();
+if (p) dipakai[p] = true;
+}
+var jumlah = 0, tanpaKelas = 0;
+for (var j = 0; j < listPesertaAdmin.length; j++) {
+var baris = listPesertaAdmin[j];
+var kelas = String(baris[0]).replace(/\s+/g, '').toUpperCase();
+var adaIsi = (kelas !== '' || String(baris[1]).trim() !== '');
+if (String(baris[2]).trim() === '' && adaIsi) {
+if (kelas === '') { tanpaKelas++; continue; }
+var pass = '';
+do {
+pass = kelas + acakHurufKapital(PASSWORD_PANJANG_ACAK);
+} while (dipakai[pass]);
+dipakai[pass] = true;
+baris[2] = pass; jumlah++;
+}
+}
+renderTabelPeserta();
+var pesan = jumlah + " password dibuat. Klik Simpan untuk menyimpan.";
+if (tanpaKelas > 0) pesan += " " + tanpaKelas + " baris dilewati karena Kelas masih kosong.";
+showToast(pesan, "success");
+}
+
 function simpanDataPesertaAdmin() {
 var cleanData = [];
 for(var i=0; i<listPesertaAdmin.length; i++){
 var r = listPesertaAdmin[i];
 if(String(r[0]).trim() !== '' || String(r[1]).trim() !== '') {
-cleanData.push([String(r[0]).trim(), String(r[1]).trim(), String(r[2]), String(r[3]).trim()]);
+var rg = String(r[4] === undefined || r[4] === null ? '' : r[4]).trim();
+if (rg !== '') {
+if (!/^[0-9]+$/.test(rg) || parseInt(rg, 10) < 1) { showToast("Ruang harus berupa angka (1, 2, 3, ...). Periksa baris: " + (String(r[1]).trim() || String(r[0]).trim()), "error"); return; }
+rg = String(parseInt(rg, 10));
+}
+cleanData.push([String(r[0]).trim(), String(r[1]).trim(), String(r[2]), String(r[3]).trim(), rg]);
 }
 }
 var sudahAda = {};
@@ -1739,11 +1793,18 @@ if (sudahAda[nk]) { showToast("Kode peserta ganda: " + cleanData[c][3], "error")
 sudahAda[nk] = true;
 }
 }
+var pwTerlihat = {}, pwKembar = 0;
+for (var q = 0; q < cleanData.length; q++) {
+var pk = String(cleanData[q][2]).trim().toUpperCase();
+if (!pk) continue;
+if (pwTerlihat[pk]) pwKembar++; else pwTerlihat[pk] = true;
+}
 showLoading(true);
 google.script.run.withSuccessHandler(function() {
-showLoading(false); showToast("Data peserta berhasil disimpan!", "success");
+showLoading(false);
+showToast(pwKembar > 0 ? "Data peserta tersimpan. Perhatian: ada " + pwKembar + " password yang kembar." : "Data peserta berhasil disimpan!", pwKembar > 0 ? "info" : "success");
 listPesertaAdmin = cleanData;
-if(listPesertaAdmin.length === 0) listPesertaAdmin.push(['', '', '', '']);
+if(listPesertaAdmin.length === 0) listPesertaAdmin.push(['', '', '', '', '']);
 renderTabelPeserta();
 }).withFailureHandler(function(err) {
 showLoading(false); showToast((err && err.message) ? err.message.replace(/^Error:\s*/, '') : "Gagal menyimpan data", "error");
@@ -1850,6 +1911,7 @@ return '<div class="kartu">' +
 '<div class="k-garis"></div>' +
 '<div class="k-baris"><span class="k-lbl">Nama</span><span class="k-sep">:</span><span class="k-val">' + esc(r[1]) + '</span></div>' +
 '<div class="k-baris"><span class="k-lbl">Kelas</span><span class="k-sep">:</span><span class="k-val">' + esc(r[0]) + '</span></div>' +
+'<div class="k-baris"><span class="k-lbl">Ruang</span><span class="k-sep">:</span><span class="k-val">' + (String(r[4] || '').trim() !== '' ? esc(r[4]) : '-') + '</span></div>' +
 '<div class="k-baris"><span class="k-lbl">Kode Peserta</span><span class="k-sep">:</span><span class="k-val"><span class="k-box">' + esc(r[3]) + '</span></span></div>' +
 '<div class="k-baris"><span class="k-lbl">Password</span><span class="k-sep">:</span><span class="k-val"><span class="k-box">' + esc(r[2]) + '</span></span></div>' +
 '<div class="k-ttd"><div>' + esc(cfg.tanggal) + '</div><div>Kepala Sekolah,</div><div class="k-ttd-img">' + ttd + '</div><div class="k-kepsek">' + esc(cfg.kepsek) + '</div><div>NIP. ' + esc(cfg.nip) + '</div></div>' +
