@@ -1924,6 +1924,8 @@ google.script.run
 .withSuccessHandler(function(response) {
 showLoading(false);
 if (response.status === 'error') { tbody.innerHTML = '<tr><td class="px-6 py-16 text-center text-red-500 font-medium"><i class="fa-solid fa-triangle-exclamation text-3xl mb-3 block"></i>' + response.message + '</td></tr>'; return; }
+if (response.status === 'loading') { tbody.innerHTML = '<tr><td class="px-6 py-16 text-center text-orange-500 font-medium whitespace-normal"><i class="fa-solid fa-rotate text-4xl mb-3 block fa-spin"></i>' + response.message + '</td></tr>'; return; }
+if (response.status === 'ambigu') { tbody.innerHTML = '<tr><td class="px-6 py-16 text-center text-red-500 font-medium whitespace-normal"><i class="fa-solid fa-triangle-exclamation text-3xl mb-3 block"></i>' + response.message + '</td></tr>'; return; }
 var data = response.data;
 
 if (!data || data.length === 0) { tbody.innerHTML = '<tr><td class="px-6 py-16 text-center text-slate-500"><i class="fa-solid fa-box-open text-3xl mb-3 block"></i>Belum ada data dari server.</td></tr>'; return; }
@@ -1952,7 +1954,7 @@ isIdentity = true; break;
 if (isIdentity) { identityCols[idx] = true; } else { identityCols[idx] = false; }
 });
 trHead += '</tr>'; thead.innerHTML = trHead;
-if(data.length === 1) { tbody.innerHTML = '<tr><td colspan="' + (headers.length + 1) + '" class="px-6 py-8 text-center text-slate-400 italic border border-slate-200">Belum ada pengerjaan masuk.</td></tr>'; return; }
+if(data.length === 1) { tbody.innerHTML = '<tr><td colspan="' + (headers.length + 1) + '" class="px-0 py-8 border border-slate-200 whitespace-normal"><div class="sticky left-0 px-4 text-center text-slate-500 italic" style="width:min(100%,calc(100vw - 3rem));max-width:34rem;">' + (response.message || 'Belum ada pengerjaan masuk.') + '</div></td></tr>'; return; }
 
 for (var i = 1; i < data.length; i++) {
 var row = data[i];
@@ -1961,15 +1963,6 @@ for(var k=0; k<row.length; k++){
 if(row[k].toString().trim() !== '') { allEmpty = false; break; }
 }
 if(allEmpty) continue;
-
-if (currentUser && currentUser.role === 'student' && kelasIdx !== -1) {
-var userKelasClean = currentUser.kelas.replace(/\s+/g, '').toUpperCase();
-var rowKelasClean = row[kelasIdx] ? row[kelasIdx].toString().replace(/\s+/g, '').toUpperCase() : "";
-
-if (rowKelasClean !== userKelasClean && rowKelasClean.indexOf(userKelasClean) === -1 && userKelasClean.indexOf(rowKelasClean) === -1) {
-continue;
-}
-}
 
 // DETEKSI BARIS SUMMARY KETAT DI SISI SISWA
 var isSummaryRow = false;
@@ -2018,7 +2011,7 @@ trBody += '<td class="px-3 py-3 border-r border-slate-200 whitespace-nowrap text
 });
 trBody += '</tr>'; tbody.innerHTML += trBody;
 }
-}).withFailureHandler(function() { showLoading(false); showToast("Gagal menarik data status.", "error"); }).getHasilUjian();
+}).withFailureHandler(function() { showLoading(false); showToast("Gagal menarik data status.", "error"); }).getStatusSaya();
 }
 
 // ==========================================
