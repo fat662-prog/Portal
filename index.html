@@ -72,6 +72,68 @@ select:disabled { background-color: #f8fafc; cursor: not-allowed; opacity: 0.7; 
 .k-jd-tabel th{background:#e8e8e8;font-weight:700;text-align:center;}
 .k-jd-tabel .k-jd-c{text-align:center;}
 .k-jd-kosong{text-align:center;font-size:8pt;color:#555;padding-top:12mm;}
+/* ==== BERITA ACARA & DAFTAR HADIR (dokumen A4) ==== */
+.dk-lbl{display:block;font-size:.75rem;font-weight:700;color:#334155;margin-bottom:.25rem;}
+.dk-in{width:100%;padding:.5rem .75rem;border:1px solid #cbd5e1;border-radius:.5rem;font-size:.875rem;outline:none;background-color:#fff;color:#1e293b;user-select:text;-webkit-user-select:text;}
+.dk-in:focus{border-color:#3b82f6;box-shadow:0 0 0 2px rgba(59,130,246,.4);}
+.dk-in[readonly],.dk-in:disabled{background-color:#f1f5f9;color:#64748b;cursor:not-allowed;}
+textarea.dk-in{resize:vertical;}
+.dk-chip{display:inline-flex;align-items:center;gap:.35rem;background:#fef2f2;border:1px solid #fecaca;color:#b91c1c;border-radius:9999px;padding:.15rem .25rem .15rem .7rem;font-size:.75rem;font-weight:600;}
+.dk-chip button{width:1.25rem;height:1.25rem;border-radius:9999px;background:#fee2e2;line-height:1;font-size:.8rem;}
+.dk-pad{position:relative;border:2px dashed #94a3b8;border-radius:.75rem;background:#fff;overflow:hidden;}
+.dk-pad canvas{display:block;width:100%;height:auto;touch-action:none;cursor:crosshair;}
+.dk-pad-label{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#cbd5e1;font-weight:700;font-size:.95rem;pointer-events:none;}
+.dok-skala{width:210mm;transform-origin:top left;}
+.sheet-dok{width:210mm;height:296mm;box-sizing:border-box;padding:11mm 15mm;background:#fff;margin:0 auto 12px auto;box-shadow:0 2px 8px rgba(0,0,0,0.25);font-family:Arial,Helvetica,sans-serif;font-size:11pt;line-height:1.35;color:#000;position:relative;overflow:hidden;text-align:left;}
+.sheet-dok *{box-sizing:border-box;}
+.dok-kop{display:flex;align-items:center;gap:5mm;padding-bottom:3mm;border-bottom:0.8mm solid #000;margin-bottom:5mm;}
+.dok-logo{width:21mm;height:21mm;object-fit:contain;flex-shrink:0;}
+.dok-judul{flex:1;text-align:center;margin-right:21mm;}
+.dok-t1{font-weight:800;font-size:14pt;}
+.dok-t2{font-weight:700;font-size:13pt;}
+.dok-t3{font-weight:700;font-size:11.5pt;}
+.dok-par{text-align:justify;margin:0 0 4mm 0;}
+.dok-titik{color:#9ca3af;}
+.dok-fr{display:flex;align-items:flex-start;margin-bottom:1.8mm;}
+.dok-fn{width:8mm;flex-shrink:0;}
+.dok-fl{width:56mm;flex-shrink:0;}
+.dok-fs{width:4mm;flex-shrink:0;}
+.dok-fv{flex:1;min-height:6mm;border-bottom:0.3mm solid #000;padding-left:1mm;word-break:break-word;}
+.dok-nama-list.dua{column-count:2;column-gap:5mm;}
+.dok-nama-list div{break-inside:avoid;}
+.dok-catatan{border:0.35mm solid #000;min-height:38mm;padding:2mm 2.5mm;white-space:pre-wrap;word-break:break-word;margin:1.5mm 0 0 8mm;}
+.dok-ttd-judul{margin:5mm 0 0 0;}
+.dok-ttd-kepala{display:flex;margin-top:1mm;}
+.dok-ttd-kepala .kosong{width:120mm;flex-shrink:0;}
+.dok-ttd-kepala .ttd{flex:1;text-align:center;font-weight:700;padding-left:7mm;}
+.dok-tb{display:flex;align-items:flex-end;min-height:24mm;}
+.dok-tb-no{width:8mm;flex-shrink:0;}
+.dok-tb-peran{width:34mm;flex-shrink:0;}
+.dok-tb-nama{width:70mm;flex-shrink:0;margin-right:8mm;}
+.dok-garis{border-bottom:0.3mm solid #000;min-height:5.5mm;padding-left:1mm;word-break:break-word;}
+.dok-tb-nip{display:flex;align-items:flex-end;margin-top:1mm;}
+.dok-tb-nip span{width:10mm;flex-shrink:0;}
+.dok-tb-nip .dok-garis{flex:1;}
+.dok-tb-ttd{flex:1;display:flex;align-items:flex-end;}
+.dok-tb-n{width:7mm;flex-shrink:0;}
+.dok-tb-area{flex:1;position:relative;height:19mm;border-bottom:0.3mm solid #000;display:flex;align-items:flex-end;justify-content:center;}
+.dok-tb-area img{max-height:19mm;max-width:100%;object-fit:contain;}
+.dok-ir{display:flex;margin-bottom:1.2mm;}
+.dok-il{width:36mm;flex-shrink:0;}
+.dok-is{width:4mm;flex-shrink:0;}
+.dok-iv{flex:1;border-bottom:0.3mm solid #000;padding-left:1mm;font-weight:700;word-break:break-word;}
+.dok-lanjut{font-weight:700;font-size:11pt;text-align:center;margin-bottom:3mm;padding-bottom:2mm;border-bottom:0.5mm solid #000;}
+.dok-tabel{width:100%;border-collapse:collapse;table-layout:fixed;margin-top:2mm;}
+.dok-tabel th,.dok-tabel td{border:0.3mm solid #000;padding:0 2mm !important;font-size:10.5pt !important;line-height:1.15;vertical-align:middle;overflow:hidden;}
+.dok-tabel th{background:#e8e8e8;text-align:center;font-weight:700;height:8mm;}
+.dok-tabel td.c{text-align:center;}
+.dok-kls{font-size:8.5pt;color:#444;}
+.dok-sel{display:flex;width:100%;}
+.dok-sel.kanan{justify-content:flex-end;}
+.dok-dh-ttd{width:74mm;margin:7mm auto 0 auto;text-align:center;}
+.dok-dh-gbr{height:18mm;display:flex;align-items:center;justify-content:center;}
+.dok-dh-gbr img{max-height:18mm;max-width:60mm;object-fit:contain;}
+.dok-dh-nama{font-weight:700;text-decoration:underline;}
 #printRoot{display:none;}
 @media print {
 @page{size:A4;margin:0;}
@@ -80,6 +142,8 @@ body.printing > *:not(#printRoot){display:none !important;}
 body.printing #printRoot{display:block !important;}
 body.printing .sheet-kartu{margin:0 !important;box-shadow:none !important;page-break-after:always;break-after:page;}
 body.printing .sheet-kartu:last-child{page-break-after:auto;break-after:auto;}
+body.printing .sheet-dok{margin:0 !important;box-shadow:none !important;page-break-after:always;break-after:page;}
+body.printing .sheet-dok:last-child{page-break-after:auto;break-after:auto;}
 }
 </style>
 </head>
@@ -318,6 +382,16 @@ STATUS PENGERJAAN
 <h4 class="font-bold text-slate-800 mb-1">Generator Soal AI</h4>
 <p class="text-slate-500 text-xs line-clamp-3">Otomatisasi pembuatan draf soal pilihan ganda dengan teknologi kecerdasan buatan.</p>
 </div>
+<div class="dash-card bg-white p-5 rounded-xl border border-slate-200 shadow-sm" onclick="openTab('shared-ba')">
+<div class="w-10 h-10 rounded-full bg-teal-50 text-teal-600 flex items-center justify-center text-lg mb-3"><i class="fa-solid fa-file-signature"></i></div>
+<h4 class="font-bold text-slate-800 mb-1">Berita Acara</h4>
+<p class="text-slate-500 text-xs line-clamp-3">Isi, simpan, cetak, dan unggah berita acara pelaksanaan asesmen untuk ruang yang Anda awasi.</p>
+</div>
+<div class="dash-card bg-white p-5 rounded-xl border border-slate-200 shadow-sm" onclick="openTab('shared-dh')">
+<div class="w-10 h-10 rounded-full bg-orange-50 text-orange-600 flex items-center justify-center text-lg mb-3"><i class="fa-solid fa-clipboard-list"></i></div>
+<h4 class="font-bold text-slate-800 mb-1">Daftar Hadir</h4>
+<p class="text-slate-500 text-xs line-clamp-3">Lihat daftar hadir peserta per ruang dan unggah hasil scan yang sudah ditandatangani.</p>
+</div>
 </div>
 </div>
 
@@ -356,6 +430,16 @@ STATUS PENGERJAAN
 <div class="w-10 h-10 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center text-lg mb-3"><i class="fa-solid fa-table"></i></div>
 <h4 class="font-bold text-slate-800 mb-1">Hasil Ujian</h4>
 <p class="text-slate-500 text-xs">Tinjau rekapitulasi data pengerjaan siswa secara real-time atau ekspor ke Excel.</p>
+</div>
+<div class="dash-card bg-white p-5 rounded-xl border border-slate-200 shadow-sm" onclick="openTab('shared-ba')">
+<div class="w-10 h-10 rounded-full bg-teal-50 text-teal-600 flex items-center justify-center text-lg mb-3"><i class="fa-solid fa-file-signature"></i></div>
+<h4 class="font-bold text-slate-800 mb-1">Berita Acara</h4>
+<p class="text-slate-500 text-xs">Lihat seluruh berita acara dari para pengawas, cetak, dan kelola berkas unggahan.</p>
+</div>
+<div class="dash-card bg-white p-5 rounded-xl border border-slate-200 shadow-sm" onclick="openTab('shared-dh')">
+<div class="w-10 h-10 rounded-full bg-orange-50 text-orange-600 flex items-center justify-center text-lg mb-3"><i class="fa-solid fa-clipboard-list"></i></div>
+<h4 class="font-bold text-slate-800 mb-1">Daftar Hadir</h4>
+<p class="text-slate-500 text-xs">Buat dan cetak daftar hadir peserta per ruang, lalu simpan ke server dan Drive.</p>
 </div>
 </div>
 </div>
@@ -457,6 +541,132 @@ Pastikan Anda mengklik "Simpan" setelah mengubah data. Perubahan otomatis disink
 <div class="p-4 md:p-6 bg-white" id="settingContent"></div>
 </div>
 </div>
+
+<!-- ================= BERITA ACARA (GURU & ADMIN) ================= -->
+<div id="view-shared-ba" class="tab-content max-w-6xl mx-auto hidden mt-2">
+<div class="bg-white rounded-xl md:rounded-2xl shadow-sm border border-slate-200 p-4 md:p-6">
+<h3 class="text-lg md:text-xl font-bold text-slate-800 flex items-center gap-2"><i class="fa-solid fa-file-signature text-blue-600"></i> Berita Acara Asesmen</h3>
+<p class="text-slate-500 text-xs md:text-sm mt-1 mb-3">Isi semua kolom, klik <b>Simpan</b>, lalu <b>Cetak</b> (A4). Setelah ditandatangani, foto atau scan dokumen dapat diunggah dengan tombol <b>Upload</b>.</p>
+<p id="baInfoAdm" class="text-[11px] md:text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2 mb-4">Memuat data Administrasi...</p>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4">
+<div><label class="dk-lbl" for="baTanggal">Tanggal pelaksanaan</label><input id="baTanggal" type="date" class="dk-in" oninput="perubahanBA()"></div>
+<div><label class="dk-lbl" for="baJamMulai">Dari pukul</label><input id="baJamMulai" type="time" class="dk-in" oninput="perubahanBA()"></div>
+<div><label class="dk-lbl" for="baJamSelesai">Sampai dengan pukul</label><input id="baJamSelesai" type="time" class="dk-in" oninput="perubahanBA()"></div>
+<div class="md:col-span-3"><label class="dk-lbl" for="baKegiatan">Kegiatan yang diselenggarakan</label><input id="baKegiatan" type="text" maxlength="150" autocomplete="off" placeholder="Contoh: Asesmen Sumatif Akhir Semester Ganjil" class="dk-in" oninput="perubahanBA()"></div>
+<div><label class="dk-lbl" for="baRuang">Ruang (angka)</label><input id="baRuang" type="number" min="1" inputmode="numeric" placeholder="1" class="dk-in" oninput="aturRuangBA(true); perubahanBA()"></div>
+<div class="md:col-span-2"><label class="dk-lbl" for="baMapel">Mata Pelajaran</label><select id="baMapel" class="dk-in" onchange="perubahanBA()"><option value="">Pilih mata pelajaran</option></select></div>
+<div><label class="dk-lbl" for="baSeharusnya">Jumlah peserta seharusnya</label><input id="baSeharusnya" type="text" readonly placeholder="Otomatis dari nomor ruang" class="dk-in"></div>
+<div><label class="dk-lbl" for="baHadir">Jumlah peserta hadir</label><input id="baHadir" type="number" min="0" inputmode="numeric" class="dk-in" oninput="baState.manualHadir=true; perubahanBA()"></div>
+<div><label class="dk-lbl" for="baTidakHadir">Jumlah peserta tidak hadir</label><input id="baTidakHadir" type="number" min="0" inputmode="numeric" class="dk-in" oninput="baState.manualTidak=true; perubahanBA()"></div>
+<div class="md:col-span-3">
+<label class="dk-lbl" for="baPilihTidakHadir">Nama peserta tidak hadir</label>
+<select id="baPilihTidakHadir" class="dk-in" onchange="tambahTidakHadirBA(this.value)"><option value="">Isi nomor ruang dulu</option></select>
+<div id="baChipTidakHadir" class="flex flex-wrap gap-2 mt-2"></div>
+</div>
+<div class="md:col-span-3"><label class="dk-lbl" for="baCatatan">Catatan selama asesmen</label><textarea id="baCatatan" rows="4" maxlength="1200" placeholder="Contoh: Pelaksanaan asesmen berjalan dengan aman, lancar, dan terkendali." class="dk-in" oninput="perubahanBA()"></textarea></div>
+<div class="md:col-span-2"><label class="dk-lbl" for="baPengawas">Nama Pengawas</label><input id="baPengawas" type="text" maxlength="100" autocomplete="off" placeholder="Nama lengkap beserta gelar" class="dk-in" oninput="perubahanBA()"></div>
+<div><label class="dk-lbl" for="baNip">NIP Pengawas (jika ada)</label><input id="baNip" type="text" maxlength="40" autocomplete="off" class="dk-in" oninput="perubahanBA()"></div>
+<div class="md:col-span-3"><label class="dk-lbl">Tanda tangan Pengawas</label><div id="baTtdWadah"></div></div>
+</div>
+<p id="baPeringatan" class="hidden text-[11px] md:text-xs text-amber-800 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2 mt-4"></p>
+<div class="flex flex-wrap items-center gap-2 mt-4">
+<button id="baBtnSimpan" onclick="simpanBA()" class="bg-blue-600 border border-blue-600 text-white px-4 py-2 rounded-lg font-semibold text-sm flex items-center gap-2 hover:bg-blue-700 transition active:scale-95"><i class="fa-solid fa-floppy-disk"></i> Simpan</button>
+<button onclick="cetakBA()" class="bg-emerald-600 border border-emerald-700 text-white px-4 py-2 rounded-lg font-semibold text-sm flex items-center gap-2 hover:bg-emerald-700 transition active:scale-95"><i class="fa-solid fa-print"></i> Cetak</button>
+<button onclick="klikUnggahBA()" class="bg-white border border-slate-300 text-slate-700 px-4 py-2 rounded-lg font-semibold text-sm flex items-center gap-2 hover:bg-slate-50 transition active:scale-95"><i class="fa-solid fa-cloud-arrow-up"></i> Upload</button>
+<button onclick="formBaruBA()" class="bg-white border border-slate-300 text-slate-600 px-4 py-2 rounded-lg font-semibold text-sm flex items-center gap-2 hover:bg-slate-50 transition active:scale-95"><i class="fa-solid fa-file-circle-plus"></i> Form Baru</button>
+</div>
+<p id="baStatus" class="text-xs text-slate-500 mt-2">Belum disimpan.</p>
+</div>
+
+<div class="mt-4 bg-white rounded-xl md:rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+<div class="p-4 border-b border-slate-200 bg-slate-50 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+<div><h4 class="font-bold text-slate-800 text-sm md:text-base"><i class="fa-solid fa-folder-open text-blue-600 mr-1"></i> Berita Acara Tersimpan</h4><p id="baListInfo" class="text-[11px] md:text-xs text-slate-500">Memuat...</p></div>
+<div class="flex gap-2">
+<input id="baCari" type="text" onkeyup="renderListBA()" placeholder="Cari ruang/mapel/pengawas..." class="dk-in sm:w-56 !py-1.5 text-xs">
+<button onclick="muatListBA(true)" class="bg-white border border-slate-200 text-slate-700 px-3 py-1.5 rounded-lg font-semibold text-xs flex items-center gap-1.5 hover:bg-slate-50 transition active:scale-95 whitespace-nowrap"><i class="fa-solid fa-arrows-rotate"></i> Segarkan</button>
+</div>
+</div>
+<div class="overflow-auto custom-scrollbar" style="max-height:60vh;">
+<table class="w-full text-left border-collapse bg-white text-xs md:text-sm">
+<thead class="bg-slate-100 sticky top-0 z-10 text-slate-700"><tr>
+<th class="px-3 py-2 font-bold border-b border-slate-200">Tanggal</th>
+<th class="px-3 py-2 font-bold border-b border-slate-200 text-center">Ruang</th>
+<th class="px-3 py-2 font-bold border-b border-slate-200">Mata Pelajaran</th>
+<th class="px-3 py-2 font-bold border-b border-slate-200 text-center">Hadir / Tidak</th>
+<th class="px-3 py-2 font-bold border-b border-slate-200">Pengawas</th>
+<th class="px-3 py-2 font-bold border-b border-slate-200">Berkas</th>
+<th class="px-3 py-2 font-bold border-b border-slate-200">Aksi</th>
+</tr></thead>
+<tbody id="baListBody" class="divide-y divide-slate-100"></tbody>
+</table>
+</div>
+</div>
+
+<div class="mt-4 bg-slate-200 rounded-xl p-2 overflow-hidden" id="baPratinjauWadah"><div id="baPratinjau" class="dok-skala"></div></div>
+</div>
+
+<!-- ================= DAFTAR HADIR (ADMIN: FORM + DAFTAR | GURU: DAFTAR + UPLOAD) ================= -->
+<div id="view-shared-dh" class="tab-content max-w-6xl mx-auto hidden mt-2">
+<div id="dhFormWrap" class="bg-white rounded-xl md:rounded-2xl shadow-sm border border-slate-200 p-4 md:p-6">
+<h3 class="text-lg md:text-xl font-bold text-slate-800 flex items-center gap-2"><i class="fa-solid fa-clipboard-list text-blue-600"></i> Daftar Hadir Asesmen</h3>
+<p class="text-slate-500 text-xs md:text-sm mt-1 mb-3">Pilih ruang, isi data, klik <b>Simpan</b>, lalu <b>Cetak</b>. Daftar nama siswa diambil otomatis dari Data Peserta berdasarkan ruang. Setelah ditandatangani, unggah foto/scan dengan <b>Upload</b>.</p>
+<p id="dhInfoAdm" class="text-[11px] md:text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2 mb-4">Memuat data Administrasi...</p>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4">
+<div><label class="dk-lbl" for="dhTanggal">Hari / Tanggal</label><input id="dhTanggal" type="date" class="dk-in" oninput="perubahanDH()"></div>
+<div><label class="dk-lbl" for="dhJamMulai">Waktu mulai</label><input id="dhJamMulai" type="time" class="dk-in" oninput="perubahanDH()"></div>
+<div><label class="dk-lbl" for="dhJamSelesai">Waktu selesai</label><input id="dhJamSelesai" type="time" class="dk-in" oninput="perubahanDH()"></div>
+<div><label class="dk-lbl" for="dhRuang">Ruang</label><select id="dhRuang" class="dk-in" onchange="perubahanDH()"><option value="">Pilih ruang</option></select></div>
+<div class="md:col-span-2"><label class="dk-lbl" for="dhMapel">Mata Pelajaran</label><select id="dhMapel" class="dk-in" onchange="perubahanDH()"><option value="">Pilih mata pelajaran</option></select></div>
+<div class="md:col-span-2"><label class="dk-lbl" for="dhAsesmen">Nama asesmen (untuk kalimat pembuka)</label><input id="dhAsesmen" type="text" maxlength="120" autocomplete="off" placeholder="Contoh: Sumatif Akhir Semester Ganjil" class="dk-in" oninput="perubahanDH()"></div>
+<div><label class="dk-lbl" for="dhTahun">Tahun Ajaran (untuk kalimat pembuka)</label><input id="dhTahun" type="text" maxlength="30" autocomplete="off" placeholder="2026-2027" class="dk-in" oninput="perubahanDH()"></div>
+<div><label class="dk-lbl" for="dhTglDok">Tanggal dokumen (Surabaya, ...)</label><input id="dhTglDok" type="date" class="dk-in" oninput="perubahanDH()"></div>
+<div class="md:col-span-2"><label class="dk-lbl" for="dhPengawas">Nama Pengawas</label><input id="dhPengawas" type="text" maxlength="100" autocomplete="off" placeholder="Nama lengkap beserta gelar" class="dk-in" oninput="perubahanDH()"></div>
+<div><label class="dk-lbl" for="dhNip">NIP Pengawas</label><input id="dhNip" type="text" maxlength="40" autocomplete="off" class="dk-in" oninput="perubahanDH()"></div>
+<div class="md:col-span-3"><label class="dk-lbl">Tanda tangan Pengawas (gambar)</label><div id="dhTtdWadah"></div></div>
+</div>
+<p id="dhPeringatan" class="hidden text-[11px] md:text-xs text-amber-800 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2 mt-4"></p>
+<div class="flex flex-wrap items-center gap-2 mt-4">
+<button id="dhBtnSimpan" onclick="simpanDH()" class="bg-blue-600 border border-blue-600 text-white px-4 py-2 rounded-lg font-semibold text-sm flex items-center gap-2 hover:bg-blue-700 transition active:scale-95"><i class="fa-solid fa-floppy-disk"></i> Simpan</button>
+<button onclick="cetakDH()" class="bg-emerald-600 border border-emerald-700 text-white px-4 py-2 rounded-lg font-semibold text-sm flex items-center gap-2 hover:bg-emerald-700 transition active:scale-95"><i class="fa-solid fa-print"></i> Cetak</button>
+<button onclick="klikUnggahDH()" class="bg-white border border-slate-300 text-slate-700 px-4 py-2 rounded-lg font-semibold text-sm flex items-center gap-2 hover:bg-slate-50 transition active:scale-95"><i class="fa-solid fa-cloud-arrow-up"></i> Upload</button>
+<button onclick="formBaruDH()" class="bg-white border border-slate-300 text-slate-600 px-4 py-2 rounded-lg font-semibold text-sm flex items-center gap-2 hover:bg-slate-50 transition active:scale-95"><i class="fa-solid fa-file-circle-plus"></i> Form Baru</button>
+</div>
+<p id="dhStatus" class="text-xs text-slate-500 mt-2">Belum disimpan.</p>
+</div>
+
+<div id="dhGuruInfo" class="hidden bg-white rounded-xl md:rounded-2xl shadow-sm border border-slate-200 p-4 md:p-6">
+<h3 class="text-lg md:text-xl font-bold text-slate-800 flex items-center gap-2"><i class="fa-solid fa-clipboard-list text-blue-600"></i> Daftar Hadir Asesmen</h3>
+<p class="text-slate-500 text-xs md:text-sm mt-1">Daftar hadir disiapkan dan dicetak oleh admin. Setelah ditandatangani peserta, unggah foto/scan-nya dengan tombol <b>Upload</b> pada baris ruang Anda.</p>
+</div>
+
+<div class="mt-4 bg-white rounded-xl md:rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+<div class="p-4 border-b border-slate-200 bg-slate-50 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+<div><h4 class="font-bold text-slate-800 text-sm md:text-base"><i class="fa-solid fa-folder-open text-blue-600 mr-1"></i> Daftar Hadir Tersimpan</h4><p id="dhListInfo" class="text-[11px] md:text-xs text-slate-500">Memuat...</p></div>
+<div class="flex gap-2">
+<input id="dhCari" type="text" onkeyup="renderListDH()" placeholder="Cari ruang/mapel/pengawas..." class="dk-in sm:w-56 !py-1.5 text-xs">
+<button onclick="muatListDH(true)" class="bg-white border border-slate-200 text-slate-700 px-3 py-1.5 rounded-lg font-semibold text-xs flex items-center gap-1.5 hover:bg-slate-50 transition active:scale-95 whitespace-nowrap"><i class="fa-solid fa-arrows-rotate"></i> Segarkan</button>
+</div>
+</div>
+<div class="overflow-auto custom-scrollbar" style="max-height:60vh;">
+<table class="w-full text-left border-collapse bg-white text-xs md:text-sm">
+<thead class="bg-slate-100 sticky top-0 z-10 text-slate-700"><tr>
+<th class="px-3 py-2 font-bold border-b border-slate-200">Tanggal</th>
+<th class="px-3 py-2 font-bold border-b border-slate-200">Waktu</th>
+<th class="px-3 py-2 font-bold border-b border-slate-200 text-center">Ruang</th>
+<th class="px-3 py-2 font-bold border-b border-slate-200">Mata Pelajaran</th>
+<th class="px-3 py-2 font-bold border-b border-slate-200">Pengawas</th>
+<th class="px-3 py-2 font-bold border-b border-slate-200">Berkas</th>
+<th class="px-3 py-2 font-bold border-b border-slate-200">Aksi</th>
+</tr></thead>
+<tbody id="dhListBody" class="divide-y divide-slate-100"></tbody>
+</table>
+</div>
+</div>
+
+<div id="dhPratinjauBungkus" class="mt-4 bg-slate-200 rounded-xl p-2 overflow-hidden"><div id="dhPratinjauWadah"><div id="dhPratinjau" class="dok-skala"></div></div></div>
+</div>
+
+<input type="file" id="inputUnggahBerkas" class="hidden" accept="application/pdf,image/jpeg,image/png,image/*" onchange="prosesUnggah(this)">
 
 <!-- ================= SHARED VIEWS (GURU & ADMIN) ================= -->
 <div id="view-shared-belum" class="tab-content max-w-[100%] xl:max-w-6xl mx-auto hidden mt-2">
@@ -708,7 +918,7 @@ var activeSettingType = 'USP';
 var cachedLinks = {};
 var daftarMapel = {};
 var modeHapusMapel = false;
-var dataAdministrasi = { tahun: '', kepsek: '', nip: '', proktor: '', ttdKepsek: '', ttdProktor: '' };
+var dataAdministrasi = { tahun: '', kepsek: '', nip: '', proktor: '', nipProktor: '', ttdKepsek: '', ttdProktor: '' };
 try {
 var savedMapel = localStorage.getItem('smpn8_mapel');
 if (savedMapel && savedMapel !== 'null') { daftarMapel = JSON.parse(savedMapel) || {}; }
@@ -1092,13 +1302,15 @@ menus = [
 { id: 'admin-home', label: 'Dashboard', icon: 'fa-solid fa-house' },
 { id: 'admin-peserta', label: 'Data Peserta', icon: 'fa-solid fa-users-gear' },
 { id: 'admin-kartu', label: 'Cetak Kartu', icon: 'fa-solid fa-id-card' },
+{ id: 'shared-ba', label: 'Berita Acara', icon: 'fa-solid fa-file-signature' },
+{ id: 'shared-dh', label: 'Daftar Hadir', icon: 'fa-solid fa-clipboard-list' },
 { id: 'admin-setting', label: 'Setting Ujian', icon: 'fa-solid fa-sliders' },
 { id: 'shared-belum', label: 'Belum Mengerjakan', icon: 'fa-solid fa-user-clock' },
 { id: 'shared-hasil', label: 'Hasil Ujian', icon: 'fa-solid fa-square-poll-vertical' },
 { id: 'guru-analisis', label: 'Analisis', icon: 'fa-solid fa-chart-pie' }
  ];
 } else if (currentUser.role === 'guru') {
-menus = [ { id: 'guru-home', label: 'Dashboard', icon: 'fa-solid fa-house' }, { id: 'shared-belum', label: 'Belum Mengerjakan', icon: 'fa-solid fa-user-clock' }, { id: 'shared-hasil', label: 'Hasil Ujian', icon: 'fa-solid fa-table' }, { id: 'guru-analisis', label: 'Analisis', icon: 'fa-solid fa-chart-pie' }, { id: 'guru-ai', label: 'Generator Soal ✨', icon: 'fa-solid fa-wand-magic-sparkles' } ];
+menus = [ { id: 'guru-home', label: 'Dashboard', icon: 'fa-solid fa-house' }, { id: 'shared-belum', label: 'Belum Mengerjakan', icon: 'fa-solid fa-user-clock' }, { id: 'shared-hasil', label: 'Hasil Ujian', icon: 'fa-solid fa-table' }, { id: 'shared-ba', label: 'Berita Acara', icon: 'fa-solid fa-file-signature' }, { id: 'shared-dh', label: 'Daftar Hadir', icon: 'fa-solid fa-clipboard-list' }, { id: 'guru-analisis', label: 'Analisis', icon: 'fa-solid fa-chart-pie' }, { id: 'guru-ai', label: 'Generator Soal ✨', icon: 'fa-solid fa-wand-magic-sparkles' } ];
 } else {
 menus.push({ id: 'student-home', label: 'Dashboard', icon: 'fa-solid fa-house' });
 var kelasStr = currentUser.kelas ? currentUser.kelas.toUpperCase() : "";
@@ -1141,6 +1353,8 @@ else if (tabId === 'shared-belum') { displayTitle = 'BELUM MENGERJAKAN'; documen
 else if (tabId === 'shared-hasil') { displayTitle = 'HASIL UJIAN'; document.getElementById('view-shared-hasil').classList.add('active'); loadHasilUjian(); }
 else if (tabId === 'guru-analisis') { displayTitle = 'ANALISIS HASIL'; document.getElementById('view-guru-analisis').classList.add('active'); loadAnalisisData(); }
 else if (tabId === 'guru-ai') { displayTitle = 'GENERATOR SOAL AI ✨'; document.getElementById('view-guru-ai').classList.add('active'); }
+else if (tabId === 'shared-ba') { displayTitle = 'BERITA ACARA'; document.getElementById('view-shared-ba').classList.add('active'); siapkanHalamanBA(); }
+else if (tabId === 'shared-dh') { displayTitle = 'DAFTAR HADIR'; document.getElementById('view-shared-dh').classList.add('active'); siapkanHalamanDH(); }
 }
 else if (currentUser.role === 'admin') {
 if (tabId === 'admin-home') { displayTitle = 'DASHBOARD'; document.getElementById('view-admin-home').classList.add('active'); }
@@ -1150,6 +1364,8 @@ else if (tabId === 'admin-setting') { displayTitle = 'SETTING UJIAN'; document.g
 else if (tabId === 'shared-belum') { displayTitle = 'BELUM MENGERJAKAN'; document.getElementById('view-shared-belum').classList.add('active'); loadBelumMengerjakan(); }
 else if (tabId === 'shared-hasil') { displayTitle = 'HASIL UJIAN'; document.getElementById('view-shared-hasil').classList.add('active'); loadHasilUjian(); }
 else if (tabId === 'guru-analisis') { displayTitle = 'ANALISIS HASIL'; document.getElementById('view-guru-analisis').classList.add('active'); loadAnalisisData(); }
+else if (tabId === 'shared-ba') { displayTitle = 'BERITA ACARA'; document.getElementById('view-shared-ba').classList.add('active'); siapkanHalamanBA(); }
+else if (tabId === 'shared-dh') { displayTitle = 'DAFTAR HADIR'; document.getElementById('view-shared-dh').classList.add('active'); siapkanHalamanDH(); }
 }
 
 document.getElementById('headerTitle').innerText = displayTitle; document.getElementById('mobileHeaderTitle').innerText = displayTitle;
@@ -2457,7 +2673,8 @@ var ADM_FIELD_TEKS = [
 { key: 'tahun', label: 'Tahun Ajaran', ph: '2026-2027' },
 { key: 'kepsek', label: 'Nama Kepala Sekolah', ph: 'Nama lengkap beserta gelar' },
 { key: 'nip', label: 'NIP Kepala Sekolah', ph: 'NIP' },
-{ key: 'proktor', label: 'Nama Proktor', ph: 'Nama lengkap beserta gelar' }
+{ key: 'proktor', label: 'Nama Proktor', ph: 'Nama lengkap beserta gelar' },
+{ key: 'nipProktor', label: 'NIP Proktor', ph: 'NIP' }
 ];
 // Gambar tanda tangan diambil dari GitHub (satu folder dengan index.html dan logo.png)
 var ADM_FIELD_GAMBAR = [
@@ -2628,6 +2845,892 @@ content.classList.add('open'); icon.classList.add('open');
 }
 
 function showLoading(show) { document.getElementById('contentLoading').style.display = show ? 'flex' : 'none'; }
+
+// ==========================================
+// BERITA ACARA & DAFTAR HADIR
+// ==========================================
+var admDok = { tahun: '', kepsek: '', nip: '', proktor: '', nipProktor: '' };
+var pesertaRuang = [];
+var pesertaRuangMuat = false;
+var daftarBA = [];
+var daftarDH = [];
+var baState = { id: '', ttd: '', fileUrl: '', tidakHadir: [], manualHadir: false, manualTidak: false, kotor: false, menyimpan: false };
+var dhState = { id: '', ttd: '', fileUrl: '', kotor: false, menyimpan: false };
+var baPad = null;
+var dhPad = null;
+var targetUnggah = null;
+var TTD_TERAKHIR_KEY = 'smpn8_ttd_terakhir';
+var PREF_DOK_KEY = 'smpn8_pref_dokumen';
+var LEBAR_A4_PX = 793.7;
+var BATAS_BERKAS_MB = 5;
+
+function dkEl(id) { return document.getElementById(id); }
+function dkVal(id) { var e = dkEl(id); return e ? String(e.value === null || e.value === undefined ? '' : e.value).trim() : ''; }
+function dkSet(id, v) { var e = dkEl(id); if (e) e.value = (v === null || v === undefined) ? '' : v; }
+function dkTitik(v, titik) { v = String(v === null || v === undefined ? '' : v).trim(); return v ? esc(v) : '<span class="dok-titik">' + (titik || '..........') + '</span>'; }
+function dkIsoHariIni() { var d = new Date(); return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2); }
+function dkAngka(v) { var n = parseInt(String(v), 10); return isNaN(n) ? null : n; }
+function dkParseJson(s, cadangan) { try { var x = JSON.parse(s); return x === null ? cadangan : x; } catch (e) { return cadangan; } }
+function dkLsGet(k) { try { return localStorage.getItem(k) || ''; } catch (e) { return ''; } }
+function dkLsSet(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+
+function pesanGalat(err, cadangan) {
+var m = (err && err.message) ? String(err.message).replace(/^(Error:\s*)+/, '') : '';
+if (!m || /failed to fetch|networkerror|load failed|unexpected token|json/i.test(m)) return cadangan || 'Koneksi ke server bermasalah. Coba lagi.';
+return m;
+}
+
+function dkTanggalPanjang(tgl) {
+var dt = parseTanggalJadwal(tgl);
+return dt ? (dt.getDate() + ' ' + BULAN_ID[dt.getMonth()] + ' ' + dt.getFullYear()) : '';
+}
+
+// ---------- Data pendukung (Administrasi & peserta per ruang) ----------
+function muatAdmDok(sesudah) {
+google.script.run.withSuccessHandler(function(d) {
+d = d || {};
+admDok = { tahun: d.tahun || '', kepsek: d.kepsek || '', nip: d.nip || '', proktor: d.proktor || '', nipProktor: d.nipProktor || '' };
+if (sesudah) sesudah();
+}).withFailureHandler(function() {
+showToast("Gagal memuat data Administrasi", "error");
+if (sesudah) sesudah();
+}).getAdministrasiGuru();
+}
+
+function muatPesertaRuang(sesudah) {
+google.script.run.withSuccessHandler(function(data) {
+pesertaRuang = [];
+for (var i = 0; i < (data ? data.length : 0); i++) { pesertaRuang.push([String(data[i][0] || ''), String(data[i][1] || ''), String(data[i][2] || '')]); }
+pesertaRuangMuat = true;
+if (sesudah) sesudah();
+}).withFailureHandler(function() {
+showToast("Gagal memuat data peserta per ruang", "error");
+}).getPesertaRuang();
+}
+
+function dkRuang(v) { var r = String(v === null || v === undefined ? '' : v).trim(); return /^[0-9]+$/.test(r) ? String(parseInt(r, 10)) : r; }
+
+function pesertaDiRuang(ruang) {
+var r = dkRuang(ruang);
+var hasil = [];
+if (!r) return hasil;
+for (var i = 0; i < pesertaRuang.length; i++) { if (pesertaRuang[i][2] === r) hasil.push([pesertaRuang[i][0], pesertaRuang[i][1]]); }
+hasil.sort(function(a, b) { var c = a[0].localeCompare(b[0], 'id', { numeric: true }); return c !== 0 ? c : a[1].localeCompare(b[1], 'id'); });
+return hasil;
+}
+
+function daftarRuangAda() {
+var ada = {}, hasil = [];
+for (var i = 0; i < pesertaRuang.length; i++) { var r = pesertaRuang[i][2]; if (!ada[r]) { ada[r] = true; hasil.push(r); } }
+hasil.sort(function(a, b) { return parseInt(a, 10) - parseInt(b, 10); });
+return hasil;
+}
+
+function daftarMapelGabungan() {
+var hasil = [], ada = {};
+for (var i = 0; i < ASSESSMENT_TYPES.length; i++) {
+var l = getMapelJenis(ASSESSMENT_TYPES[i]) || [];
+for (var j = 0; j < l.length; j++) { var k = String(l[j]).toLowerCase(); if (!ada[k]) { ada[k] = true; hasil.push(l[j]); } }
+}
+return hasil;
+}
+
+function isiDropdownMapel(id) {
+var sel = dkEl(id); if (!sel) return;
+var pilih = sel.value;
+var daftar = daftarMapelGabungan();
+if (pilih && daftar.indexOf(pilih) === -1) daftar.push(pilih);
+var h = '<option value="">Pilih mata pelajaran</option>';
+for (var i = 0; i < daftar.length; i++) h += '<option value="' + esc(daftar[i]) + '">' + esc(daftar[i]) + '</option>';
+sel.innerHTML = h;
+sel.value = pilih;
+}
+
+// ---------- Papan tanda tangan (gratis, tanpa library; jari / mouse / pena) ----------
+function buatPapanTtd(wadahId, saatUbah) {
+var wadah = dkEl(wadahId);
+var W = 600, H = 220, WARNA = '#111827';
+wadah.innerHTML = '<div class="dk-pad"><canvas width="' + W + '" height="' + H + '"></canvas><div class="dk-pad-label">Tanda tangan di sini</div></div>' +
+'<div class="flex flex-wrap gap-2 mt-2">' +
+'<button type="button" data-a="hapus" class="bg-white border border-red-200 text-red-600 px-3 py-1.5 rounded-lg font-semibold text-xs flex items-center gap-1.5 hover:bg-red-50 transition"><i class="fa-solid fa-eraser"></i> Hapus</button>' +
+'<label class="bg-white border border-slate-300 text-slate-700 px-3 py-1.5 rounded-lg font-semibold text-xs flex items-center gap-1.5 hover:bg-slate-50 transition cursor-pointer"><i class="fa-solid fa-image"></i> Unggah gambar TTD<input type="file" accept="image/*" class="hidden"></label>' +
+'<button type="button" data-a="terakhir" class="hidden bg-white border border-blue-200 text-blue-700 px-3 py-1.5 rounded-lg font-semibold text-xs flex items-center gap-1.5 hover:bg-blue-50 transition"><i class="fa-solid fa-clock-rotate-left"></i> Pakai TTD terakhir</button>' +
+'</div>' +
+'<p class="text-[11px] text-slate-500 mt-1">Gambar tanda tangan dengan jari, mouse, atau pena layar sentuh pada kotak di atas. Bisa juga mengunggah foto tanda tangan di kertas putih.</p>';
+var canvas = wadah.querySelector('canvas');
+var label = wadah.querySelector('.dk-pad-label');
+var ctx = canvas.getContext('2d');
+ctx.lineWidth = 4.5; ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.strokeStyle = WARNA; ctx.fillStyle = WARNA;
+var menggambar = false, adaIsi = false, lx = 0, ly = 0, mx = 0, my = 0, data = '';
+var btnTerakhir = wadah.querySelector('[data-a="terakhir"]');
+
+function pos(e) { var r = canvas.getBoundingClientRect(); return { x: (e.clientX - r.left) * W / r.width, y: (e.clientY - r.top) * H / r.height }; }
+
+function ekspor() {
+var px = ctx.getImageData(0, 0, W, H).data;
+var x0 = W, y0 = H, x1 = -1, y1 = -1;
+for (var y = 0; y < H; y++) { for (var x = 0; x < W; x++) { if (px[(y * W + x) * 4 + 3] > 12) { if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y; } } }
+if (x1 < 0) return '';
+var pad = 6; x0 = Math.max(0, x0 - pad); y0 = Math.max(0, y0 - pad); x1 = Math.min(W - 1, x1 + pad); y1 = Math.min(H - 1, y1 + pad);
+var cw = x1 - x0 + 1, ch = y1 - y0 + 1;
+var skala = Math.min(1, 420 / cw, 170 / ch);
+var hasil = '';
+for (var n = 0; n < 6; n++) {
+var t = document.createElement('canvas');
+t.width = Math.max(1, Math.round(cw * skala)); t.height = Math.max(1, Math.round(ch * skala));
+t.getContext('2d').drawImage(canvas, x0, y0, cw, ch, 0, 0, t.width, t.height);
+hasil = t.toDataURL('image/png');
+if (hasil.length <= 40000) break;
+skala *= 0.8;
+}
+return hasil;
+}
+
+function selesai() { data = adaIsi ? ekspor() : ''; if (!data) adaIsi = false; label.style.display = adaIsi ? 'none' : 'flex'; if (saatUbah) saatUbah(data); }
+function bersihkan() { ctx.clearRect(0, 0, W, H); adaIsi = false; data = ''; label.style.display = 'flex'; }
+
+canvas.addEventListener('pointerdown', function(e) {
+if (e.pointerType === 'mouse' && e.button !== 0) return;
+e.preventDefault();
+if (canvas.setPointerCapture) { try { canvas.setPointerCapture(e.pointerId); } catch (x) {} }
+menggambar = true; var p = pos(e); lx = p.x; ly = p.y; mx = p.x; my = p.y;
+ctx.beginPath(); ctx.arc(p.x, p.y, ctx.lineWidth / 2, 0, Math.PI * 2); ctx.fill();
+adaIsi = true; label.style.display = 'none';
+});
+canvas.addEventListener('pointermove', function(e) {
+if (!menggambar) return; e.preventDefault();
+var p = pos(e), tx = (lx + p.x) / 2, ty = (ly + p.y) / 2;
+ctx.beginPath(); ctx.moveTo(mx, my); ctx.quadraticCurveTo(lx, ly, tx, ty); ctx.stroke();
+mx = tx; my = ty; lx = p.x; ly = p.y;
+});
+function akhiri() { if (!menggambar) return; menggambar = false; selesai(); }
+canvas.addEventListener('pointerup', akhiri);
+canvas.addEventListener('pointercancel', akhiri);
+canvas.addEventListener('pointerleave', akhiri);
+
+function gambarKe(src, hapusPutih, sesudah) {
+var img = new Image();
+img.onload = function() {
+bersihkan();
+var s = Math.min((W - 20) / img.width, (H - 20) / img.height, 1);
+var w = Math.round(img.width * s), h = Math.round(img.height * s);
+if (hapusPutih) {
+var t = document.createElement('canvas'); t.width = w; t.height = h;
+var tc = t.getContext('2d'); tc.drawImage(img, 0, 0, w, h);
+var id = tc.getImageData(0, 0, w, h), d = id.data;
+for (var i = 0; i < d.length; i += 4) {
+var terang = Math.min(d[i], d[i + 1], d[i + 2]);
+if (terang > 215) d[i + 3] = 0; else if (terang > 150) d[i + 3] = Math.round(d[i + 3] * (215 - terang) / 65);
+}
+tc.putImageData(id, 0, 0);
+ctx.drawImage(t, Math.round((W - w) / 2), Math.round((H - h) / 2));
+} else {
+ctx.drawImage(img, Math.round((W - w) / 2), Math.round((H - h) / 2), w, h);
+}
+adaIsi = true; label.style.display = 'none';
+if (sesudah) sesudah();
+};
+img.onerror = function() { showToast("Gambar tanda tangan tidak bisa dibaca.", "error"); };
+img.src = src;
+}
+
+function segarkanTombol() { btnTerakhir.classList.toggle('hidden', !dkLsGet(TTD_TERAKHIR_KEY)); }
+wadah.querySelector('[data-a="hapus"]').addEventListener('click', function() { bersihkan(); if (saatUbah) saatUbah(''); });
+btnTerakhir.addEventListener('click', function() {
+var t = dkLsGet(TTD_TERAKHIR_KEY); if (!t) return;
+gambarKe(t, false, function() { data = t; if (saatUbah) saatUbah(t); });
+});
+wadah.querySelector('input[type=file]').addEventListener('change', function() {
+var f = this.files && this.files[0]; var input = this; if (!f) return;
+var rd = new FileReader();
+rd.onload = function(e) { gambarKe(e.target.result, true, function() { selesai(); }); input.value = ''; };
+rd.readAsDataURL(f);
+});
+segarkanTombol();
+
+return {
+ambil: function() { return data; },
+hapus: function() { bersihkan(); },
+setel: function(url) { if (url) { gambarKe(url, false, function() { data = url; }); } else { bersihkan(); } },
+segarkanTombol: segarkanTombol
+};
+}
+
+// ---------- Pratinjau & cetak ----------
+function skalakanPratinjau(idWadah, idSkala) {
+var w = dkEl(idWadah), s = dkEl(idSkala);
+if (!w || !s) return;
+var lebar = w.clientWidth - 16;
+if (lebar <= 0) return;
+var k = Math.min(1, lebar / LEBAR_A4_PX);
+if (k < 1) { s.style.transform = 'scale(' + k + ')'; s.style.margin = '0'; w.style.height = (s.offsetHeight * k + 16) + 'px'; }
+else { s.style.transform = ''; s.style.margin = '0 auto'; w.style.height = ''; }
+}
+
+window.addEventListener('resize', function() { skalakanPratinjau('baPratinjauWadah', 'baPratinjau'); skalakanPratinjau('dhPratinjauWadah', 'dhPratinjau'); });
+
+function tungguGambar(root, batas, sesudah) {
+var imgs = root.querySelectorAll('img'), sisa = 0, selesai = false;
+function lanjut() { if (selesai) return; selesai = true; sesudah(); }
+for (var i = 0; i < imgs.length; i++) {
+if (!imgs[i].complete) { sisa++; imgs[i].addEventListener('load', function() { sisa--; if (sisa <= 0) lanjut(); }); imgs[i].addEventListener('error', function() { sisa--; if (sisa <= 0) lanjut(); }); }
+}
+if (sisa === 0) lanjut(); else setTimeout(lanjut, batas);
+}
+
+function cetakDokumenHtml(html) {
+var root = dkEl('printRoot');
+if (!root) { root = document.createElement('div'); root.id = 'printRoot'; document.body.appendChild(root); }
+root.innerHTML = html;
+document.body.classList.add('printing');
+var bersih = function() { document.body.classList.remove('printing'); root.innerHTML = ''; window.removeEventListener('afterprint', bersih); };
+window.addEventListener('afterprint', bersih);
+tungguGambar(root, 2500, function() { setTimeout(function() { window.print(); }, 150); });
+}
+
+function htmlKopDokumen(judul) {
+return '<div class="dok-kop"><img class="dok-logo" src="logo.png" alt="" onerror="this.style.display=\'none\'">' +
+'<div class="dok-judul"><div class="dok-t1">' + judul + '</div><div class="dok-t2">SMP NEGERI 8 SURABAYA</div><div class="dok-t3">TAHUN AJARAN ' + dkTitik(admDok.tahun, '....') + '</div></div></div>';
+}
+
+function htmlGambarTtd(src) { return src ? '<img src="' + esc(src) + '" alt="" onerror="this.style.display=\'none\'">' : ''; }
+
+function htmlBarisTtdBA(no, peran, nama, nip, adaNip, src) {
+return '<div class="dok-tb"><div class="dok-tb-no">' + no + '.</div><div class="dok-tb-peran">' + peran + '</div>' +
+'<div class="dok-tb-nama"><div class="dok-garis">' + dkTitik(nama, '') + '</div>' +
+(adaNip ? '<div class="dok-tb-nip"><span>NIP</span><div class="dok-garis">' + esc(nip || '') + '</div></div>' : '') + '</div>' +
+'<div class="dok-tb-ttd"><span class="dok-tb-n">' + no + '.</span><div class="dok-tb-area">' + htmlGambarTtd(src) + '</div></div></div>';
+}
+
+function htmlNamaTidakHadir(arr) {
+if (!arr || !arr.length) return '-';
+var h = '<div class="dok-nama-list' + (arr.length > 6 ? ' dua' : '') + '">';
+for (var i = 0; i < arr.length; i++) h += '<div>' + (i + 1) + '. ' + esc(arr[i].n) + (arr[i].k ? ' (' + esc(arr[i].k) + ')' : '') + '</div>';
+return h + '</div>';
+}
+
+function htmlBeritaAcara(d) {
+var dt = parseTanggalJadwal(d.tanggal);
+var hari = dt ? HARI_ID[dt.getDay()] : '', tgl = dt ? String(dt.getDate()) : '', bln = dt ? BULAN_ID[dt.getMonth()] : '', thn = dt ? String(dt.getFullYear()) : '';
+var par = 'Pada hari ini ' + dkTitik(hari, '......') + ' tanggal ' + dkTitik(tgl, '....') + ' bulan ' + dkTitik(bln, '........') + ' tahun ' + dkTitik(thn, '......') +
+', di SMP NEGERI 8 SURABAYA telah diselenggarakan ' + dkTitik(d.kegiatan, '..................') +
+', dari pukul ' + dkTitik(d.jamMulai, '.....') + ' sampai dengan pukul ' + dkTitik(d.jamSelesai, '.....') + ' WIB dengan rincian sebagai berikut.';
+function baris(no, lbl, isi) { return '<div class="dok-fr"><div class="dok-fn">' + no + '</div><div class="dok-fl">' + lbl + '</div><div class="dok-fs">:</div><div class="dok-fv">' + isi + '</div></div>'; }
+return '<div class="sheet-dok">' + htmlKopDokumen('BERITA ACARA ASESMEN') +
+'<p class="dok-par">' + par + '</p>' +
+baris('1.', 'Ruang', dkTitik(d.ruang, '....')) +
+baris('', 'Mata Pelajaran', dkTitik(d.mapel, '..................')) +
+baris('', 'Jumlah Peserta Seharusnya', dkTitik(d.seharusnya, '....')) +
+baris('', 'Jumlah Peserta Hadir', dkTitik(d.hadir, '....')) +
+baris('', 'Jumlah Peserta Tidak Hadir', dkTitik(d.tidakHadir, '....')) +
+baris('', 'Nama Peserta Tidak Hadir', htmlNamaTidakHadir(d.namaTidakHadir)) +
+'<div class="dok-fr" style="margin-top:3mm;margin-bottom:0;"><div class="dok-fn">2.</div><div>Catatan Selama Asesmen :</div></div>' +
+'<div class="dok-catatan">' + esc(d.catatan || '') + '</div>' +
+'<div class="dok-ttd-judul">Yang membuat berita acara :</div>' +
+'<div class="dok-ttd-kepala"><div class="kosong"></div><div class="ttd">TTD</div></div>' +
+htmlBarisTtdBA(1, 'Proktor', admDok.proktor, admDok.nipProktor, true, 'ttd-proktor.png') +
+htmlBarisTtdBA(2, 'Pengawas', d.pengawas, d.nip, !!(d.nip), d.ttd) +
+htmlBarisTtdBA(3, 'Penanggung Jawab', admDok.kepsek, admDok.nip, true, 'ttd-kepsek.png') +
+'</div>';
+}
+
+function htmlBarisDH(chunk, mulai, tinggi) {
+var h = '';
+for (var i = 0; i < chunk.length; i++) {
+var no = mulai + i + 1;
+h += '<tr style="height:' + tinggi + 'mm"><td class="c">' + no + '</td><td>' + esc(chunk[i][1]) + (chunk[i][0] ? ' <span class="dok-kls">(' + esc(chunk[i][0]) + ')</span>' : '') + '</td>' +
+'<td><div class="dok-sel' + (no % 2 === 0 ? ' kanan' : '') + '">' + no + '.</div></td></tr>';
+}
+return h;
+}
+
+function htmlTabelDH(chunk, mulai, tinggi) {
+return '<table class="dok-tabel"><colgroup><col style="width:13mm"><col><col style="width:68mm"></colgroup>' +
+'<thead><tr><th>No</th><th>Nama Siswa</th><th>Tanda Tangan</th></tr></thead><tbody>' + htmlBarisDH(chunk, mulai, tinggi) + '</tbody></table>';
+}
+
+function htmlDaftarHadir(d) {
+var peserta = pesertaDiRuang(d.ruang);
+var n = peserta.length, halaman = [], tinggi;
+if (n <= 22) { halaman = [peserta]; tinggi = n ? Math.max(6.4, Math.min(9, Math.floor(1450 / n) / 10)) : 8; }
+else { var jml = Math.ceil(n / 22), per = Math.ceil(n / jml); for (var i = 0; i < n; i += per) halaman.push(peserta.slice(i, i + per)); tinggi = 7.2; }
+var dt = parseTanggalJadwal(d.tanggal);
+var tglTeks = dt ? (HARI_ID[dt.getDay()] + ', ' + dt.getDate() + ' ' + BULAN_ID[dt.getMonth()] + ' ' + dt.getFullYear()) : '';
+var waktu = (d.jamMulai || d.jamSelesai) ? ((d.jamMulai || '..') + ' - ' + (d.jamSelesai || '..') + ' WIB') : '';
+function info(l, v) { return '<div class="dok-ir"><div class="dok-il">' + l + '</div><div class="dok-is">:</div><div class="dok-iv">' + dkTitik(v, '..................') + '</div></div>'; }
+var kepala = htmlKopDokumen('DAFTAR HADIR ASESMEN') +
+'<div style="margin-bottom:3mm;">' + info('Hari/Tanggal', tglTeks) + info('Waktu', waktu) + info('Ruang', d.ruang) + info('Mata Pelajaran', d.mapel) + '</div>' +
+'<p class="dok-par" style="margin-bottom:2mm;">Berikut adalah Daftar Hadir Peserta Asesmen ' + dkTitik(d.asesmen, '..................') + ' Tahun Ajaran ' + dkTitik(d.tahun, '........') + '.</p>';
+var tglDok = dkTanggalPanjang(d.tanggalDokumen);
+var kaki = '<div class="dok-dh-ttd"><div>Surabaya, ' + dkTitik(tglDok, '..........') + '</div><div>Pengawas</div><div class="dok-dh-gbr">' + htmlGambarTtd(d.ttd) + '</div>' +
+'<div class="dok-dh-nama">' + dkTitik(d.pengawas, '..................') + '</div><div>NIP. ' + dkTitik(d.nip, '..................') + '</div></div>';
+var html = '', mulai = 0;
+for (var h = 0; h < halaman.length; h++) {
+var pertama = h === 0, terakhir = h === halaman.length - 1;
+html += '<div class="sheet-dok">' + (pertama ? kepala : '<div class="dok-lanjut">DAFTAR HADIR ASESMEN - Ruang ' + esc(d.ruang) + ' - ' + esc(d.mapel) + ' (lanjutan)</div>');
+if (n === 0) html += '<table class="dok-tabel"><thead><tr><th>No</th><th>Nama Siswa</th><th>Tanda Tangan</th></tr></thead><tbody><tr style="height:12mm"><td colspan="3" class="c">' + (d.ruang ? 'Belum ada peserta pada ruang ini.' : 'Pilih ruang untuk menampilkan daftar siswa.') + '</td></tr></tbody></table>';
+else html += htmlTabelDH(halaman[h], mulai, tinggi);
+mulai += halaman[h].length;
+if (terakhir) html += kaki;
+html += '</div>';
+}
+return html;
+}
+
+// ---------- Unggah berkas ke Google Drive ----------
+function siapkanBerkasUnggah(file, sesudah, gagal) {
+var tipe = String(file.type || '').toLowerCase();
+if (tipe === 'application/pdf') {
+if (file.size > BATAS_BERKAS_MB * 1024 * 1024) { gagal('Ukuran PDF maksimal ' + BATAS_BERKAS_MB + ' MB.'); return; }
+var rd = new FileReader();
+rd.onload = function(e) { sesudah(file.name, 'application/pdf', String(e.target.result).replace(/^data:[^,]*,/, '')); };
+rd.onerror = function() { gagal('Berkas tidak bisa dibaca.'); };
+rd.readAsDataURL(file);
+return;
+}
+if (tipe !== 'image/jpeg' && tipe !== 'image/png') { gagal('Format berkas harus PDF, JPG, atau PNG.'); return; }
+var rd2 = new FileReader();
+rd2.onload = function(e) {
+var img = new Image();
+img.onload = function() {
+var s = Math.min(1, 1800 / Math.max(img.width, img.height));
+var c = document.createElement('canvas'); c.width = Math.round(img.width * s); c.height = Math.round(img.height * s);
+var cx = c.getContext('2d'); cx.fillStyle = '#fff'; cx.fillRect(0, 0, c.width, c.height); cx.drawImage(img, 0, 0, c.width, c.height);
+var url = c.toDataURL('image/jpeg', 0.82);
+if (url.length * 0.75 > BATAS_BERKAS_MB * 1024 * 1024) { gagal('Foto terlalu besar. Gunakan foto yang lebih kecil.'); return; }
+sesudah(String(file.name || 'foto').replace(/\.[^.]*$/, '') + '.jpg', 'image/jpeg', url.replace(/^data:[^,]*,/, ''));
+};
+img.onerror = function() { gagal('Gambar tidak bisa dibaca.'); };
+img.src = e.target.result;
+};
+rd2.onerror = function() { gagal('Berkas tidak bisa dibaca.'); };
+rd2.readAsDataURL(file);
+}
+
+function mintaUnggah(jenis, id) {
+if (!id) { showToast("Simpan dulu sebelum mengunggah berkas.", "error"); return; }
+targetUnggah = { jenis: jenis, id: id };
+var inp = dkEl('inputUnggahBerkas'); inp.value = ''; inp.click();
+}
+
+function prosesUnggah(input) {
+var f = input.files && input.files[0];
+var t = targetUnggah;
+input.value = '';
+if (!f || !t) return;
+targetUnggah = null;
+showToast("Menyiapkan berkas...", "info");
+siapkanBerkasUnggah(f, function(nama, mime, b64) {
+showToast("Mengunggah ke Google Drive...", "info");
+var jalan = google.script.run.withSuccessHandler(function(h) {
+var daftar = t.jenis === 'ba' ? daftarBA : daftarDH;
+for (var i = 0; i < daftar.length; i++) { if (daftar[i].id === t.id) { daftar[i].fileUrl = h.fileUrl; daftar[i].fileNama = h.fileNama; daftar[i].fileDiunggah = h.fileDiunggah; } }
+if (t.jenis === 'ba') { if (baState.id === t.id) baState.fileUrl = h.fileUrl; renderListBA(); updateStatusBA(); }
+else { if (dhState.id === t.id) dhState.fileUrl = h.fileUrl; renderListDH(); updateStatusDH(); }
+showToast("Berkas berhasil diunggah.", "success");
+}).withFailureHandler(function(err) {
+showToast(pesanGalat(err, "Gagal mengunggah. Periksa koneksi lalu coba lagi."), "error");
+});
+if (t.jenis === 'ba') jalan.unggahBeritaAcara(t.id, nama, mime, b64); else jalan.unggahDaftarHadir(t.id, nama, mime, b64);
+}, function(pesan) { showToast(pesan, "error"); });
+}
+
+function tautBerkas(r) {
+return r.fileUrl ? '<a href="' + esc(r.fileUrl) + '" target="_blank" rel="noopener noreferrer" class="text-blue-600 font-semibold hover:underline"><i class="fa-solid fa-file-circle-check"></i> Lihat</a>' : '<span class="text-slate-400">Belum diunggah</span>';
+}
+
+var kelasTombolKecil = 'px-2 py-1 rounded-md border text-[11px] font-semibold inline-flex items-center gap-1 transition active:scale-95 whitespace-nowrap ';
+function tombolAksi(fungsi, id, ikon, teks, warna) {
+return '<button onclick="' + fungsi + '(\'' + esc(id) + '\')" class="' + kelasTombolKecil + warna + '"><i class="fa-solid ' + ikon + '"></i> ' + teks + '</button>';
+}
+
+function perluDiisi(pesan, idField) {
+showToast(pesan, "error");
+var e = dkEl(idField);
+if (e) { try { e.scrollIntoView({ behavior: 'smooth', block: 'center' }); e.focus(); } catch (x) {} }
+}
+
+// ======================= BERITA ACARA =======================
+function infoAdmBA() {
+var e = dkEl('baInfoAdm'); if (!e) return;
+e.innerHTML = 'Diambil otomatis dari Setting Ujian &rsaquo; Administrasi: Tahun Ajaran <b>' + esc(admDok.tahun || '-') + '</b> &bull; Proktor <b>' + esc(admDok.proktor || '-') + '</b> &bull; Penanggung Jawab <b>' + esc(admDok.kepsek || '-') + '</b>.';
+}
+
+function siapkanHalamanBA() {
+if (!baPad) {
+baPad = buatPapanTtd('baTtdWadah', function(d) { baState.ttd = d; perubahanBA(); });
+formBaruBA(true);
+}
+baPad.segarkanTombol();
+isiDropdownMapel('baMapel');
+infoAdmBA();
+muatAdmDok(function() { infoAdmBA(); renderPratinjauBA(); });
+muatPesertaRuang(function() { aturRuangBA(); });
+muatDaftarMapel(function() { isiDropdownMapel('baMapel'); });
+muatListBA();
+renderPratinjauBA();
+}
+
+function formBaruBA(awal) {
+var pref = dkParseJson(dkLsGet(PREF_DOK_KEY), {});
+baState = { id: '', ttd: '', fileUrl: '', tidakHadir: [], manualHadir: false, manualTidak: false, kotor: false, menyimpan: false };
+dkSet('baTanggal', dkIsoHariIni()); dkSet('baJamMulai', ''); dkSet('baJamSelesai', '');
+dkSet('baKegiatan', pref.kegiatan || ''); dkSet('baRuang', ''); dkSet('baMapel', '');
+dkSet('baSeharusnya', ''); dkSet('baHadir', ''); dkSet('baTidakHadir', ''); dkSet('baCatatan', '');
+dkSet('baPengawas', pref.pengawas || ''); dkSet('baNip', pref.nip || '');
+if (baPad) baPad.hapus();
+aturRuangBA();
+updateStatusBA();
+renderPratinjauBA();
+}
+
+function perubahanBA() { baState.kotor = true; updateStatusBA(); renderPratinjauBA(); }
+
+function updateStatusBA() {
+var e = dkEl('baStatus'); if (!e) return;
+var t = baState.id ? ('Tersimpan di server (ID ' + baState.id + ').' + (baState.kotor ? ' Ada perubahan yang belum disimpan.' : '')) : 'Belum disimpan.';
+if (baState.fileUrl) t += ' Berkas sudah diunggah.';
+e.innerText = t;
+}
+
+function aturRuangBA(dariInput) {
+var angka = dkRuang(dkVal('baRuang'));
+if (!/^[0-9]+$/.test(angka)) angka = '';
+var ada = angka ? pesertaDiRuang(angka) : [];
+if (baState.id && !dariInput) { isiPilihanTidakHadir(ada, angka); return; }
+dkSet('baSeharusnya', angka && pesertaRuangMuat ? String(ada.length) : '');
+if (pesertaRuangMuat) {
+var tersisa = [];
+for (var i = 0; i < baState.tidakHadir.length; i++) {
+var x = baState.tidakHadir[i], cocok = false;
+for (var j = 0; j < ada.length; j++) { if (ada[j][1] === x.n && ada[j][0] === x.k) { cocok = true; break; } }
+if (cocok) tersisa.push(x);
+}
+baState.tidakHadir = tersisa;
+}
+isiPilihanTidakHadir(ada, angka);
+renderChipTidakHadir();
+autoIsiJumlahBA();
+}
+
+function isiPilihanTidakHadir(ada, angka) {
+var sel = dkEl('baPilihTidakHadir');
+if (!angka) { sel.innerHTML = '<option value="">Isi nomor ruang dulu</option>'; return; }
+if (!ada.length) { sel.innerHTML = '<option value="">' + (pesertaRuangMuat ? 'Tidak ada peserta di ruang ' + esc(angka) : 'Memuat peserta...') + '</option>'; return; }
+var h = '<option value="">+ Pilih nama peserta yang tidak hadir</option>';
+for (var i = 0; i < ada.length; i++) {
+var sudah = false;
+for (var j = 0; j < baState.tidakHadir.length; j++) { if (baState.tidakHadir[j].n === ada[i][1] && baState.tidakHadir[j].k === ada[i][0]) { sudah = true; break; } }
+if (!sudah) h += '<option value="' + i + '">' + esc(ada[i][1]) + ' - ' + esc(ada[i][0]) + '</option>';
+}
+sel.innerHTML = h;
+}
+
+function tambahTidakHadirBA(nilai) {
+if (nilai === '') return;
+var ada = pesertaDiRuang(dkVal('baRuang'));
+var p = ada[parseInt(nilai, 10)];
+if (!p) return;
+baState.tidakHadir.push({ n: p[1], k: p[0] });
+isiPilihanTidakHadir(ada, dkVal('baRuang'));
+renderChipTidakHadir();
+autoIsiJumlahBA();
+perubahanBA();
+}
+
+function hapusTidakHadirBA(i) {
+baState.tidakHadir.splice(i, 1);
+var ada = pesertaDiRuang(dkVal('baRuang'));
+isiPilihanTidakHadir(ada, dkVal('baRuang'));
+renderChipTidakHadir();
+autoIsiJumlahBA();
+perubahanBA();
+}
+
+function renderChipTidakHadir() {
+var h = '';
+for (var i = 0; i < baState.tidakHadir.length; i++) {
+var x = baState.tidakHadir[i];
+h += '<span class="dk-chip">' + esc(x.n) + (x.k ? ' (' + esc(x.k) + ')' : '') + '<button type="button" onclick="hapusTidakHadirBA(' + i + ')" title="Hapus">&times;</button></span>';
+}
+dkEl('baChipTidakHadir').innerHTML = h;
+}
+
+// Jumlah hadir/tidak hadir terisi otomatis selama belum diketik manual
+function autoIsiJumlahBA() {
+var ruang = dkVal('baRuang');
+if (!ruang) return;
+var seharusnya = dkAngka(dkVal('baSeharusnya'));
+if (!baState.manualTidak) dkSet('baTidakHadir', String(baState.tidakHadir.length));
+if (!baState.manualHadir && seharusnya !== null) { var t = dkAngka(dkVal('baTidakHadir')) || 0; dkSet('baHadir', String(Math.max(0, seharusnya - t))); }
+}
+
+function peringatanBA() {
+var e = dkEl('baPeringatan');
+var s = dkAngka(dkVal('baSeharusnya')), h = dkAngka(dkVal('baHadir')), t = dkAngka(dkVal('baTidakHadir'));
+var p = [];
+if (dkVal('baRuang') && pesertaRuangMuat && s === 0) p.push('Tidak ada peserta pada ruang ' + dkVal('baRuang') + ' di Data Peserta. Periksa nomor ruang.');
+if (s !== null && h !== null && t !== null && (h + t) !== s) p.push('Hadir (' + h + ') + tidak hadir (' + t + ') = ' + (h + t) + ', tidak sama dengan jumlah seharusnya (' + s + ').');
+if (t !== null && t !== baState.tidakHadir.length) p.push('Jumlah tidak hadir (' + t + ') berbeda dengan jumlah nama yang dipilih (' + baState.tidakHadir.length + ').');
+e.innerHTML = p.length ? ('<i class="fa-solid fa-triangle-exclamation"></i> ' + p.join('<br><i class="fa-solid fa-triangle-exclamation"></i> ')) : '';
+e.classList.toggle('hidden', !p.length);
+}
+
+function ambilDataBA() {
+return {
+id: baState.id, tanggal: dkVal('baTanggal'), jamMulai: dkVal('baJamMulai'), jamSelesai: dkVal('baJamSelesai'),
+kegiatan: dkVal('baKegiatan'), ruang: dkRuang(dkVal('baRuang')), mapel: dkVal('baMapel'),
+seharusnya: dkVal('baSeharusnya'), hadir: dkVal('baHadir'), tidakHadir: dkVal('baTidakHadir'),
+namaTidakHadir: baState.tidakHadir.slice(), catatan: dkEl('baCatatan').value.replace(/\s+$/, ''),
+pengawas: dkVal('baPengawas'), nip: dkVal('baNip'), ttd: baState.ttd
+};
+}
+
+function validasiBA(d) {
+if (!d.tanggal) return ['Tanggal pelaksanaan wajib diisi.', 'baTanggal'];
+if (!d.jamMulai) return ['Jam mulai wajib diisi.', 'baJamMulai'];
+if (!d.jamSelesai) return ['Jam selesai wajib diisi.', 'baJamSelesai'];
+if (d.jamSelesai <= d.jamMulai) return ['Jam selesai harus setelah jam mulai.', 'baJamSelesai'];
+if (!d.kegiatan) return ['Kegiatan yang diselenggarakan wajib diisi.', 'baKegiatan'];
+if (!/^[0-9]+$/.test(d.ruang) || parseInt(d.ruang, 10) < 1) return ['Ruang wajib diisi dengan angka.', 'baRuang'];
+if (!d.mapel) return ['Mata pelajaran wajib dipilih.', 'baMapel'];
+if (d.seharusnya === '') return ['Jumlah peserta seharusnya belum terisi. Tunggu data peserta dimuat atau periksa nomor ruang.', 'baRuang'];
+if (d.hadir === '') return ['Jumlah peserta hadir wajib diisi.', 'baHadir'];
+if (d.tidakHadir === '') return ['Jumlah peserta tidak hadir wajib diisi.', 'baTidakHadir'];
+if (!d.pengawas) return ['Nama pengawas wajib diisi.', 'baPengawas'];
+return null;
+}
+
+var tmrBA = null;
+function renderPratinjauBA() {
+clearTimeout(tmrBA);
+tmrBA = setTimeout(function() {
+if (!dkEl('baPratinjau')) return;
+dkEl('baPratinjau').innerHTML = htmlBeritaAcara(ambilDataBA());
+skalakanPratinjau('baPratinjauWadah', 'baPratinjau');
+peringatanBA();
+}, 120);
+}
+
+function simpanBA() {
+if (baState.menyimpan) return;
+var d = ambilDataBA(), v = validasiBA(d);
+if (v) { perluDiisi(v[0], v[1]); return; }
+var btn = dkEl('baBtnSimpan');
+baState.menyimpan = true; btn.disabled = true; btn.classList.add('opacity-60');
+showToast("Menyimpan ke server...", "info");
+function lepas() { baState.menyimpan = false; btn.disabled = false; btn.classList.remove('opacity-60'); }
+google.script.run.withSuccessHandler(function(rek) {
+lepas();
+baState.id = rek.id; baState.kotor = false; baState.fileUrl = rek.fileUrl || '';
+dkLsSet(PREF_DOK_KEY, JSON.stringify({ kegiatan: d.kegiatan, pengawas: d.pengawas, nip: d.nip }));
+if (d.ttd) { dkLsSet(TTD_TERAKHIR_KEY, d.ttd); if (baPad) baPad.segarkanTombol(); }
+updateStatusBA();
+showToast("Berita acara tersimpan.", "success");
+muatListBA();
+}).withFailureHandler(function(err) {
+lepas();
+showToast(pesanGalat(err, "Gagal menyimpan. Periksa koneksi lalu coba lagi."), "error");
+}).simpanBeritaAcara(d);
+}
+
+function cetakBA() {
+var d = ambilDataBA(), v = validasiBA(d);
+if (v) { perluDiisi('Lengkapi dulu sebelum mencetak: ' + v[0], v[1]); return; }
+if (baState.kotor || !baState.id) showToast("Dokumen dicetak. Jangan lupa klik Simpan agar data tersimpan di server.", "info");
+cetakDokumenHtml(htmlBeritaAcara(d));
+}
+
+function klikUnggahBA() { mintaUnggah('ba', baState.id); }
+
+function muatListBA(tampilToast) {
+google.script.run.withSuccessHandler(function(data) {
+daftarBA = data || [];
+renderListBA();
+if (tampilToast) showToast("Daftar diperbarui.", "success");
+}).withFailureHandler(function(err) {
+dkEl('baListInfo').innerText = 'Gagal memuat daftar. Klik Segarkan untuk mencoba lagi.';
+}).getListBeritaAcara();
+}
+
+function renderListBA() {
+var cari = dkVal('baCari').toLowerCase();
+var h = '', tampil = 0;
+var admin = currentUser && currentUser.role === 'admin';
+for (var i = 0; i < daftarBA.length; i++) {
+var r = daftarBA[i];
+var teksCari = (r.tanggal + ' ' + r.ruang + ' ' + r.mapel + ' ' + r.pengawas).toLowerCase();
+if (cari && teksCari.indexOf(cari) === -1) continue;
+tampil++;
+h += '<tr class="hover:bg-slate-50"><td class="px-3 py-2 whitespace-nowrap">' + esc(teksTanggalJadwal(r.tanggal)) + '<div class="text-[10px] text-slate-400">' + esc(r.jamMulai) + ' - ' + esc(r.jamSelesai) + '</div></td>' +
+'<td class="px-3 py-2 text-center font-bold">' + esc(r.ruang) + '</td><td class="px-3 py-2">' + esc(r.mapel) + '</td>' +
+'<td class="px-3 py-2 text-center whitespace-nowrap">' + esc(r.hadir) + ' / ' + esc(r.tidakHadir) + '</td><td class="px-3 py-2">' + esc(r.pengawas) + '</td>' +
+'<td class="px-3 py-2 whitespace-nowrap">' + tautBerkas(r) + '</td><td class="px-3 py-2"><div class="flex flex-wrap gap-1">' +
+tombolAksi('bukaBA', r.id, 'fa-pen-to-square', 'Buka', 'bg-blue-50 border-blue-200 text-blue-700 hover:bg-blue-100') +
+tombolAksi('cetakBAdariList', r.id, 'fa-print', 'Cetak', 'bg-emerald-50 border-emerald-200 text-emerald-700 hover:bg-emerald-100') +
+tombolAksi('unggahDariListBA', r.id, 'fa-cloud-arrow-up', 'Upload', 'bg-white border-slate-300 text-slate-700 hover:bg-slate-50') +
+(admin ? tombolAksi('hapusBA', r.id, 'fa-trash', 'Hapus', 'bg-red-50 border-red-200 text-red-600 hover:bg-red-100') : '') +
+'</div></td></tr>';
+}
+if (!tampil) h = '<tr><td colspan="7" class="px-3 py-6 text-center text-slate-400">' + (daftarBA.length ? 'Tidak ada data yang cocok.' : 'Belum ada berita acara tersimpan.') + '</td></tr>';
+dkEl('baListBody').innerHTML = h;
+dkEl('baListInfo').innerText = daftarBA.length + ' berita acara tersimpan di server' + (cari ? ' (' + tampil + ' cocok dengan pencarian)' : '') + '.';
+}
+
+function unggahDariListBA(id) { mintaUnggah('ba', id); }
+
+function isiFormBA(r) {
+baState = { id: r.id, ttd: r.ttd || '', fileUrl: r.fileUrl || '', tidakHadir: dkParseJson(r.namaTidakHadir, []), manualHadir: true, manualTidak: true, kotor: false, menyimpan: false };
+if (Object.prototype.toString.call(baState.tidakHadir) !== '[object Array]') baState.tidakHadir = [];
+dkSet('baTanggal', r.tanggal); dkSet('baJamMulai', r.jamMulai); dkSet('baJamSelesai', r.jamSelesai);
+dkSet('baKegiatan', r.kegiatan); dkSet('baRuang', r.ruang);
+isiDropdownMapel('baMapel'); var sel = dkEl('baMapel'); sel.value = r.mapel;
+if (sel.value !== r.mapel) { var o = document.createElement('option'); o.value = r.mapel; o.textContent = r.mapel; sel.appendChild(o); sel.value = r.mapel; }
+dkSet('baSeharusnya', r.seharusnya); dkSet('baHadir', r.hadir); dkSet('baTidakHadir', r.tidakHadir);
+dkSet('baCatatan', r.catatan); dkSet('baPengawas', r.pengawas); dkSet('baNip', r.nip);
+baPad.setel(r.ttd || '');
+var ada = pesertaDiRuang(r.ruang);
+isiPilihanTidakHadir(ada, r.ruang); renderChipTidakHadir();
+updateStatusBA(); renderPratinjauBA();
+}
+
+function bukaBA(id) {
+showToast("Memuat berita acara...", "info");
+google.script.run.withSuccessHandler(function(r) {
+isiFormBA(r);
+try { dkEl('mainContentArea').scrollTo({ top: 0, behavior: 'smooth' }); } catch (e) {}
+showToast("Berita acara dibuka. Ubah lalu klik Simpan.", "success");
+}).withFailureHandler(function(err) {
+showToast(pesanGalat(err, "Gagal memuat berita acara."), "error");
+}).getBeritaAcara(id);
+}
+
+function cetakBAdariList(id) {
+showToast("Menyiapkan dokumen...", "info");
+google.script.run.withSuccessHandler(function(r) {
+cetakDokumenHtml(htmlBeritaAcara({
+tanggal: r.tanggal, jamMulai: r.jamMulai, jamSelesai: r.jamSelesai, kegiatan: r.kegiatan, ruang: r.ruang, mapel: r.mapel,
+seharusnya: r.seharusnya, hadir: r.hadir, tidakHadir: r.tidakHadir, namaTidakHadir: dkParseJson(r.namaTidakHadir, []),
+catatan: r.catatan, pengawas: r.pengawas, nip: r.nip, ttd: r.ttd
+}));
+}).withFailureHandler(function(err) {
+showToast(pesanGalat(err, "Gagal memuat berita acara."), "error");
+}).getBeritaAcara(id);
+}
+
+function hapusBA(id) {
+if (!window.confirm('Hapus berita acara ini dari server? Berkas yang sudah diunggah ke Drive tidak ikut terhapus.')) return;
+google.script.run.withSuccessHandler(function() {
+if (baState.id === id) formBaruBA();
+muatListBA();
+showToast("Berita acara dihapus.", "success");
+}).withFailureHandler(function(err) {
+showToast(pesanGalat(err, "Gagal menghapus."), "error");
+}).hapusBeritaAcara(id);
+}
+
+// ======================= DAFTAR HADIR =======================
+function siapkanHalamanDH() {
+var admin = currentUser && currentUser.role === 'admin';
+dkEl('dhFormWrap').classList.toggle('hidden', !admin);
+dkEl('dhGuruInfo').classList.toggle('hidden', admin);
+dkEl('dhPratinjauBungkus').classList.toggle('hidden', !admin);
+if (admin && !dhPad) {
+dhPad = buatPapanTtd('dhTtdWadah', function(d) { dhState.ttd = d; perubahanDH(); });
+formBaruDH(true);
+}
+if (admin) {
+dhPad.segarkanTombol();
+isiDropdownMapel('dhMapel');
+infoAdmDH();
+muatAdmDok(function() { infoAdmDH(); if (!dkVal('dhTahun') && !dhState.id) dkSet('dhTahun', admDok.tahun); renderPratinjauDH(); });
+muatPesertaRuang(function() { isiDropdownRuangDH(); renderPratinjauDH(); });
+muatDaftarMapel(function() { isiDropdownMapel('dhMapel'); });
+renderPratinjauDH();
+}
+muatListDH();
+}
+
+function infoAdmDH() {
+var e = dkEl('dhInfoAdm'); if (!e) return;
+e.innerHTML = 'Judul dokumen memakai Tahun Ajaran <b>' + esc(admDok.tahun || '-') + '</b> dari Setting Ujian &rsaquo; Administrasi.';
+}
+
+function isiDropdownRuangDH() {
+var sel = dkEl('dhRuang'); var pilih = sel.value;
+var rooms = daftarRuangAda();
+if (pilih && rooms.indexOf(pilih) === -1) rooms.push(pilih);
+var h = '<option value="">Pilih ruang</option>';
+for (var i = 0; i < rooms.length; i++) { var jml = pesertaDiRuang(rooms[i]).length; h += '<option value="' + esc(rooms[i]) + '">Ruang ' + esc(rooms[i]) + ' (' + jml + ' siswa)</option>'; }
+sel.innerHTML = h; sel.value = pilih;
+}
+
+function formBaruDH() {
+dhState = { id: '', ttd: '', fileUrl: '', kotor: false, menyimpan: false };
+var pref = dkParseJson(dkLsGet(PREF_DOK_KEY), {});
+dkSet('dhTanggal', dkIsoHariIni()); dkSet('dhJamMulai', ''); dkSet('dhJamSelesai', '');
+dkSet('dhRuang', ''); dkSet('dhMapel', ''); dkSet('dhAsesmen', pref.asesmenDH || ''); dkSet('dhTahun', admDok.tahun || '');
+dkSet('dhTglDok', dkIsoHariIni()); dkSet('dhPengawas', ''); dkSet('dhNip', '');
+if (dhPad) dhPad.hapus();
+updateStatusDH(); renderPratinjauDH();
+}
+
+function perubahanDH() { dhState.kotor = true; updateStatusDH(); renderPratinjauDH(); }
+
+function updateStatusDH() {
+var e = dkEl('dhStatus'); if (!e) return;
+var t = dhState.id ? ('Tersimpan di server (ID ' + dhState.id + ').' + (dhState.kotor ? ' Ada perubahan yang belum disimpan.' : '')) : 'Belum disimpan.';
+if (dhState.fileUrl) t += ' Berkas sudah diunggah.';
+e.innerText = t;
+}
+
+function ambilDataDH() {
+return {
+id: dhState.id, tanggal: dkVal('dhTanggal'), jamMulai: dkVal('dhJamMulai'), jamSelesai: dkVal('dhJamSelesai'),
+ruang: dkVal('dhRuang'), mapel: dkVal('dhMapel'), asesmen: dkVal('dhAsesmen'), tahun: dkVal('dhTahun'),
+tanggalDokumen: dkVal('dhTglDok'), pengawas: dkVal('dhPengawas'), nip: dkVal('dhNip'), ttd: dhState.ttd
+};
+}
+
+function validasiDH(d) {
+if (!d.tanggal) return ['Hari/tanggal wajib diisi.', 'dhTanggal'];
+if (!d.jamMulai) return ['Waktu mulai wajib diisi.', 'dhJamMulai'];
+if (!d.jamSelesai) return ['Waktu selesai wajib diisi.', 'dhJamSelesai'];
+if (d.jamSelesai <= d.jamMulai) return ['Waktu selesai harus setelah waktu mulai.', 'dhJamSelesai'];
+if (!d.ruang) return ['Ruang wajib dipilih.', 'dhRuang'];
+if (!d.mapel) return ['Mata pelajaran wajib dipilih.', 'dhMapel'];
+if (!d.asesmen) return ['Nama asesmen wajib diisi.', 'dhAsesmen'];
+if (!d.tahun) return ['Tahun ajaran wajib diisi.', 'dhTahun'];
+if (!d.tanggalDokumen) return ['Tanggal dokumen wajib diisi.', 'dhTglDok'];
+if (!d.pengawas) return ['Nama pengawas wajib diisi.', 'dhPengawas'];
+if (pesertaRuangMuat && pesertaDiRuang(d.ruang).length === 0) return ['Ruang ' + d.ruang + ' belum memiliki peserta. Atur ruang di menu Data Peserta.', 'dhRuang'];
+return null;
+}
+
+var tmrDH = null;
+function renderPratinjauDH() {
+clearTimeout(tmrDH);
+tmrDH = setTimeout(function() {
+if (!dkEl('dhPratinjau') || !(currentUser && currentUser.role === 'admin')) return;
+var d = ambilDataDH();
+dkEl('dhPratinjau').innerHTML = htmlDaftarHadir(d);
+skalakanPratinjau('dhPratinjauWadah', 'dhPratinjau');
+var p = dkEl('dhPeringatan');
+if (d.ruang && pesertaRuangMuat) { var n = pesertaDiRuang(d.ruang).length; p.innerHTML = '<i class="fa-solid fa-circle-info"></i> Ruang ' + esc(d.ruang) + ' berisi <b>' + n + '</b> siswa (otomatis dari Data Peserta).'; p.classList.remove('hidden'); }
+else { p.classList.add('hidden'); }
+}, 120);
+}
+
+function simpanDH() {
+if (dhState.menyimpan) return;
+var d = ambilDataDH(), v = validasiDH(d);
+if (v) { perluDiisi(v[0], v[1]); return; }
+var btn = dkEl('dhBtnSimpan');
+dhState.menyimpan = true; btn.disabled = true; btn.classList.add('opacity-60');
+showToast("Menyimpan ke server...", "info");
+function lepas() { dhState.menyimpan = false; btn.disabled = false; btn.classList.remove('opacity-60'); }
+google.script.run.withSuccessHandler(function(rek) {
+lepas();
+dhState.id = rek.id; dhState.kotor = false; dhState.fileUrl = rek.fileUrl || '';
+var pref = dkParseJson(dkLsGet(PREF_DOK_KEY), {}); pref.asesmenDH = d.asesmen; dkLsSet(PREF_DOK_KEY, JSON.stringify(pref));
+if (d.ttd) { dkLsSet(TTD_TERAKHIR_KEY, d.ttd); if (dhPad) dhPad.segarkanTombol(); }
+updateStatusDH();
+showToast("Daftar hadir tersimpan.", "success");
+muatListDH();
+}).withFailureHandler(function(err) {
+lepas();
+showToast(pesanGalat(err, "Gagal menyimpan. Periksa koneksi lalu coba lagi."), "error");
+}).simpanDaftarHadir(d);
+}
+
+function cetakDH() {
+var d = ambilDataDH(), v = validasiDH(d);
+if (v) { perluDiisi('Lengkapi dulu sebelum mencetak: ' + v[0], v[1]); return; }
+if (dhState.kotor || !dhState.id) showToast("Dokumen dicetak. Jangan lupa klik Simpan agar data tersimpan di server.", "info");
+cetakDokumenHtml(htmlDaftarHadir(d));
+}
+
+function klikUnggahDH() { mintaUnggah('dh', dhState.id); }
+
+function muatListDH(tampilToast) {
+google.script.run.withSuccessHandler(function(data) {
+daftarDH = data || [];
+renderListDH();
+if (tampilToast) showToast("Daftar diperbarui.", "success");
+}).withFailureHandler(function() {
+dkEl('dhListInfo').innerText = 'Gagal memuat daftar. Klik Segarkan untuk mencoba lagi.';
+}).getListDaftarHadir();
+}
+
+function renderListDH() {
+var cari = dkVal('dhCari').toLowerCase();
+var admin = currentUser && currentUser.role === 'admin';
+var h = '', tampil = 0;
+for (var i = 0; i < daftarDH.length; i++) {
+var r = daftarDH[i];
+var teksCari = (r.tanggal + ' ' + r.ruang + ' ' + r.mapel + ' ' + r.pengawas).toLowerCase();
+if (cari && teksCari.indexOf(cari) === -1) continue;
+tampil++;
+h += '<tr class="hover:bg-slate-50"><td class="px-3 py-2 whitespace-nowrap">' + esc(teksTanggalJadwal(r.tanggal)) + '</td>' +
+'<td class="px-3 py-2 whitespace-nowrap">' + esc(r.jamMulai) + ' - ' + esc(r.jamSelesai) + '</td>' +
+'<td class="px-3 py-2 text-center font-bold">' + esc(r.ruang) + '</td><td class="px-3 py-2">' + esc(r.mapel) + '</td><td class="px-3 py-2">' + esc(r.pengawas) + '</td>' +
+'<td class="px-3 py-2 whitespace-nowrap">' + tautBerkas(r) + '</td><td class="px-3 py-2"><div class="flex flex-wrap gap-1">' +
+(admin ? tombolAksi('bukaDH', r.id, 'fa-pen-to-square', 'Buka', 'bg-blue-50 border-blue-200 text-blue-700 hover:bg-blue-100') + tombolAksi('cetakDHdariList', r.id, 'fa-print', 'Cetak', 'bg-emerald-50 border-emerald-200 text-emerald-700 hover:bg-emerald-100') : '') +
+tombolAksi('unggahDariListDH', r.id, 'fa-cloud-arrow-up', 'Upload', 'bg-white border-slate-300 text-slate-700 hover:bg-slate-50') +
+(admin ? tombolAksi('hapusDH', r.id, 'fa-trash', 'Hapus', 'bg-red-50 border-red-200 text-red-600 hover:bg-red-100') : '') +
+'</div></td></tr>';
+}
+if (!tampil) h = '<tr><td colspan="7" class="px-3 py-6 text-center text-slate-400">' + (daftarDH.length ? 'Tidak ada data yang cocok.' : 'Belum ada daftar hadir yang disimpan admin.') + '</td></tr>';
+dkEl('dhListBody').innerHTML = h;
+dkEl('dhListInfo').innerText = daftarDH.length + ' daftar hadir tersimpan di server' + (cari ? ' (' + tampil + ' cocok dengan pencarian)' : '') + '.';
+}
+
+function unggahDariListDH(id) { mintaUnggah('dh', id); }
+
+function bukaDH(id) {
+showToast("Memuat daftar hadir...", "info");
+google.script.run.withSuccessHandler(function(r) {
+dhState = { id: r.id, ttd: r.ttd || '', fileUrl: r.fileUrl || '', kotor: false, menyimpan: false };
+dkSet('dhTanggal', r.tanggal); dkSet('dhJamMulai', r.jamMulai); dkSet('dhJamSelesai', r.jamSelesai);
+isiDropdownRuangDH(); dkSet('dhRuang', r.ruang);
+isiDropdownMapel('dhMapel'); var sel = dkEl('dhMapel'); sel.value = r.mapel;
+if (sel.value !== r.mapel) { var o = document.createElement('option'); o.value = r.mapel; o.textContent = r.mapel; sel.appendChild(o); sel.value = r.mapel; }
+dkSet('dhAsesmen', r.asesmen); dkSet('dhTahun', r.tahun); dkSet('dhTglDok', r.tanggalDokumen);
+dkSet('dhPengawas', r.pengawas); dkSet('dhNip', r.nip);
+dhPad.setel(r.ttd || '');
+updateStatusDH(); renderPratinjauDH();
+try { dkEl('mainContentArea').scrollTo({ top: 0, behavior: 'smooth' }); } catch (e) {}
+showToast("Daftar hadir dibuka. Ubah lalu klik Simpan.", "success");
+}).withFailureHandler(function(err) {
+showToast(pesanGalat(err, "Gagal memuat daftar hadir."), "error");
+}).getDaftarHadir(id);
+}
+
+function cetakDHdariList(id) {
+showToast("Menyiapkan dokumen...", "info");
+var siap = function() {
+google.script.run.withSuccessHandler(function(r) {
+cetakDokumenHtml(htmlDaftarHadir({
+tanggal: r.tanggal, jamMulai: r.jamMulai, jamSelesai: r.jamSelesai, ruang: r.ruang, mapel: r.mapel,
+asesmen: r.asesmen, tahun: r.tahun, tanggalDokumen: r.tanggalDokumen, pengawas: r.pengawas, nip: r.nip, ttd: r.ttd
+}));
+}).withFailureHandler(function(err) {
+showToast(pesanGalat(err, "Gagal memuat daftar hadir."), "error");
+}).getDaftarHadir(id);
+};
+if (pesertaRuangMuat && admDok.tahun) siap(); else { muatAdmDok(function() { if (pesertaRuangMuat) siap(); else muatPesertaRuang(siap); }); }
+}
+
+function hapusDH(id) {
+if (!window.confirm('Hapus daftar hadir ini dari server? Berkas yang sudah diunggah ke Drive tidak ikut terhapus.')) return;
+google.script.run.withSuccessHandler(function() {
+if (dhState.id === id) formBaruDH();
+muatListDH();
+showToast("Daftar hadir dihapus.", "success");
+}).withFailureHandler(function(err) {
+showToast(pesanGalat(err, "Gagal menghapus."), "error");
+}).hapusDaftarHadir(id);
+}
 
 // ==========================================
 // GEMINI AI INTEGRATION (GENERATOR SOAL)
