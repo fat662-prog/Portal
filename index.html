@@ -57,10 +57,14 @@ select:disabled { background-color: #f8fafc; cursor: not-allowed; opacity: 0.7; 
 .k-val{font-weight:700;flex:1;}
 .k-box{font-family:'Courier New',monospace;border:0.3mm solid #555;border-radius:1mm;padding:0 1.5mm;background:#f5f5f5;display:inline-block;letter-spacing:0.3mm;}
 .k-ttd{position:absolute;right:4mm;bottom:3mm;width:46mm;font-size:7.5pt;line-height:1.25;text-align:left;}
-.k-ttd-img{height:13mm;display:flex;align-items:center;}
-.k-ttd-img img{max-height:13mm;max-width:40mm;}
+.k-ttd-img{height:16mm;display:flex;align-items:center;position:relative;}
+.k-ttd-img img.ttd-gbr{width:42mm;height:16mm;flex-shrink:0;object-fit:contain;display:block;}
+.k-ttd-img img.ttd-stempel{left:15mm;top:50%;height:26mm;}
+/* Stempel Kepala Sekolah (file terpisah stempel-kepsek.png): ditumpuk di atas tanda tangan dan boleh menimpa teks, seperti stempel manual */
+.ttd-gbr{max-width:none;}
+.ttd-stempel{position:absolute;z-index:3;width:auto;max-width:none;transform:translate(-50%,-50%);pointer-events:none;mix-blend-mode:multiply;opacity:.92;}
 .k-kepsek{font-weight:700;text-decoration:underline;}
-.k-garis-jd{margin:0.8mm 0 1.2mm 0;}
+.k-garis-jd{margin:0.8mm 0 2.6mm 0;}
 .k-jd-head{gap:2.5mm;}
 .k-jd-head .k-logo{width:10mm;height:10mm;}
 .k-jd-head .k-t1{font-size:9pt;}
@@ -68,7 +72,7 @@ select:disabled { background-color: #f8fafc; cursor: not-allowed; opacity: 0.7; 
 .k-jd-head .k-t3{font-size:7pt;}
 .k-jd-wrap{width:100%;}
 .k-jd-tabel{width:100%;border-collapse:collapse;table-layout:auto;font-size:7pt;line-height:1.1;white-space:nowrap;}
-.k-jd-tabel th,.k-jd-tabel td{border:0.25mm solid #000;padding:0.1mm 1mm !important;font-size:inherit !important;line-height:1.1;vertical-align:middle;white-space:nowrap;}
+.k-jd-tabel th,.k-jd-tabel td{border:0.25mm solid #000;padding:0.5mm 1mm !important;font-size:inherit !important;line-height:1.1;vertical-align:middle;white-space:nowrap;}
 .k-jd-tabel th{background:#e8e8e8;font-weight:700;text-align:center;}
 .k-jd-tabel .k-jd-c{text-align:center;}
 .k-jd-kosong{text-align:center;font-size:8pt;color:#555;padding-top:12mm;}
@@ -116,8 +120,9 @@ textarea.dk-in{resize:vertical;}
 .dok-tb-nip .dok-garis{flex:1;}
 .dok-tb-ttd{flex:1;display:flex;align-items:flex-end;}
 .dok-tb-n{width:7mm;flex-shrink:0;}
-.dok-tb-area{flex:1;position:relative;height:19mm;border-bottom:0.3mm solid #000;display:flex;align-items:flex-end;justify-content:center;}
-.dok-tb-area img{max-height:19mm;max-width:100%;object-fit:contain;}
+.dok-tb-area{flex:1;position:relative;height:24mm;border-bottom:0.3mm solid #000;display:flex;align-items:flex-end;justify-content:center;}
+.dok-tb-area img.ttd-gbr{width:50mm;height:24mm;flex-shrink:0;object-fit:contain;display:block;}
+.dok-tb-area img.ttd-stempel{left:calc(50% - 12mm);top:50%;height:30mm;}
 .dok-ir{display:flex;margin-bottom:1.2mm;}
 .dok-il{width:36mm;flex-shrink:0;}
 .dok-is{width:4mm;flex-shrink:0;}
@@ -133,8 +138,9 @@ textarea.dk-in{resize:vertical;}
 .sheet-dok.dok-flex{display:flex;flex-direction:column;}
 .sheet-dok.dok-flex > *{flex-shrink:0;}
 .dok-dh-kaki{margin-top:auto;padding-top:5mm;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(5,auto);grid-auto-flow:column;column-gap:4mm;text-align:center;font-size:10.5pt;line-height:1.3;}
-.dok-dh-kaki .g{height:16mm;display:flex;align-items:center;justify-content:center;}
-.dok-dh-kaki .g img{max-height:16mm;max-width:46mm;object-fit:contain;}
+.dok-dh-kaki .g{height:20mm;position:relative;display:flex;align-items:center;justify-content:center;}
+.dok-dh-kaki .g img.ttd-gbr{width:50mm;height:20mm;flex-shrink:0;object-fit:contain;display:block;}
+.dok-dh-kaki .g img.ttd-stempel{left:calc(50% - 13mm);top:50%;height:30mm;}
 .dok-dh-kaki .nm{font-weight:700;text-decoration:underline;}
 .dok-dh-kaki .nm span,.dok-dh-kaki .ni span{display:inline-block;white-space:nowrap;}
 .dok-dh-kaki .a{white-space:nowrap;}
@@ -2165,6 +2171,7 @@ showLoading(false); showToast((err && err.message) ? err.message.replace(/^Error
 var dataKartu = [];
 var TTD_KEPSEK_URL = 'ttd-kepsek.png';
 var TTD_PROKTOR_URL = 'ttd-proktor.png';
+var STEMPEL_KEPSEK_URL = 'stempel-kepsek.png';
 var ttdKartu = TTD_KEPSEK_URL;
 var KARTU_KEY = 'smpn8_kartu_setting';
 
@@ -2261,7 +2268,7 @@ showLoading(false); showToast("Gagal memuat data peserta", "error");
 }
 
 function htmlSatuKartu(r, cfg) {
-var ttd = cfg.ttd ? '<img src="' + cfg.ttd + '" alt="" onerror="this.style.display=\'none\'">' : '';
+var ttd = cfg.ttd ? '<img class="ttd-gbr" src="' + cfg.ttd + '" alt="" onerror="this.style.display=\'none\'">' + htmlStempelKepsek() : '';
 return '<div class="kartu">' +
 '<div class="k-head"><img class="k-logo" src="logo.png" alt="" onerror="this.style.display=\'none\'">' +
 '<div class="k-judul"><div class="k-t1">KARTU PESERTA ASESMEN</div><div class="k-t2">SMP NEGERI 8 SURABAYA</div><div class="k-t3">Tahun Ajaran ' + esc(cfg.tahun) + '</div></div></div>' +
@@ -3168,13 +3175,17 @@ return '<div class="dok-kop"><img class="dok-logo" src="logo.png" alt="" onerror
 '<div class="dok-judul"><div class="dok-t1">' + judul + '</div><div class="dok-t2">SMP NEGERI 8 SURABAYA</div><div class="dok-t3">TAHUN AJARAN ' + dkTitik(tahun, '....') + '</div></div></div>';
 }
 
-function htmlGambarTtd(src) { return src ? '<img src="' + esc(src) + '" alt="" onerror="this.style.display=\'none\'">' : ''; }
+// Stempel Kepala Sekolah: gambar terpisah (stempel-kepsek.png) yang ditumpuk di atas tanda tangan
+function htmlStempelKepsek() { return '<img class="ttd-stempel" src="' + STEMPEL_KEPSEK_URL + '" alt="" onerror="this.style.display=\'none\'">'; }
 
-function htmlBarisTtdBA(no, peran, nama, nip, adaNip, src) {
+// Semua gambar tanda tangan memakai kotak berukuran tetap (lihat CSS .ttd-gbr), apa pun ukuran gambar aslinya
+function htmlGambarTtd(src, denganStempel) { return src ? '<img class="ttd-gbr" src="' + esc(src) + '" alt="" onerror="this.style.display=\'none\'">' + (denganStempel ? htmlStempelKepsek() : '') : ''; }
+
+function htmlBarisTtdBA(no, peran, nama, nip, adaNip, src, denganStempel) {
 return '<div class="dok-tb"><div class="dok-tb-no">' + no + '.</div><div class="dok-tb-peran">' + peran + '</div>' +
 '<div class="dok-tb-nama"><div class="dok-garis">' + dkTitik(nama, '') + '</div>' +
 (adaNip ? '<div class="dok-tb-nip"><span>NIP</span><div class="dok-garis">' + esc(nip || '') + '</div></div>' : '') + '</div>' +
-'<div class="dok-tb-ttd"><span class="dok-tb-n">' + no + '.</span><div class="dok-tb-area">' + htmlGambarTtd(src) + '</div></div></div>';
+'<div class="dok-tb-ttd"><span class="dok-tb-n">' + no + '.</span><div class="dok-tb-area">' + htmlGambarTtd(src, denganStempel) + '</div></div></div>';
 }
 
 function htmlNamaTidakHadir(arr) {
@@ -3205,7 +3216,7 @@ baris('', 'Nama Peserta Tidak Hadir', htmlNamaTidakHadir(d.namaTidakHadir)) +
 '<div class="dok-ttd-kepala"><div class="kosong"></div><div class="ttd">TTD</div></div>' +
 htmlBarisTtdBA(1, 'Proktor', admDok.proktor, admDok.nipProktor, true, 'ttd-proktor.png') +
 htmlBarisTtdBA(2, 'Pengawas', d.pengawas, d.nip, !!(d.nip), d.ttd) +
-htmlBarisTtdBA(3, 'Penanggung Jawab', admDok.kepsek, admDok.nip, true, 'ttd-kepsek.png') +
+htmlBarisTtdBA(3, 'Penanggung Jawab', admDok.kepsek, admDok.nip, true, 'ttd-kepsek.png', true) +
 '</div>';
 }
 
@@ -3229,16 +3240,17 @@ var DH_MAKS_SATU_LEMBAR = 25;
 var DH_TINGGI_BARIS_MIN = 5.2, DH_TINGGI_BARIS_MAKS = 9;
 // Ruang tabel (mm) untuk baris siswa bila paragraf pembuka 1 baris dan nama pada kaki 1 baris:
 // lembar pertama tanpa kaki / lembar terakhir dengan kaki. Dikurangi otomatis bila teks lebih panjang.
-var DH_RUANG_TANPA_KAKI = 185, DH_RUANG_DENGAN_KAKI = 150;
+// (Kotak tanda tangan pada kaki setinggi 20 mm, 4 mm lebih tinggi dari sebelumnya, sehingga ruang dengan kaki 150 -> 146.)
+var DH_RUANG_TANPA_KAKI = 185, DH_RUANG_DENGAN_KAKI = 146;
 
 function htmlKakiDH(d) {
 var tglDok = dkTanggalPanjang(d.tanggalDokumen);
-function kolom(atas, peran, src, nama, nip) {
-return '<div class="a">' + atas + '</div><div class="p">' + peran + '</div><div class="g">' + htmlGambarTtd(src) + '</div>' +
+function kolom(atas, peran, src, nama, nip, denganStempel) {
+return '<div class="a">' + atas + '</div><div class="p">' + peran + '</div><div class="g">' + htmlGambarTtd(src, denganStempel) + '</div>' +
 '<div class="nm"><span>' + dkTitik(nama, '..................') + '</span></div><div class="ni"><span>NIP. ' + dkTitik(nip, '..................') + '</span></div>';
 }
 return '<div class="dok-dh-kaki">' +
-kolom('', 'Kepala Sekolah', 'ttd-kepsek.png', admDok.kepsek, admDok.nip) +
+kolom('', 'Kepala Sekolah', 'ttd-kepsek.png', admDok.kepsek, admDok.nip, true) +
 kolom('', 'Proktor', 'ttd-proktor.png', admDok.proktor, admDok.nipProktor) +
 kolom('Surabaya, ' + dkTitik(tglDok, '..........'), 'Pengawas', d.ttd, d.pengawas, d.nip) +
 '</div>';
