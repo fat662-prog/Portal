@@ -137,7 +137,7 @@ textarea.dk-in{resize:vertical;}
 .dok-sel.tengah{justify-content:center;}
 .sheet-dok.dok-flex{display:flex;flex-direction:column;}
 .sheet-dok.dok-flex > *{flex-shrink:0;}
-.dok-dh-kaki{margin-top:auto;padding-top:5mm;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(5,auto);grid-auto-flow:column;column-gap:4mm;text-align:center;font-size:10.5pt;line-height:1.3;}
+.dok-dh-kaki{margin-top:0;padding-top:5mm;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(5,auto);grid-auto-flow:column;column-gap:4mm;text-align:center;font-size:10.5pt;line-height:1.3;}
 .dok-dh-kaki .g{height:20mm;position:relative;display:flex;align-items:center;justify-content:center;}
 .dok-dh-kaki .g img.ttd-gbr{width:50mm;height:20mm;flex-shrink:0;object-fit:contain;display:block;}
 .dok-dh-kaki .g img.ttd-stempel{left:calc(50% - 13mm);top:50%;height:30mm;}
@@ -3235,13 +3235,40 @@ return '<table class="dok-tabel"><colgroup><col style="width:13mm"><col><col sty
 '<thead><tr><th>No</th><th>Nama Siswa</th><th>Tanda Tangan</th></tr></thead><tbody>' + htmlBarisDH(chunk, mulai, tinggi) + '</tbody></table>';
 }
 
-// Batas satu dokumen: sampai 25 siswa muat satu lembar; lebih dari itu dibagi rata ke beberapa lembar.
-var DH_MAKS_SATU_LEMBAR = 25;
-var DH_TINGGI_BARIS_MIN = 5.2, DH_TINGGI_BARIS_MAKS = 9;
-// Ruang tabel (mm) untuk baris siswa bila paragraf pembuka 1 baris dan nama pada kaki 1 baris:
-// lembar pertama tanpa kaki / lembar terakhir dengan kaki. Dikurangi otomatis bila teks lebih panjang.
-// (Kotak tanda tangan pada kaki setinggi 20 mm, 4 mm lebih tinggi dari sebelumnya, sehingga ruang dengan kaki 150 -> 146.)
-var DH_RUANG_TANPA_KAKI = 185, DH_RUANG_DENGAN_KAKI = 146;
+// Pembagian halaman Daftar Hadir (A4, tinggi isi 296mm - margin 11mm atas/bawah). Hasil ukur di browser:
+// ruang untuk baris siswa (mm) pada lembar pertama / lembar lanjutan, tanpa kaki tanda tangan; kaki setinggi +-44mm.
+// Baris diisi sampai tepi margin bawah; tanda tangan hanya di lembar terakhir, tepat di bawah tabel.
+var DH_TINGGI_BARIS = 5.6, DH_TINGGI_BARIS_MIN = 5.2, DH_TINGGI_BARIS_MAKS = 9;
+var DH_RUANG_P1 = 196.7, DH_RUANG_LANJUT = 253.3, DH_TINGGI_KAKI = 44.3, DH_MIN_BARIS_TERAKHIR = 3;
+
+function dhTinggiPas(ruang, jumlah) {
+return Math.max(DH_TINGGI_BARIS_MIN, Math.min(DH_TINGGI_BARIS_MAKS, Math.floor(ruang / jumlah * 100) / 100));
+}
+
+// Mengembalikan [{n: jumlah baris, tinggi: tinggi baris (mm)}, ...] per lembar.
+function dhBagiHalaman(n, ruangP1, ruangLanjut, tinggiKaki) {
+var H = DH_TINGGI_BARIS;
+var s1 = Math.floor((ruangP1 - tinggiKaki) / H);
+if (n <= s1) return [{ n: n, tinggi: n ? dhTinggiPas(ruangP1 - tinggiKaki, n) : 8 }];
+var c1 = Math.floor(ruangP1 / H), cN = Math.floor(ruangLanjut / H), sN = Math.floor((ruangLanjut - tinggiKaki) / H);
+var P = 2;
+while (c1 + (P - 2) * cN + sN < n) P++;
+var cnt = [c1];
+for (var i = 1; i < P - 1; i++) cnt.push(cN);
+var terakhir = n - cnt.reduce(function(a, b) { return a + b; }, 0);
+if (terakhir < DH_MIN_BARIS_TERAKHIR) {
+var kurang = DH_MIN_BARIS_TERAKHIR - terakhir;
+for (var k = cnt.length - 1; k >= 0 && kurang > 0; k--) { var ambil = Math.min(kurang, cnt[k] - 1); cnt[k] -= ambil; kurang -= ambil; }
+terakhir = n - cnt.reduce(function(a, b) { return a + b; }, 0);
+}
+cnt.push(terakhir);
+var hasil = [];
+for (var h = 0; h < cnt.length; h++) {
+var ruang = h === 0 ? ruangP1 : ruangLanjut;
+hasil.push({ n: cnt[h], tinggi: h === cnt.length - 1 ? H : dhTinggiPas(ruang, cnt[h]) });
+}
+return hasil;
+}
 
 function htmlKakiDH(d) {
 var tglDok = dkTanggalPanjang(d.tanggalDokumen);
@@ -3283,21 +3310,14 @@ for (var m = 0; m < 3; m++) { nm[m].style.fontSize = ukuran; ni[m].style.fontSiz
 
 function htmlDaftarHadir(d) {
 var peserta = pesertaDiRuang(d.ruang);
-var n = peserta.length, halaman = [], tinggi;
+var n = peserta.length, halaman = [], tinggi = [];
 var tahun = d.tahun || admDok.tahun, asesmen = d.asesmen || admDok.namaAsesmen;
 var teksPembuka = 'Berikut adalah Daftar Hadir Peserta Asesmen ' + asesmen + ' Tahun Ajaran ' + tahun + '.';
 var tambahPembuka = (Math.max(1, Math.ceil(teksPembuka.length / 92)) - 1) * 5.4;
 var namaTerpanjang = Math.max(String(admDok.kepsek || '').length, String(admDok.proktor || '').length, String(d.pengawas || '').length);
 var tambahKaki = (Math.max(1, Math.ceil(namaTerpanjang / 28)) - 1) * 4.6;
-var ruangDenganKaki = DH_RUANG_DENGAN_KAKI - tambahPembuka - tambahKaki, ruangTanpaKaki = DH_RUANG_TANPA_KAKI - tambahPembuka;
-if (n <= DH_MAKS_SATU_LEMBAR) {
-halaman = [peserta];
-tinggi = n ? Math.max(DH_TINGGI_BARIS_MIN, Math.min(DH_TINGGI_BARIS_MAKS, Math.floor(ruangDenganKaki / n * 10) / 10)) : 8;
-} else {
-var jml = Math.ceil(n / DH_MAKS_SATU_LEMBAR), per = Math.ceil(n / jml);
-for (var i = 0; i < n; i += per) halaman.push(peserta.slice(i, i + per));
-tinggi = Math.max(DH_TINGGI_BARIS_MIN, Math.min(DH_TINGGI_BARIS_MAKS, Math.floor(Math.min(ruangTanpaKaki, ruangDenganKaki) / per * 10) / 10));
-}
+var bagi = dhBagiHalaman(n, DH_RUANG_P1 - tambahPembuka, DH_RUANG_LANJUT, DH_TINGGI_KAKI + tambahKaki), pos = 0;
+for (var bi = 0; bi < bagi.length; bi++) { halaman.push(peserta.slice(pos, pos + bagi[bi].n)); pos += bagi[bi].n; tinggi.push(bagi[bi].tinggi); }
 var dt = parseTanggalJadwal(d.tanggal);
 var tglTeks = dt ? (HARI_ID[dt.getDay()] + ', ' + dt.getDate() + ' ' + BULAN_ID[dt.getMonth()] + ' ' + dt.getFullYear()) : '';
 var waktu = (d.jamMulai || d.jamSelesai) ? ((d.jamMulai || '..') + ' - ' + (d.jamSelesai || '..') + ' WIB') : '';
@@ -3310,7 +3330,7 @@ for (var h = 0; h < halaman.length; h++) {
 var pertama = h === 0, terakhir = h === halaman.length - 1;
 html += '<div class="sheet-dok dok-flex">' + (pertama ? kepala : '<div class="dok-lanjut">DAFTAR HADIR ASESMEN - Ruang ' + esc(d.ruang) + ' - ' + esc(d.mapel) + ' (lanjutan)</div>');
 if (n === 0) html += '<table class="dok-tabel"><thead><tr><th>No</th><th>Nama Siswa</th><th>Tanda Tangan</th></tr></thead><tbody><tr style="height:12mm"><td colspan="3" class="c">' + (d.ruang ? 'Belum ada peserta pada ruang ini.' : 'Pilih ruang untuk menampilkan daftar siswa.') + '</td></tr></tbody></table>';
-else html += htmlTabelDH(halaman[h], mulai, tinggi);
+else html += htmlTabelDH(halaman[h], mulai, tinggi[h]);
 mulai += halaman[h].length;
 if (terakhir) html += htmlKakiDH(d);
 html += '</div>';
