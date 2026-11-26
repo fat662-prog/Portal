@@ -41,41 +41,41 @@ select:disabled { background-color: #f8fafc; cursor: not-allowed; opacity: 0.7; 
 .dash-card { transition: all 0.3s ease; cursor: pointer; }
 .dash-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.2); border-color: #93c5fd; }
 
-/* ==== KARTU PESERTA (ukuran mengikuti contoh: kartu 93,5 x 85 mm, 6 kartu per A4) ==== */
-.sheet-kartu{width:210mm;height:296mm;box-sizing:border-box;padding:9.9mm 10.2mm;display:grid;grid-template-columns:93.5mm 93.5mm;grid-auto-rows:85mm;gap:2.9mm;align-content:start;background:#fff;margin:0 auto 12px auto;box-shadow:0 2px 8px rgba(0,0,0,0.25);}
-.kartu{width:93.5mm;height:85mm;box-sizing:border-box;border:0.35mm solid #000;border-radius:4mm;padding:3mm 4mm;font-family:Arial,Helvetica,sans-serif;font-size:8.5pt;line-height:1.25;color:#000;position:relative;overflow:hidden;background:#fff;}
+/* ==== KARTU PESERTA (ukuran mengikuti contoh: kartu 99,5 x 71,5 mm, 4 baris per A4 = 4 kartu + 4 jadwal) ==== */
+.sheet-kartu{width:210mm;height:296mm;box-sizing:border-box;padding:3.2mm 4.9mm;display:grid;grid-template-columns:99.5mm 99.5mm;grid-auto-rows:71.5mm;gap:1.2mm;align-content:start;background:#fff;margin:0 auto 12px auto;box-shadow:0 2px 8px rgba(0,0,0,0.25);}
+.kartu{width:99.5mm;height:71.5mm;box-sizing:border-box;border:0.35mm solid #000;border-radius:3mm;padding:2.5mm 4mm;font-family:Arial,Helvetica,sans-serif;font-size:8pt;line-height:1.2;color:#000;position:relative;overflow:hidden;background:#fff;}
 .k-head{display:flex;align-items:center;gap:3mm;}
-.k-logo{width:13mm;height:13mm;object-fit:contain;flex-shrink:0;}
+.k-logo{width:11mm;height:11mm;object-fit:contain;flex-shrink:0;}
 .k-judul{flex:1;text-align:center;}
-.k-t1{font-weight:800;font-size:10pt;}
-.k-t2{font-weight:700;font-size:9pt;}
-.k-t3{font-size:8pt;}
-.k-garis{border-top:0.7mm solid #000;margin:2mm 0 2.5mm 0;}
-.k-baris{display:flex;margin-bottom:1.2mm;align-items:flex-start;}
+.k-t1{font-weight:800;font-size:9.5pt;}
+.k-t2{font-weight:700;font-size:8.5pt;}
+.k-t3{font-size:7.5pt;}
+.k-garis{border-top:0.6mm solid #000;margin:1.5mm 0 2mm 0;}
+.k-baris{display:flex;margin-bottom:0.9mm;align-items:flex-start;}
 .k-lbl{width:24mm;flex-shrink:0;}
 .k-sep{width:3mm;flex-shrink:0;}
 .k-val{font-weight:700;flex:1;}
 .k-box{font-family:'Courier New',monospace;border:0.3mm solid #555;border-radius:1mm;padding:0 1.5mm;background:#f5f5f5;display:inline-block;letter-spacing:0.3mm;}
-.k-ttd{position:absolute;right:4mm;bottom:3mm;width:46mm;font-size:7.5pt;line-height:1.25;text-align:left;}
-.k-ttd-img{height:16mm;display:flex;align-items:center;position:relative;}
-.k-ttd-img img.ttd-gbr{width:42mm;height:16mm;flex-shrink:0;object-fit:contain;display:block;}
-.k-ttd-img img.ttd-stempel{left:15mm;top:50%;height:26mm;}
+.k-ttd{position:absolute;right:4mm;bottom:2.5mm;width:46mm;font-size:7pt;line-height:1.2;text-align:left;}
+.k-ttd-img{height:13.5mm;display:flex;align-items:center;position:relative;}
+.k-ttd-img img.ttd-gbr{width:35mm;height:13.5mm;flex-shrink:0;object-fit:contain;display:block;margin-left:var(--k-ttd-x,0mm);}
+.k-ttd-img img.ttd-stempel{left:var(--k-stempel-x,-5mm);top:50%;height:22mm;}
 /* Stempel Kepala Sekolah (file terpisah stempel-kepsek.png): ditumpuk di atas tanda tangan dan boleh menimpa teks, seperti stempel manual */
 .ttd-gbr{max-width:none;}
 .ttd-stempel{position:absolute;z-index:3;width:auto;max-width:none;transform:translate(-50%,-50%);pointer-events:none;mix-blend-mode:multiply;opacity:.92;}
 .k-kepsek{font-weight:700;text-decoration:underline;}
-.k-garis-jd{margin:0.8mm 0 2.6mm 0;}
+.k-garis-jd{margin:0.6mm 0 1.6mm 0;}
 .k-jd-head{gap:2.5mm;}
-.k-jd-head .k-logo{width:10mm;height:10mm;}
-.k-jd-head .k-t1{font-size:9pt;}
-.k-jd-head .k-t2{font-size:8pt;}
-.k-jd-head .k-t3{font-size:7pt;}
+.k-jd-head .k-logo{width:9mm;height:9mm;}
+.k-jd-head .k-t1{font-size:8.5pt;}
+.k-jd-head .k-t2{font-size:7.5pt;}
+.k-jd-head .k-t3{font-size:6.5pt;}
 .k-jd-wrap{width:100%;}
 .k-jd-tabel{width:100%;border-collapse:collapse;table-layout:auto;font-size:7pt;line-height:1.1;white-space:nowrap;}
-.k-jd-tabel th,.k-jd-tabel td{border:0.25mm solid #000;padding:0.5mm 1mm !important;font-size:inherit !important;line-height:1.1;vertical-align:middle;white-space:nowrap;}
+.k-jd-tabel th,.k-jd-tabel td{border:0.25mm solid #000;padding:0.3mm 1mm !important;font-size:inherit !important;line-height:1.1;vertical-align:middle;white-space:nowrap;}
 .k-jd-tabel th{background:#e8e8e8;font-weight:700;text-align:center;}
 .k-jd-tabel .k-jd-c{text-align:center;}
-.k-jd-kosong{text-align:center;font-size:8pt;color:#555;padding-top:12mm;}
+.k-jd-kosong{text-align:center;font-size:8pt;color:#555;padding-top:10mm;}
 /* ==== BERITA ACARA & DAFTAR HADIR (dokumen A4) ==== */
 .dk-lbl{display:block;font-size:.75rem;font-weight:700;color:#334155;margin-bottom:.25rem;}
 .dk-in{width:100%;padding:.5rem .75rem;border:1px solid #cbd5e1;border-radius:.5rem;font-size:.875rem;outline:none;background-color:#fff;color:#1e293b;user-select:text;-webkit-user-select:text;}
@@ -498,7 +498,7 @@ Pastikan Anda mengklik "Simpan" setelah mengubah data. Perubahan otomatis disink
 <div id="view-admin-kartu" class="tab-content max-w-6xl mx-auto hidden mt-2">
 <div class="bg-white rounded-xl md:rounded-2xl shadow-sm border border-slate-200 p-4 md:p-6">
 <h3 class="text-lg md:text-xl font-bold text-slate-800 flex items-center gap-2"><i class="fa-solid fa-id-card text-blue-600"></i> Cetak Kartu Peserta</h3>
-<p class="text-slate-500 text-xs md:text-sm mt-1 mb-4">Satu lembar A4 memuat 6 kotak: 3 kartu peserta (kiri) dan 3 jadwal asesmen (kanan). Isi pengaturan di bawah, klik Pratinjau, lalu Cetak (bisa juga disimpan sebagai PDF lewat dialog cetak).</p>
+<p class="text-slate-500 text-xs md:text-sm mt-1 mb-4">Satu lembar A4 memuat 8 kotak: 4 kartu peserta (kiri) dan 4 jadwal asesmen (kanan). Isi pengaturan di bawah, klik Pratinjau, lalu Cetak (bisa juga disimpan sebagai PDF lewat dialog cetak).</p>
 <p class="text-[11px] md:text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2 mb-4">Tahun Ajaran, Nama &amp; NIP Kepala Sekolah, dan tanda tangan (file <b>ttd-kepsek.png</b> di GitHub) diambil otomatis dari Setting Ujian &rsaquo; Administrasi, jadi tidak bisa diubah di sini. Jadwal asesmen diatur per mata pelajaran di Setting Ujian.</p>
 <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
 <div><label class="block text-xs md:text-sm font-bold text-slate-700 mb-1">Tahun Ajaran</label><input id="kartuTahun" type="text" oninput="simpanPengaturanKartu()" placeholder="2026-2027" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm"></div>
@@ -2379,10 +2379,10 @@ return c !== 0 ? c : a[1].localeCompare(b[1], 'id');
 });
 var cacheJadwal = {};
 var html = '';
-// Tiap baris: kartu peserta (kiri) + jadwal asesmen kelasnya (kanan); 3 baris per lembar = 6 kotak
-for (var j = 0; j < daftar.length; j += 3) {
+// Tiap baris: kartu peserta (kiri) + jadwal asesmen kelasnya (kanan); 4 baris per lembar = 8 kotak
+for (var j = 0; j < daftar.length; j += 4) {
 html += '<div class="sheet-kartu">';
-for (var k = j; k < j + 3 && k < daftar.length; k++) {
+for (var k = j; k < j + 4 && k < daftar.length; k++) {
 var jenis = jenisJadwalUntukKelas(daftar[k][0]);
 if (cacheJadwal[jenis] === undefined) cacheJadwal[jenis] = htmlJadwalKartu(jenis, cfg);
 html += htmlSatuKartu(daftar[k], cfg) + cacheJadwal[jenis];
@@ -2392,7 +2392,7 @@ html += '</div>';
 document.getElementById('kartuPreview').innerHTML = html;
 sesuaikanTabelJadwal();
 if (document.fonts && document.fonts.ready) document.fonts.ready.then(sesuaikanTabelJadwal);
-var info = daftar.length + ' kartu peserta (' + Math.ceil(daftar.length / 3) + ' lembar, tiap lembar 3 kartu + 3 jadwal).';
+var info = daftar.length + ' kartu peserta (' + Math.ceil(daftar.length / 4) + ' lembar, tiap lembar 4 kartu + 4 jadwal).';
 if (tanpaKode > 0) info += ' ' + tanpaKode + ' siswa belum punya Kode Peserta dan tidak dicetak. Isi dulu di menu Data Peserta.';
 document.getElementById('kartuInfo').innerText = info;
 return daftar.length;
