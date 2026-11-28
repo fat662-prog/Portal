@@ -573,8 +573,9 @@ Pastikan Anda mengklik "Simpan" setelah mengubah data. Perubahan otomatis disink
 <div id="view-shared-ba" class="tab-content max-w-6xl mx-auto hidden mt-2">
 <div class="bg-white rounded-xl md:rounded-2xl shadow-sm border border-slate-200 p-4 md:p-6">
 <h3 class="text-lg md:text-xl font-bold text-slate-800 flex items-center gap-2"><i class="fa-solid fa-file-signature text-blue-600"></i> Berita Acara Asesmen</h3>
-<p class="text-slate-500 text-xs md:text-sm mt-1 mb-3">Isi semua kolom, klik <b>Simpan</b>, lalu <b>Cetak</b> (A4). Setelah ditandatangani, foto atau scan dokumen dapat diunggah dengan tombol <b>Upload</b>.</p>
+<p class="text-slate-500 text-xs md:text-sm mt-1 mb-3">Isi semua kolom, klik <b>Simpan</b>, lalu <b>Cetak</b> (A4). Form ini selalu membuat dokumen baru. Setelah ditandatangani, foto atau scan dokumen diunggah lewat tombol <b>Upload</b> pada daftar <b>Berita Acara Tersimpan</b> di bawah.</p>
 <p id="baInfoAdm" class="text-[11px] md:text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2 mb-4">Memuat data Administrasi...</p>
+<p id="baModeEdit" class="hidden text-xs md:text-sm font-semibold text-blue-800 bg-blue-50 border border-blue-300 rounded-lg px-3 py-2 mb-4"><i class="fa-solid fa-pen-to-square"></i> <span id="baModeEditTeks"></span><span class="block font-normal text-[11px] md:text-xs text-blue-700">Klik Simpan Perubahan untuk menimpa dokumen ini, atau Batal untuk keluar tanpa menyimpan.</span></p>
 <div class="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4">
 <div><label class="dk-lbl" for="baTanggal">Tanggal pelaksanaan</label><input id="baTanggal" type="date" class="dk-in" oninput="perubahanBA()"></div>
 <div><label class="dk-lbl" for="baJamMulai">Dari pukul</label><input id="baJamMulai" type="time" class="dk-in" oninput="perubahanBA()"></div>
@@ -598,10 +599,9 @@ Pastikan Anda mengklik "Simpan" setelah mengubah data. Perubahan otomatis disink
 </div>
 <p id="baPeringatan" class="hidden text-[11px] md:text-xs text-amber-800 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2 mt-4"></p>
 <div class="flex flex-wrap items-center gap-2 mt-4">
-<button id="baBtnSimpan" onclick="simpanBA()" class="bg-blue-600 border border-blue-600 text-white px-4 py-2 rounded-lg font-semibold text-sm flex items-center gap-2 hover:bg-blue-700 transition active:scale-95"><i class="fa-solid fa-floppy-disk"></i> Simpan</button>
+<button id="baBtnSimpan" onclick="simpanBA()" class="bg-blue-600 border border-blue-600 text-white px-4 py-2 rounded-lg font-semibold text-sm flex items-center gap-2 hover:bg-blue-700 transition active:scale-95"><i class="fa-solid fa-floppy-disk"></i> <span id="baBtnSimpanTeks">Simpan</span></button>
 <button onclick="cetakBA()" class="bg-emerald-600 border border-emerald-700 text-white px-4 py-2 rounded-lg font-semibold text-sm flex items-center gap-2 hover:bg-emerald-700 transition active:scale-95"><i class="fa-solid fa-print"></i> Cetak</button>
-<button onclick="klikUnggahBA()" class="bg-white border border-slate-300 text-slate-700 px-4 py-2 rounded-lg font-semibold text-sm flex items-center gap-2 hover:bg-slate-50 transition active:scale-95"><i class="fa-solid fa-cloud-arrow-up"></i> Upload</button>
-<button onclick="formBaruBA()" class="bg-white border border-slate-300 text-slate-600 px-4 py-2 rounded-lg font-semibold text-sm flex items-center gap-2 hover:bg-slate-50 transition active:scale-95"><i class="fa-solid fa-file-circle-plus"></i> Form Baru</button>
+<button id="baBtnBatal" onclick="batalEditBA()" class="hidden bg-white border border-slate-300 text-slate-600 px-4 py-2 rounded-lg font-semibold text-sm flex items-center gap-2 hover:bg-slate-50 transition active:scale-95"><i class="fa-solid fa-xmark"></i> Batal</button>
 </div>
 <p id="baStatus" class="text-xs text-slate-500 mt-2">Belum disimpan.</p>
 </div>
@@ -638,8 +638,9 @@ Pastikan Anda mengklik "Simpan" setelah mengubah data. Perubahan otomatis disink
 <div id="view-shared-dh" class="tab-content max-w-6xl mx-auto hidden mt-2">
 <div id="dhFormWrap" class="bg-white rounded-xl md:rounded-2xl shadow-sm border border-slate-200 p-4 md:p-6">
 <h3 class="text-lg md:text-xl font-bold text-slate-800 flex items-center gap-2"><i class="fa-solid fa-clipboard-list text-blue-600"></i> Daftar Hadir Asesmen</h3>
-<p class="text-slate-500 text-xs md:text-sm mt-1 mb-3">Yang wajib diisi: <b>Ruang</b>, <b>Mata Pelajaran</b>, dan <b>Tanggal Dokumen</b>. Daftar siswa diambil otomatis dari Data Peserta berdasarkan ruang. <b>Centang siswa yang hadir</b>: tanda tangan siswa yang dicentang tercetak otomatis, yang tidak dicentang dibiarkan kosong. Tanda tangan pengawas diambil dari Data Guru. Setelah itu klik <b>Simpan</b>, <b>Cetak</b>, dan <b>Upload</b> foto/scan bila diperlukan.</p>
+<p class="text-slate-500 text-xs md:text-sm mt-1 mb-3">Yang wajib diisi: <b>Ruang</b>, <b>Mata Pelajaran</b>, dan <b>Tanggal Dokumen</b>. Daftar siswa diambil otomatis dari Data Peserta berdasarkan ruang. <b>Centang siswa yang hadir</b>: tanda tangan siswa yang dicentang tercetak otomatis, yang tidak dicentang dibiarkan kosong. Tanda tangan pengawas diambil dari Data Guru. Setelah itu klik <b>Simpan</b> dan <b>Cetak</b>. Form ini selalu membuat dokumen baru; foto/scan diunggah lewat tombol <b>Upload</b> pada daftar <b>Daftar Hadir Tersimpan</b> di bawah.</p>
 <p id="dhInfoAdm" class="text-[11px] md:text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2 mb-4">Memuat data Administrasi...</p>
+<p id="dhModeEdit" class="hidden text-xs md:text-sm font-semibold text-blue-800 bg-blue-50 border border-blue-300 rounded-lg px-3 py-2 mb-4"><i class="fa-solid fa-pen-to-square"></i> <span id="dhModeEditTeks"></span><span class="block font-normal text-[11px] md:text-xs text-blue-700">Klik Simpan Perubahan untuk menimpa dokumen ini, atau Batal untuk keluar tanpa menyimpan.</span></p>
 <div class="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4">
 <div><label class="dk-lbl" for="dhTanggal">Hari / Tanggal <span class="font-normal text-slate-400">(opsional)</span></label><input id="dhTanggal" type="date" class="dk-in" oninput="perubahanDH()"></div>
 <div><label class="dk-lbl" for="dhJamMulai">Waktu mulai <span class="font-normal text-slate-400">(opsional)</span></label><input id="dhJamMulai" type="time" class="dk-in" oninput="perubahanDH()"></div>
@@ -666,10 +667,9 @@ Pastikan Anda mengklik "Simpan" setelah mengubah data. Perubahan otomatis disink
 </div>
 <p id="dhPeringatan" class="hidden text-[11px] md:text-xs text-amber-800 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2 mt-4"></p>
 <div class="flex flex-wrap items-center gap-2 mt-4">
-<button id="dhBtnSimpan" onclick="simpanDH()" class="bg-blue-600 border border-blue-600 text-white px-4 py-2 rounded-lg font-semibold text-sm flex items-center gap-2 hover:bg-blue-700 transition active:scale-95"><i class="fa-solid fa-floppy-disk"></i> Simpan</button>
+<button id="dhBtnSimpan" onclick="simpanDH()" class="bg-blue-600 border border-blue-600 text-white px-4 py-2 rounded-lg font-semibold text-sm flex items-center gap-2 hover:bg-blue-700 transition active:scale-95"><i class="fa-solid fa-floppy-disk"></i> <span id="dhBtnSimpanTeks">Simpan</span></button>
 <button onclick="cetakDH()" class="bg-emerald-600 border border-emerald-700 text-white px-4 py-2 rounded-lg font-semibold text-sm flex items-center gap-2 hover:bg-emerald-700 transition active:scale-95"><i class="fa-solid fa-print"></i> Cetak</button>
-<button onclick="klikUnggahDH()" class="bg-white border border-slate-300 text-slate-700 px-4 py-2 rounded-lg font-semibold text-sm flex items-center gap-2 hover:bg-slate-50 transition active:scale-95"><i class="fa-solid fa-cloud-arrow-up"></i> Upload</button>
-<button onclick="formBaruDH()" class="bg-white border border-slate-300 text-slate-600 px-4 py-2 rounded-lg font-semibold text-sm flex items-center gap-2 hover:bg-slate-50 transition active:scale-95"><i class="fa-solid fa-file-circle-plus"></i> Form Baru</button>
+<button id="dhBtnBatal" onclick="batalEditDH()" class="hidden bg-white border border-slate-300 text-slate-600 px-4 py-2 rounded-lg font-semibold text-sm flex items-center gap-2 hover:bg-slate-50 transition active:scale-95"><i class="fa-solid fa-xmark"></i> Batal</button>
 </div>
 <p id="dhStatus" class="text-xs text-slate-500 mt-2">Belum disimpan.</p>
 </div>
@@ -885,6 +885,18 @@ Rekap Hasil Ujian
 <button id="ttdModalBtnHapus" type="button" onclick="hapusModalTtd()" class="hidden mr-auto bg-red-50 border border-red-200 text-red-600 px-3 py-2 rounded-lg font-semibold text-xs md:text-sm flex items-center gap-1.5 hover:bg-red-100 transition"><i class="fa-solid fa-trash-can"></i> Hapus TTD</button>
 <button id="ttdModalBtnBatal" type="button" onclick="tutupModalTtd()" class="bg-white border border-slate-300 text-slate-700 px-4 py-2 rounded-lg font-semibold text-xs md:text-sm hover:bg-slate-50 transition">Tutup</button>
 <button id="ttdModalBtnSimpan" type="button" onclick="simpanModalTtd()" class="bg-blue-600 border border-blue-600 text-white px-4 py-2 rounded-lg font-semibold text-xs md:text-sm flex items-center gap-1.5 hover:bg-blue-700 transition"><i class="fa-solid fa-floppy-disk"></i> Simpan</button>
+</div>
+</div>
+</div>
+
+<div id="modalLihatDok" class="hidden fixed inset-0 z-[90] bg-slate-900/60 items-center justify-center p-3" onclick="if (event.target === this) tutupLihatDok()">
+<div class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[92vh] flex flex-col overflow-hidden">
+<div class="flex items-center justify-between gap-2 px-4 py-3 border-b border-slate-200">
+<h4 id="lihatDokJudul" class="font-bold text-slate-800 text-sm md:text-base truncate">Pratinjau</h4>
+<button type="button" onclick="tutupLihatDok()" class="bg-white border border-slate-300 text-slate-700 px-4 py-2 rounded-lg font-semibold text-xs md:text-sm hover:bg-slate-50 transition">Tutup</button>
+</div>
+<div id="lihatDokBody" class="flex-1 min-h-0 overflow-auto custom-scrollbar p-2 md:p-3 bg-slate-100">
+<div id="lihatDokWadah" class="bg-slate-200 rounded-xl p-2 overflow-hidden"><div id="lihatDokIsi" class="dok-skala"></div></div>
 </div>
 </div>
 </div>
@@ -1359,7 +1371,7 @@ btn.onclick = function() { openTab(menu.id); }; navMenu.appendChild(btn);
 }
 
 function openTab(tabId) {
-currentTab = tabId; localStorage.setItem('smpn8_tab', tabId);
+var tabLama = currentTab; currentTab = tabId; localStorage.setItem('smpn8_tab', tabId);
 var elements = document.querySelectorAll('.tab-content');
 for (var i = 0; i < elements.length; i++) { elements[i].classList.remove('active'); }
 renderMenu(); var displayTitle = '';
@@ -1376,8 +1388,8 @@ else if (tabId === 'shared-belum') { displayTitle = 'BELUM MENGERJAKAN'; documen
 else if (tabId === 'shared-hasil') { displayTitle = 'HASIL UJIAN'; document.getElementById('view-shared-hasil').classList.add('active'); loadHasilUjian(); }
 else if (tabId === 'guru-analisis') { displayTitle = 'ANALISIS HASIL'; document.getElementById('view-guru-analisis').classList.add('active'); loadAnalisisData(); }
 else if (tabId === 'guru-ai') { openTab('guru-home'); return; } // sisa tab Generator Soal di penyimpanan browser
-else if (tabId === 'shared-ba') { displayTitle = 'BERITA ACARA'; document.getElementById('view-shared-ba').classList.add('active'); siapkanHalamanBA(); }
-else if (tabId === 'shared-dh') { displayTitle = 'DAFTAR HADIR'; document.getElementById('view-shared-dh').classList.add('active'); siapkanHalamanDH(); }
+else if (tabId === 'shared-ba') { displayTitle = 'BERITA ACARA'; document.getElementById('view-shared-ba').classList.add('active'); siapkanHalamanBA(tabLama !== tabId); }
+else if (tabId === 'shared-dh') { displayTitle = 'DAFTAR HADIR'; document.getElementById('view-shared-dh').classList.add('active'); siapkanHalamanDH(tabLama !== tabId); }
 }
 else if (currentUser.role === 'admin') {
 if (tabId === 'admin-home') { displayTitle = 'DASHBOARD'; document.getElementById('view-admin-home').classList.add('active'); }
@@ -1388,8 +1400,8 @@ else if (tabId === 'admin-setting') { displayTitle = 'SETTING UJIAN'; document.g
 else if (tabId === 'shared-belum') { displayTitle = 'BELUM MENGERJAKAN'; document.getElementById('view-shared-belum').classList.add('active'); loadBelumMengerjakan(); }
 else if (tabId === 'shared-hasil') { displayTitle = 'HASIL UJIAN'; document.getElementById('view-shared-hasil').classList.add('active'); loadHasilUjian(); }
 else if (tabId === 'guru-analisis') { displayTitle = 'ANALISIS HASIL'; document.getElementById('view-guru-analisis').classList.add('active'); loadAnalisisData(); }
-else if (tabId === 'shared-ba') { displayTitle = 'BERITA ACARA'; document.getElementById('view-shared-ba').classList.add('active'); siapkanHalamanBA(); }
-else if (tabId === 'shared-dh') { displayTitle = 'DAFTAR HADIR'; document.getElementById('view-shared-dh').classList.add('active'); siapkanHalamanDH(); }
+else if (tabId === 'shared-ba') { displayTitle = 'BERITA ACARA'; document.getElementById('view-shared-ba').classList.add('active'); siapkanHalamanBA(tabLama !== tabId); }
+else if (tabId === 'shared-dh') { displayTitle = 'DAFTAR HADIR'; document.getElementById('view-shared-dh').classList.add('active'); siapkanHalamanDH(tabLama !== tabId); }
 }
 
 document.getElementById('headerTitle').innerText = displayTitle; document.getElementById('mobileHeaderTitle').innerText = displayTitle;
@@ -3114,6 +3126,7 @@ var dhFormSiap = false;
 var targetUnggah = null;
 var TTD_TERAKHIR_KEY = 'smpn8_ttd_terakhir';
 var PREF_DOK_KEY = 'smpn8_pref_dokumen';
+try { localStorage.removeItem(PREF_DOK_KEY); } catch (e) {}   // memori pengawas terakhir sudah tidak dipakai; nilai lama dibuang
 var LEBAR_A4_PX = 793.7;
 var BATAS_BERKAS_MB = 5;
 
@@ -3678,6 +3691,29 @@ var e = dkEl(idField);
 if (e) { try { e.scrollIntoView({ behavior: 'smooth', block: 'center' }); e.focus(); } catch (x) {} }
 }
 
+// ---------- Penanda mode Edit dan jendela Lihat (pratinjau saja) ----------
+function judulDokEdit(r) {
+var t = 'Ruang ' + (r.ruang || '-') + ' - ' + (r.mapel || '-');
+var tgl = teksTanggalJadwal(r.tanggal);
+return tgl ? t + ' (' + tgl + ')' : t;
+}
+
+function bukaLihatDok(judul, html, sesudahTampil) {
+dkEl('lihatDokJudul').textContent = judul;
+dkEl('lihatDokIsi').innerHTML = html;
+var m = dkEl('modalLihatDok'); m.classList.remove('hidden'); m.classList.add('flex');
+if (sesudahTampil) sesudahTampil(dkEl('lihatDokIsi'));
+skalakanPratinjau('lihatDokWadah', 'lihatDokIsi');
+dkEl('lihatDokBody').scrollTop = 0;
+}
+
+function tutupLihatDok() {
+var m = dkEl('modalLihatDok'); m.classList.add('hidden'); m.classList.remove('flex');
+dkEl('lihatDokIsi').innerHTML = '';
+}
+
+window.addEventListener('resize', function() { var m = dkEl('modalLihatDok'); if (m && !m.classList.contains('hidden')) skalakanPratinjau('lihatDokWadah', 'lihatDokIsi'); });
+
 // ---------- Daftar tersimpan: 5 daftar per halaman + navigasi halaman ----------
 function htmlNavHalaman(fungsi, hal, total, dari, sampai, jumlah) {
 var dasar = 'px-2.5 py-1 rounded-md border text-[11px] font-semibold transition active:scale-95 whitespace-nowrap ';
@@ -3709,8 +3745,8 @@ var e = dkEl('baInfoAdm'); if (!e) return;
 e.innerHTML = 'Diambil otomatis dari Setting Ujian &rsaquo; Administrasi: Tahun Ajaran <b>' + esc(admDok.tahun || '-') + '</b> &bull; Nama Asesmen (kegiatan) <b>' + esc(admDok.namaAsesmen || '-') + '</b> &bull; Proktor <b>' + esc(admDok.proktor || '-') + '</b> &bull; Penanggung Jawab <b>' + esc(admDok.kepsek || '-') + '</b>.';
 }
 
-function siapkanHalamanBA() {
-if (!baFormSiap) { baFormSiap = true; formBaruBA(true); }
+function siapkanHalamanBA(pindahMenu) {
+if (!baFormSiap || pindahMenu) { baFormSiap = true; formBaruBA(true); }
 isiDropdownMapel('baMapel');
 infoAdmBA();
 muatAdmDok(function() { infoAdmBA(); renderPratinjauBA(); });
@@ -3734,12 +3770,11 @@ else { e.className = dasar + 'text-amber-800 bg-amber-50 border-amber-200'; e.te
 }
 
 function formBaruBA(awal) {
-var pref = dkParseJson(dkLsGet(PREF_DOK_KEY), {});
 baState = { id: '', ttd: '', fileUrl: '', kegiatan: '', tidakHadir: [], manualHadir: false, manualTidak: false, kotor: false, menyimpan: false };
 dkSet('baTanggal', dkIsoHariIni()); dkSet('baJamMulai', ''); dkSet('baJamSelesai', '');
 dkSet('baRuang', ''); dkSet('baMapel', '');
 dkSet('baSeharusnya', ''); dkSet('baHadir', ''); dkSet('baTidakHadir', ''); dkSet('baCatatan', '');
-setPengawas('ba', pref.pengawas || '', pref.nip || '');
+setPengawas('ba', '', '');
 aturRuangBA();
 updateStatusBA();
 renderPratinjauBA();
@@ -3747,11 +3782,21 @@ renderPratinjauBA();
 
 function perubahanBA() { baState.kotor = true; updateStatusBA(); renderPratinjauBA(); }
 
-function updateStatusBA() {
+function updateStatusBA(pesan) {
 var e = dkEl('baStatus'); if (!e) return;
-var t = baState.id ? ('Tersimpan di server (ID ' + baState.id + ').' + (baState.kotor ? ' Ada perubahan yang belum disimpan.' : '')) : 'Belum disimpan.';
+var edit = !!baState.id;
+dkEl('baModeEdit').classList.toggle('hidden', !edit);
+dkEl('baModeEditTeks').textContent = edit ? ('Mengedit: ' + (baState.judulEdit || '')) : '';
+dkEl('baBtnBatal').classList.toggle('hidden', !edit);
+dkEl('baBtnSimpanTeks').textContent = edit ? 'Simpan Perubahan' : 'Simpan';
+var t = edit ? ('Mode edit, dokumen tersimpan (ID ' + baState.id + ').' + (baState.kotor ? ' Ada perubahan yang belum disimpan.' : '')) : 'Belum disimpan.';
 if (baState.fileUrl) t += ' Berkas sudah diunggah.';
-e.innerText = t;
+e.innerText = pesan || t;
+}
+
+function batalEditBA() {
+formBaruBA();
+showToast("Edit dibatalkan. Form dikosongkan.", "info");
 }
 
 function aturRuangBA(dariInput) {
@@ -3884,10 +3929,10 @@ showToast("Menyimpan ke server...", "info");
 function lepas() { baState.menyimpan = false; btn.disabled = false; btn.classList.remove('opacity-60'); }
 google.script.run.withSuccessHandler(function(rek) {
 lepas();
-baState.id = rek.id; baState.kotor = false; baState.fileUrl = rek.fileUrl || '';
-dkLsSet(PREF_DOK_KEY, JSON.stringify({ pengawas: d.pengawas, nip: d.nip }));
-updateStatusBA();
-showToast("Berita acara tersimpan.", "success");
+var diedit = !!d.id;
+formBaruBA();
+updateStatusBA(diedit ? 'Perubahan tersimpan. Form dikosongkan.' : 'Berita acara tersimpan. Form dikosongkan; dokumen ada di daftar di bawah.');
+showToast(diedit ? "Perubahan berita acara tersimpan." : "Berita acara tersimpan.", "success");
 muatListBA();
 }).withFailureHandler(function(err) {
 lepas();
@@ -3901,8 +3946,6 @@ if (v) { perluDiisi('Lengkapi dulu sebelum mencetak: ' + v[0], v[1]); return; }
 if (baState.kotor || !baState.id) showToast("Dokumen dicetak. Jangan lupa klik Simpan agar data tersimpan di server.", "info");
 cetakDokumenHtml(htmlBeritaAcara(d), 6000);
 }
-
-function klikUnggahBA() { mintaUnggah('ba', baState.id); }
 
 function muatListBA(tampilToast) {
 google.script.run.withSuccessHandler(function(data) {
@@ -3936,7 +3979,8 @@ h += '<tr class="hover:bg-slate-50"><td class="px-3 py-2 whitespace-nowrap">' + 
 '<td class="px-3 py-2 text-center font-bold">' + esc(r.ruang) + '</td><td class="px-3 py-2">' + esc(r.mapel) + '</td>' +
 '<td class="px-3 py-2 text-center whitespace-nowrap">' + esc(r.hadir) + ' / ' + esc(r.tidakHadir) + '</td><td class="px-3 py-2">' + esc(r.pengawas) + '</td>' +
 '<td class="px-3 py-2 whitespace-nowrap">' + tautBerkas(r) + '</td><td class="px-3 py-2"><div class="flex flex-wrap gap-1">' +
-tombolAksi('bukaBA', r.id, 'fa-pen-to-square', 'Buka', 'bg-blue-50 border-blue-200 text-blue-700 hover:bg-blue-100') +
+tombolAksi('lihatBA', r.id, 'fa-eye', 'Lihat', 'bg-slate-50 border-slate-300 text-slate-700 hover:bg-slate-100') +
+tombolAksi('editBA', r.id, 'fa-pen-to-square', 'Edit', 'bg-blue-50 border-blue-200 text-blue-700 hover:bg-blue-100') +
 tombolAksi('cetakBAdariList', r.id, 'fa-print', 'Cetak', 'bg-emerald-50 border-emerald-200 text-emerald-700 hover:bg-emerald-100') +
 tombolAksi('unggahDariListBA', r.id, 'fa-cloud-arrow-up', 'Upload', 'bg-white border-slate-300 text-slate-700 hover:bg-slate-50') +
 (admin ? tombolAksi('hapusBA', r.id, 'fa-trash', 'Hapus', 'bg-red-50 border-red-200 text-red-600 hover:bg-red-100') : '') +
@@ -3952,7 +3996,7 @@ dkEl('baListInfo').innerText = daftarBA.length + ' berita acara tersimpan di ser
 function unggahDariListBA(id) { mintaUnggah('ba', id); }
 
 function isiFormBA(r) {
-baState = { id: r.id, ttd: r.ttd || '', fileUrl: r.fileUrl || '', kegiatan: r.kegiatan || '', tidakHadir: dkParseJson(r.namaTidakHadir, []), manualHadir: true, manualTidak: true, kotor: false, menyimpan: false };
+baState = { id: r.id, judulEdit: judulDokEdit(r), ttd: r.ttd || '', fileUrl: r.fileUrl || '', kegiatan: r.kegiatan || '', tidakHadir: dkParseJson(r.namaTidakHadir, []), manualHadir: true, manualTidak: true, kotor: false, menyimpan: false };
 if (Object.prototype.toString.call(baState.tidakHadir) !== '[object Array]') baState.tidakHadir = [];
 dkSet('baTanggal', r.tanggal); dkSet('baJamMulai', r.jamMulai); dkSet('baJamSelesai', r.jamSelesai);
 dkSet('baRuang', r.ruang);
@@ -3965,12 +4009,30 @@ isiPilihanTidakHadir(ada, r.ruang); renderChipTidakHadir();
 updateStatusBA(); renderPratinjauBA();
 }
 
-function bukaBA(id) {
+// Edit: satu-satunya jalan yang memuat dokumen ke form dan mengirim ID (menimpa dokumen tersebut)
+function editBA(id) {
 showToast("Memuat berita acara...", "info");
 google.script.run.withSuccessHandler(function(r) {
 isiFormBA(r);
 try { dkEl('mainContentArea').scrollTo({ top: 0, behavior: 'smooth' }); } catch (e) {}
-showToast("Berita acara dibuka. Ubah lalu klik Simpan.", "success");
+showToast("Mode edit. Ubah lalu klik Simpan Perubahan, atau Batal.", "success");
+}).withFailureHandler(function(err) {
+showToast(pesanGalat(err, "Gagal memuat berita acara."), "error");
+}).getBeritaAcara(id);
+}
+
+// Lihat: hanya pratinjau di jendela terpisah; form dan baState tidak disentuh
+function lihatBA(id) {
+showToast("Memuat berita acara...", "info");
+google.script.run.withSuccessHandler(function(r) {
+function jalan() {
+bukaLihatDok('Berita Acara - Ruang ' + r.ruang + ' - ' + r.mapel, htmlBeritaAcara({
+tanggal: r.tanggal, jamMulai: r.jamMulai, jamSelesai: r.jamSelesai, kegiatan: r.kegiatan, ruang: r.ruang, mapel: r.mapel,
+seharusnya: r.seharusnya, hadir: r.hadir, tidakHadir: r.tidakHadir, namaTidakHadir: dkParseJson(r.namaTidakHadir, []),
+catatan: r.catatan, pengawas: r.pengawas, nip: r.nip, ttd: r.ttd
+}));
+}
+if (guruMuat) jalan(); else muatDaftarGuru(jalan);
 }).withFailureHandler(function(err) {
 showToast(pesanGalat(err, "Gagal memuat berita acara."), "error");
 }).getBeritaAcara(id);
@@ -4004,12 +4066,12 @@ showToast(pesanGalat(err, "Gagal menghapus."), "error");
 }
 
 // ======================= DAFTAR HADIR =======================
-function siapkanHalamanDH() {
+function siapkanHalamanDH(pindahMenu) {
 // Admin dan guru memakai form yang sama (isi, centang kehadiran, simpan, cetak, upload)
 dkEl('dhFormWrap').classList.remove('hidden');
 dkEl('dhGuruInfo').classList.add('hidden');
 dkEl('dhPratinjauBungkus').classList.remove('hidden');
-if (!dhFormSiap) { dhFormSiap = true; formBaruDH(true); }
+if (!dhFormSiap || pindahMenu) { dhFormSiap = true; formBaruDH(true); }
 isiDropdownMapel('dhMapel');
 infoAdmDH();
 muatAdmDok(function() { infoAdmDH(); renderPratinjauDH(); });
@@ -4124,11 +4186,21 @@ updateStatusDH(); renderPratinjauDH();
 
 function perubahanDH() { dhState.kotor = true; updateStatusDH(); renderPratinjauDH(); }
 
-function updateStatusDH() {
+function updateStatusDH(pesan) {
 var e = dkEl('dhStatus'); if (!e) return;
-var t = dhState.id ? ('Tersimpan di server (ID ' + dhState.id + ').' + (dhState.kotor ? ' Ada perubahan yang belum disimpan.' : '')) : 'Belum disimpan.';
+var edit = !!dhState.id;
+dkEl('dhModeEdit').classList.toggle('hidden', !edit);
+dkEl('dhModeEditTeks').textContent = edit ? ('Mengedit: ' + (dhState.judulEdit || '')) : '';
+dkEl('dhBtnBatal').classList.toggle('hidden', !edit);
+dkEl('dhBtnSimpanTeks').textContent = edit ? 'Simpan Perubahan' : 'Simpan';
+var t = edit ? ('Mode edit, dokumen tersimpan (ID ' + dhState.id + ').' + (dhState.kotor ? ' Ada perubahan yang belum disimpan.' : '')) : 'Belum disimpan.';
 if (dhState.fileUrl) t += ' Berkas sudah diunggah.';
-e.innerText = t;
+e.innerText = pesan || t;
+}
+
+function batalEditDH() {
+formBaruDH();
+showToast("Edit dibatalkan. Form dikosongkan.", "info");
 }
 
 function ambilDataDH() {
@@ -4175,9 +4247,10 @@ showToast("Menyimpan ke server...", "info");
 function lepas() { dhState.menyimpan = false; btn.disabled = false; btn.classList.remove('opacity-60'); }
 google.script.run.withSuccessHandler(function(rek) {
 lepas();
-dhState.id = rek.id; dhState.kotor = false; dhState.fileUrl = rek.fileUrl || '';
-updateStatusDH();
-showToast("Daftar hadir tersimpan.", "success");
+var diedit = !!d.id;
+formBaruDH();
+updateStatusDH(diedit ? 'Perubahan tersimpan. Form dikosongkan.' : 'Daftar hadir tersimpan. Form dikosongkan; dokumen ada di daftar di bawah.');
+showToast(diedit ? "Perubahan daftar hadir tersimpan." : "Daftar hadir tersimpan.", "success");
 muatListDH();
 }).withFailureHandler(function(err) {
 lepas();
@@ -4191,8 +4264,6 @@ if (v) { perluDiisi('Lengkapi dulu sebelum mencetak: ' + v[0], v[1]); return; }
 if (dhState.kotor || !dhState.id) showToast("Dokumen dicetak. Jangan lupa klik Simpan agar data tersimpan di server.", "info");
 cetakDokumenHtml(htmlDaftarHadir(d), 8000);
 }
-
-function klikUnggahDH() { mintaUnggah('dh', dhState.id); }
 
 function muatListDH(tampilToast) {
 google.script.run.withSuccessHandler(function(data) {
@@ -4226,7 +4297,8 @@ h += '<tr class="hover:bg-slate-50"><td class="px-3 py-2 whitespace-nowrap">' + 
 '<td class="px-3 py-2 whitespace-nowrap">' + ((r.jamMulai || r.jamSelesai) ? esc(r.jamMulai || '..') + ' - ' + esc(r.jamSelesai || '..') : '-') + '</td>' +
 '<td class="px-3 py-2 text-center font-bold">' + esc(r.ruang) + '</td><td class="px-3 py-2">' + esc(r.mapel) + '</td><td class="px-3 py-2">' + (esc(r.pengawas) || '-') + '</td>' +
 '<td class="px-3 py-2 whitespace-nowrap">' + tautBerkas(r) + '</td><td class="px-3 py-2"><div class="flex flex-wrap gap-1">' +
-tombolAksi('bukaDH', r.id, 'fa-pen-to-square', 'Buka', 'bg-blue-50 border-blue-200 text-blue-700 hover:bg-blue-100') + tombolAksi('cetakDHdariList', r.id, 'fa-print', 'Cetak', 'bg-emerald-50 border-emerald-200 text-emerald-700 hover:bg-emerald-100') +
+tombolAksi('lihatDH', r.id, 'fa-eye', 'Lihat', 'bg-slate-50 border-slate-300 text-slate-700 hover:bg-slate-100') +
+tombolAksi('editDH', r.id, 'fa-pen-to-square', 'Edit', 'bg-blue-50 border-blue-200 text-blue-700 hover:bg-blue-100') + tombolAksi('cetakDHdariList', r.id, 'fa-print', 'Cetak', 'bg-emerald-50 border-emerald-200 text-emerald-700 hover:bg-emerald-100') +
 tombolAksi('unggahDariListDH', r.id, 'fa-cloud-arrow-up', 'Upload', 'bg-white border-slate-300 text-slate-700 hover:bg-slate-50') +
 (admin ? tombolAksi('hapusDH', r.id, 'fa-trash', 'Hapus', 'bg-red-50 border-red-200 text-red-600 hover:bg-red-100') : '') +
 '</div></td></tr>';
@@ -4240,12 +4312,13 @@ dkEl('dhListInfo').innerText = daftarDH.length + ' daftar hadir tersimpan di ser
 
 function unggahDariListDH(id) { mintaUnggah('dh', id); }
 
-function bukaDH(id) {
+// Edit: satu-satunya jalan yang memuat dokumen ke form dan mengirim ID (menimpa dokumen tersebut)
+function editDH(id) {
 showToast("Memuat daftar hadir...", "info");
 google.script.run.withSuccessHandler(function(r) {
 var hadirBuka = {}, khBuka = dkParseJson(r.kehadiran, []);
 for (var hb = 0; hb < khBuka.length; hb++) hadirBuka[khBuka[hb]] = true;
-dhState = { id: r.id, ttd: r.ttd || '', fileUrl: r.fileUrl || '', asesmen: r.asesmen || '', tahun: r.tahun || '', kotor: false, menyimpan: false, hadir: hadirBuka };
+dhState = { id: r.id, judulEdit: judulDokEdit(r), ttd: r.ttd || '', fileUrl: r.fileUrl || '', asesmen: r.asesmen || '', tahun: r.tahun || '', kotor: false, menyimpan: false, hadir: hadirBuka };
 dkSet('dhTanggal', r.tanggal); dkSet('dhJamMulai', r.jamMulai); dkSet('dhJamSelesai', r.jamSelesai);
 isiDropdownRuangDH(); dkSet('dhRuang', r.ruang);
 isiDropdownMapel('dhMapel'); var sel = dkEl('dhMapel'); sel.value = r.mapel;
@@ -4255,10 +4328,26 @@ setPengawas('dh', r.pengawas, r.nip);
 renderKehadiranDH();
 updateStatusDH(); renderPratinjauDH();
 try { dkEl('mainContentArea').scrollTo({ top: 0, behavior: 'smooth' }); } catch (e) {}
-showToast("Daftar hadir dibuka. Ubah lalu klik Simpan.", "success");
+showToast("Mode edit. Ubah lalu klik Simpan Perubahan, atau Batal.", "success");
 }).withFailureHandler(function(err) {
 showToast(pesanGalat(err, "Gagal memuat daftar hadir."), "error");
 }).getDaftarHadir(id);
+}
+
+// Lihat: hanya pratinjau di jendela terpisah; form dan dhState tidak disentuh
+function lihatDH(id) {
+showToast("Memuat daftar hadir...", "info");
+var siap = function() {
+google.script.run.withSuccessHandler(function(r) {
+bukaLihatDok('Daftar Hadir - Ruang ' + r.ruang + ' - ' + r.mapel, htmlDaftarHadir({
+tanggal: r.tanggal, jamMulai: r.jamMulai, jamSelesai: r.jamSelesai, ruang: r.ruang, mapel: r.mapel,
+asesmen: r.asesmen, tahun: r.tahun, tanggalDokumen: r.tanggalDokumen, pengawas: r.pengawas, nip: r.nip, ttd: r.ttd, kehadiran: r.kehadiran
+}), sesuaikanKakiDH);
+}).withFailureHandler(function(err) {
+showToast(pesanGalat(err, "Gagal memuat daftar hadir."), "error");
+}).getDaftarHadir(id);
+};
+if (pesertaRuangMuat && admDok.tahun && guruMuat) siap(); else { muatAdmDok(function() { muatDaftarGuru(function() { if (pesertaRuangMuat) siap(); else muatPesertaRuang(siap); }); }); }
 }
 
 function cetakDHdariList(id) {
