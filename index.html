@@ -503,9 +503,12 @@ Pastikan Anda mengklik "Simpan" setelah mengubah data. Perubahan otomatis disink
 <div class="border-b border-slate-200 bg-slate-50 shrink-0 mobile-compact-header flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-3 rounded-t-xl md:rounded-t-2xl p-4">
 <div>
 <h3 class="text-lg md:text-xl font-bold text-slate-800 flex items-center gap-2"><i class="fa-solid fa-chalkboard-user text-blue-600"></i> Data Guru</h3>
-<p class="text-slate-500 text-[10px] md:text-sm mt-1">Kelola tanda tangan guru (digambar langsung). Nama dan NIP diambil dari sheet DataGuru.</p>
+<p class="text-slate-500 text-[10px] md:text-sm mt-1">Tambah, ubah, lihat, dan hapus data guru, serta kelola tanda tangannya (digambar langsung). Data tersimpan di sheet DataGuru.</p>
 </div>
+<div class="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+<button onclick="bukaGuruForm('tambah')" class="w-full sm:w-auto bg-blue-600 border border-blue-600 shadow-sm text-white px-4 py-2 rounded-lg font-semibold flex items-center justify-center gap-2 hover:bg-blue-700 transition active:scale-95 text-xs md:text-sm"><i class="fa-solid fa-user-plus"></i> Tambah Guru</button>
 <button onclick="loadAdminGuru()" class="w-full sm:w-auto bg-white border border-slate-200 shadow-sm text-slate-700 px-4 py-2 rounded-lg font-semibold flex items-center justify-center gap-2 hover:bg-slate-50 hover:text-blue-600 transition active:scale-95 text-xs md:text-sm"><i class="fa-solid fa-arrows-rotate"></i> Segarkan</button>
+</div>
 </div>
 <div class="overflow-auto flex-1 p-0 custom-scrollbar relative">
 <table class="w-full text-left border-collapse bg-white mobile-compact-table">
@@ -514,7 +517,8 @@ Pastikan Anda mengklik "Simpan" setelah mengubah data. Perubahan otomatis disink
 <th class="font-bold text-slate-700 px-3 py-2.5 border-b border-r border-slate-200 w-12 text-center">No</th>
 <th class="font-bold text-slate-700 px-3 py-2.5 border-b border-r border-slate-200">Nama Guru</th>
 <th class="font-bold text-slate-700 px-3 py-2.5 border-b border-r border-slate-200 w-[25%]">NIP</th>
-<th class="font-bold text-slate-700 px-3 py-2.5 border-b w-[22%] text-center">Tanda Tangan</th>
+<th class="font-bold text-slate-700 px-3 py-2.5 border-b border-r border-slate-200 w-[20%] text-center">Tanda Tangan</th>
+<th class="font-bold text-slate-700 px-3 py-2.5 border-b w-[16%] text-center">Aksi</th>
 </tr>
 </thead>
 <tbody id="guruTableBody" class="divide-y divide-slate-100 text-[11px] md:text-sm"></tbody>
@@ -595,7 +599,7 @@ Pastikan Anda mengklik "Simpan" setelah mengubah data. Perubahan otomatis disink
 <div id="baPengawasManual" class="hidden mt-2"><input id="baPengawas" type="text" maxlength="100" autocomplete="off" placeholder="Ketik nama lengkap beserta gelar" class="dk-in" oninput="perubahanBA()"></div>
 <p id="baPengawasInfo" class="hidden text-[11px] text-amber-700 mt-1"></p></div>
 <div><label class="dk-lbl" for="baNip">NIP Pengawas (jika ada)</label><input id="baNip" type="text" maxlength="40" autocomplete="off" readonly placeholder="Terisi otomatis" class="dk-in bg-slate-100 cursor-not-allowed" oninput="perubahanBA()"></div>
-<div class="md:col-span-3"><label class="dk-lbl">Tanda tangan Pengawas</label><div id="baTtdWadah"></div></div>
+<div class="md:col-span-3"><label class="dk-lbl">Tanda tangan Pengawas</label><p id="baTtdPengawasInfo" class="text-[11px] md:text-xs text-slate-600 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2">Pilih nama pengawas.</p></div>
 </div>
 <p id="baPeringatan" class="hidden text-[11px] md:text-xs text-amber-800 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2 mt-4"></p>
 <div class="flex flex-wrap items-center gap-2 mt-4">
@@ -897,6 +901,25 @@ Rekap Hasil Ujian
 </div>
 </div>
 
+</div>
+</div>
+
+<div id="modalGuru" class="hidden fixed inset-0 z-[90] bg-slate-900/60 items-center justify-center p-3">
+<div class="bg-white rounded-2xl shadow-2xl w-full max-w-md max-h-[92vh] overflow-y-auto p-4 md:p-5 custom-scrollbar">
+<h4 id="guruModalJudul" class="font-bold text-slate-800 text-base md:text-lg mb-3">Tambah Guru</h4>
+<div class="space-y-3">
+<div><label class="dk-lbl" for="guruInNama">Nama lengkap beserta gelar <span class="text-red-500">*</span></label><input id="guruInNama" type="text" maxlength="100" autocomplete="off" class="dk-in" placeholder="Contoh: Adyan Humaidillah, S.Pd"></div>
+<div><label class="dk-lbl" for="guruInNip">NIP (jika ada)</label><input id="guruInNip" type="text" maxlength="40" autocomplete="off" class="dk-in" placeholder="Kosongkan bila tidak ada"></div>
+<div id="guruModalTtdWadah" class="hidden">
+<p class="dk-lbl">Tanda tangan</p>
+<div class="border border-slate-200 rounded-lg bg-white p-2 flex items-center justify-center min-h-[5rem]"><img id="guruModalTtd" alt="" class="max-h-24 max-w-full object-contain" data-id="" data-t="0" onerror="ttdGagal(this)"><p id="guruModalTtdKosong" class="text-xs text-slate-400">Belum ada tanda tangan tersimpan.</p></div>
+</div>
+</div>
+<div class="flex flex-wrap items-center justify-end gap-2 mt-4">
+<button id="guruModalBtnTtd" type="button" onclick="guruModalKeTtd()" class="hidden mr-auto bg-emerald-50 border border-emerald-200 text-emerald-700 px-3 py-2 rounded-lg font-semibold text-xs md:text-sm flex items-center gap-1.5 hover:bg-emerald-100 transition"><i class="fa-solid fa-signature"></i> Tanda tangan</button>
+<button id="guruModalBtnTutup" type="button" onclick="tutupGuruForm()" class="bg-white border border-slate-300 text-slate-700 px-4 py-2 rounded-lg font-semibold text-xs md:text-sm hover:bg-slate-50 transition">Tutup</button>
+<button id="guruModalBtnSimpan" type="button" onclick="simpanGuruForm()" class="bg-blue-600 border border-blue-600 text-white px-4 py-2 rounded-lg font-semibold text-xs md:text-sm flex items-center gap-1.5 hover:bg-blue-700 transition"><i class="fa-solid fa-floppy-disk"></i> Simpan</button>
+</div>
 </div>
 </div>
 
@@ -2327,13 +2350,14 @@ google.script.run.withSuccessHandler(function() { r[5] = ''; segarkanSelTtdPeser
 }
 
 // ---- Guru (menu Data Guru) ----
-function loadAdminGuru() {
+function loadAdminGuru(sesudah) {
 showLoading(true);
 google.script.run.withSuccessHandler(function(data) {
 showLoading(false);
 listGuruAdmin = [];
 for (var i = 0; i < (data ? data.length : 0); i++) { listGuruAdmin.push([String(data[i][0] || ''), String(data[i][1] || ''), String(data[i][2] || '')]); }
 renderTabelGuru();
+if (sesudah) sesudah();
 }).withFailureHandler(function(err) {
 showLoading(false); showToast(pesanGalat(err, "Gagal memuat data guru"), "error");
 }).getDataGuruAdmin();
@@ -2342,7 +2366,7 @@ showLoading(false); showToast(pesanGalat(err, "Gagal memuat data guru"), "error"
 function renderTabelGuru() {
 var tbody = dkEl('guruTableBody'), info = dkEl('guruInfo');
 if (!listGuruAdmin.length) {
-tbody.innerHTML = '<tr><td colspan="4" class="px-3 py-8 text-center text-slate-400">Belum ada data guru. Isi sheet "DataGuru" (kolom A = Nama, kolom B = NIP) lalu klik Segarkan.</td></tr>';
+tbody.innerHTML = '<tr><td colspan="5" class="px-3 py-8 text-center text-slate-400">Belum ada data guru. Klik "Tambah Guru" untuk menambahkan.</td></tr>';
 info.innerText = 'Data guru kosong.';
 return;
 }
@@ -2353,11 +2377,92 @@ if (ada) punya++;
 h += '<tr class="hover:bg-slate-50"><td class="px-3 py-2 text-center text-slate-500 font-bold border-r border-slate-100">' + (i + 1) + '</td>' +
 '<td class="px-3 py-2 font-semibold text-slate-800 border-r border-slate-100">' + esc(g[0]) + '</td>' +
 '<td class="px-3 py-2 text-slate-600 border-r border-slate-100">' + (esc(g[1]) || '-') + '</td>' +
-'<td class="px-3 py-2 text-center"><button type="button" onclick="ttdGuruKlik(' + i + ')" class="px-3 py-1.5 rounded-md border text-[11px] md:text-xs font-semibold inline-flex items-center gap-1.5 transition active:scale-95 ' +
-(ada ? 'bg-emerald-50 border-emerald-200 text-emerald-700 hover:bg-emerald-100' : 'bg-slate-50 border-slate-300 text-slate-600 hover:bg-slate-100') + '"><i class="fa-solid ' + (ada ? 'fa-circle-check' : 'fa-pen-nib') + '"></i> ' + (ada ? 'Lihat / Ubah' : 'Gambar TTD') + '</button></td></tr>';
+'<td class="px-3 py-2 text-center border-r border-slate-100"><button type="button" onclick="ttdGuruKlik(' + i + ')" class="px-3 py-1.5 rounded-md border text-[11px] md:text-xs font-semibold inline-flex items-center gap-1.5 transition active:scale-95 ' +
+(ada ? 'bg-emerald-50 border-emerald-200 text-emerald-700 hover:bg-emerald-100' : 'bg-slate-50 border-slate-300 text-slate-600 hover:bg-slate-100') + '"><i class="fa-solid ' + (ada ? 'fa-circle-check' : 'fa-pen-nib') + '"></i> ' + (ada ? 'Lihat / Ubah' : 'Gambar TTD') + '</button></td>' +
+'<td class="px-2 py-2 text-center whitespace-nowrap">' +
+'<button type="button" onclick="bukaGuruForm(\'lihat\',' + i + ')" title="Lihat" class="px-2 py-1.5 rounded-md border border-slate-300 bg-white text-slate-600 hover:bg-slate-50 text-xs mr-1"><i class="fa-solid fa-eye"></i></button>' +
+'<button type="button" onclick="bukaGuruForm(\'edit\',' + i + ')" title="Ubah" class="px-2 py-1.5 rounded-md border border-blue-200 bg-blue-50 text-blue-700 hover:bg-blue-100 text-xs mr-1"><i class="fa-solid fa-pen-to-square"></i></button>' +
+'<button type="button" onclick="hapusGuruKlik(' + i + ')" title="Hapus" class="px-2 py-1.5 rounded-md border border-red-200 bg-red-50 text-red-600 hover:bg-red-100 text-xs"><i class="fa-solid fa-trash-can"></i></button></td></tr>';
 }
 tbody.innerHTML = h;
-info.innerText = listGuruAdmin.length + ' guru, ' + punya + ' sudah memiliki tanda tangan. Tanda tangan tersimpan langsung di Drive.';
+info.innerText = listGuruAdmin.length + ' guru, ' + punya + ' sudah memiliki tanda tangan. Perubahan tersimpan langsung di sheet DataGuru dan Drive.';
+}
+
+// ---- Tambah / Ubah / Lihat guru (satu jendela, tiga mode) ----
+var guruFormMode = '', guruFormRef = null;
+
+function bukaGuruForm(mode, i) {
+var g = mode === 'tambah' ? null : listGuruAdmin[i];
+if (mode !== 'tambah' && !g) return;
+guruFormMode = mode; guruFormRef = g;
+var lihat = mode === 'lihat';
+dkEl('guruModalJudul').innerText = mode === 'tambah' ? 'Tambah Guru' : (lihat ? 'Data Guru' : 'Ubah Data Guru');
+dkSet('guruInNama', g ? g[0] : ''); dkSet('guruInNip', g ? g[1] : '');
+var ids = ['guruInNama', 'guruInNip'];
+for (var k = 0; k < ids.length; k++) { var e = dkEl(ids[k]); e.readOnly = lihat; e.classList.toggle('bg-slate-100', lihat); }
+var wadah = dkEl('guruModalTtdWadah'), img = dkEl('guruModalTtd'), kosong = dkEl('guruModalTtdKosong');
+wadah.classList.toggle('hidden', mode === 'tambah');
+if (g && g[2]) { img.style.display = ''; img.setAttribute('data-id', g[2]); img.setAttribute('data-t', '0'); img.src = urlTtdDrive(g[2]); kosong.classList.add('hidden'); }
+else { img.removeAttribute('src'); img.style.display = 'none'; kosong.classList.remove('hidden'); }
+dkEl('guruModalBtnTtd').classList.toggle('hidden', mode === 'tambah');
+dkEl('guruModalBtnSimpan').classList.toggle('hidden', lihat);
+dkEl('guruModalBtnSimpan').disabled = false; dkEl('guruModalBtnSimpan').classList.remove('opacity-60');
+var m = dkEl('modalGuru'); m.classList.remove('hidden'); m.classList.add('flex');
+if (!lihat) { try { dkEl('guruInNama').focus(); } catch (x) {} }
+}
+
+function tutupGuruForm() {
+var m = dkEl('modalGuru'); m.classList.add('hidden'); m.classList.remove('flex');
+guruFormRef = null;
+}
+
+function guruModalKeTtd() {
+var i = listGuruAdmin.indexOf(guruFormRef);
+if (i < 0) return;
+tutupGuruForm();
+ttdGuruKlik(i);
+}
+
+function cariIndexGuru(nama, nip) {
+for (var i = 0; i < listGuruAdmin.length; i++) {
+if (normNamaGuru(listGuruAdmin[i][0]) === normNamaGuru(nama) && String(listGuruAdmin[i][1]).trim() === nip) return i;
+}
+return -1;
+}
+
+function simpanGuruForm() {
+var nama = dkVal('guruInNama').replace(/\s+/g, ' ').trim(), nip = dkVal('guruInNip').trim();
+if (!nama) { showToast("Nama guru wajib diisi.", "error"); try { dkEl('guruInNama').focus(); } catch (x) {} return; }
+var tambah = guruFormMode === 'tambah', ref = guruFormRef;
+var btn = dkEl('guruModalBtnSimpan'); btn.disabled = true; btn.classList.add('opacity-60');
+showToast("Menyimpan data guru...", "info");
+function lepas() { btn.disabled = false; btn.classList.remove('opacity-60'); }
+var jalan = google.script.run.withSuccessHandler(function() {
+lepas(); tutupGuruForm();
+loadAdminGuru(function() {
+if (tambah) {
+var idx = cariIndexGuru(nama, nip);
+showToast("Guru ditambahkan. Silakan gambar tanda tangannya.", "success");
+if (idx >= 0) ttdGuruKlik(idx);
+} else {
+showToast("Data guru diperbarui. Bila perlu, gambar tanda tangan baru lewat tombol Lihat / Ubah.", "success");
+}
+});
+}).withFailureHandler(function(err) {
+lepas(); showToast(pesanGalat(err, "Gagal menyimpan data guru. Periksa koneksi lalu coba lagi."), "error");
+});
+if (tambah) jalan.tambahGuru(nama, nip); else jalan.ubahGuru(ref[0], ref[1], nama, nip);
+}
+
+function hapusGuruKlik(i) {
+var g = listGuruAdmin[i]; if (!g) return;
+if (!window.confirm('Hapus guru "' + g[0] + '"?\n\nTanda tangannya ikut dihapus dari Drive. Dokumen lama yang memakai nama ini tidak akan menampilkan tanda tangan saat dicetak ulang.')) return;
+showToast("Menghapus guru...", "info");
+google.script.run.withSuccessHandler(function() {
+showToast("Guru dihapus.", "success"); loadAdminGuru();
+}).withFailureHandler(function(err) {
+showToast(pesanGalat(err, "Gagal menghapus guru. Periksa koneksi lalu coba lagi."), "error");
+}).hapusGuru(g[0], g[1]);
 }
 
 function ttdGuruKlik(i) {
@@ -3055,6 +3160,7 @@ var daftarDH = [];
 var baState = { id: '', ttd: '', fileUrl: '', kegiatan: '', tidakHadir: [], manualHadir: false, manualTidak: false, kotor: false, menyimpan: false };
 var dhState = { id: '', ttd: '', fileUrl: '', asesmen: '', tahun: '', kotor: false, menyimpan: false, hadir: {} };
 var baPad = null;
+var baFormSiap = false;
 var dhPad = null;
 var dhFormSiap = false;
 var targetUnggah = null;
@@ -3388,11 +3494,11 @@ function htmlStempelKepsek() { return '<img class="ttd-stempel" src="' + STEMPEL
 // Semua gambar tanda tangan memakai kotak berukuran tetap (lihat CSS .ttd-gbr), apa pun ukuran gambar aslinya
 function htmlGambarTtd(src, denganStempel, idDrive) { if (idDrive) return htmlImgTtdDrive(idDrive, 'ttd-gbr', ''); return src ? '<img class="ttd-gbr" src="' + esc(src) + '" alt="" onerror="this.style.display=\'none\'">' + (denganStempel ? htmlStempelKepsek() : '') : ''; }
 
-function htmlBarisTtdBA(no, peran, nama, nip, adaNip, src, denganStempel) {
+function htmlBarisTtdBA(no, peran, nama, nip, adaNip, src, denganStempel, idDrive) {
 return '<div class="dok-tb"><div class="dok-tb-no">' + no + '.</div><div class="dok-tb-peran">' + peran + '</div>' +
 '<div class="dok-tb-nama"><div class="dok-garis">' + dkTitik(nama, '') + '</div>' +
 (adaNip ? '<div class="dok-tb-nip"><span>NIP</span><div class="dok-garis">' + esc(nip || '') + '</div></div>' : '') + '</div>' +
-'<div class="dok-tb-ttd"><span class="dok-tb-n">' + no + '.</span><div class="dok-tb-area">' + htmlGambarTtd(src, denganStempel) + '</div></div></div>';
+'<div class="dok-tb-ttd"><span class="dok-tb-n">' + no + '.</span><div class="dok-tb-area">' + htmlGambarTtd(src, denganStempel, idDrive) + '</div></div></div>';
 }
 
 function htmlNamaTidakHadir(arr) {
@@ -3422,7 +3528,7 @@ baris('', 'Nama Peserta Tidak Hadir', htmlNamaTidakHadir(d.namaTidakHadir)) +
 '<div class="dok-ttd-judul">Yang membuat berita acara :</div>' +
 '<div class="dok-ttd-kepala"><div class="kosong"></div><div class="ttd">TTD</div></div>' +
 htmlBarisTtdBA(1, 'Proktor', admDok.proktor, admDok.nipProktor, true, 'ttd-proktor.png') +
-htmlBarisTtdBA(2, 'Pengawas', d.pengawas, d.nip, !!(d.nip), d.ttd) +
+htmlBarisTtdBA(2, 'Pengawas', d.pengawas, d.nip, !!(d.nip), d.ttd, false, idTtdGuruDH(d)) +
 htmlBarisTtdBA(3, 'Penanggung Jawab', admDok.kepsek, admDok.nip, true, 'ttd-kepsek.png', true) +
 '</div>';
 }
@@ -3631,20 +3737,27 @@ e.innerHTML = 'Diambil otomatis dari Setting Ujian &rsaquo; Administrasi: Tahun 
 }
 
 function siapkanHalamanBA() {
-if (!baPad) {
-baPad = buatPapanTtd('baTtdWadah', function(d) { baState.ttd = d; perubahanBA(); });
-formBaruBA(true);
-}
-baPad.segarkanTombol();
+if (!baFormSiap) { baFormSiap = true; formBaruBA(true); }
 isiDropdownMapel('baMapel');
 infoAdmBA();
 muatAdmDok(function() { infoAdmBA(); renderPratinjauBA(); });
 muatPesertaRuang(function() { aturRuangBA(); });
 isiDropdownPengawas('ba');
-muatDaftarGuru(function() { segarkanPengawas('ba'); });
+muatDaftarGuru(function() { segarkanPengawas('ba'); renderPratinjauBA(); });
 muatDaftarMapel(function() { isiDropdownMapel('baMapel'); });
 muatListBA();
 renderPratinjauBA();
+}
+
+// Tanda tangan pengawas Berita Acara diambil otomatis dari Data Guru (nama + NIP yang dipilih)
+function infoTtdPengawasBA() {
+var e = dkEl('baTtdPengawasInfo'); if (!e) return;
+var nama = dkVal('baPengawas');
+var dasar = 'text-[11px] md:text-xs rounded-lg px-3 py-2 border ';
+if (!nama) { e.className = dasar + 'text-slate-600 bg-slate-50 border-slate-200'; e.textContent = 'Pilih nama pengawas.'; return; }
+if (idTtdGuruDH({ pengawas: nama, nip: dkVal('baNip') })) { e.className = dasar + 'text-emerald-700 bg-emerald-50 border-emerald-200'; e.textContent = 'Tanda tangan ' + nama + ' tersimpan di Data Guru dan tercetak otomatis.'; }
+else if (baState.ttd) { e.className = dasar + 'text-slate-600 bg-slate-50 border-slate-200'; e.textContent = 'Memakai tanda tangan gambar yang sudah melekat pada dokumen ini (belum ada di Data Guru).'; }
+else { e.className = dasar + 'text-amber-800 bg-amber-50 border-amber-200'; e.textContent = 'Belum ada tanda tangan tersimpan untuk ' + nama + '. Minta admin mengisinya di menu Data Guru; sementara itu kolom tanda tangan pengawas tercetak kosong.'; }
 }
 
 function formBaruBA(awal) {
@@ -3654,7 +3767,6 @@ dkSet('baTanggal', dkIsoHariIni()); dkSet('baJamMulai', ''); dkSet('baJamSelesai
 dkSet('baRuang', ''); dkSet('baMapel', '');
 dkSet('baSeharusnya', ''); dkSet('baHadir', ''); dkSet('baTidakHadir', ''); dkSet('baCatatan', '');
 setPengawas('ba', pref.pengawas || '', pref.nip || '');
-if (baPad) baPad.hapus();
 aturRuangBA();
 updateStatusBA();
 renderPratinjauBA();
@@ -3783,6 +3895,7 @@ clearTimeout(tmrBA);
 tmrBA = setTimeout(function() {
 if (!dkEl('baPratinjau')) return;
 dkEl('baPratinjau').innerHTML = htmlBeritaAcara(ambilDataBA());
+infoTtdPengawasBA();
 skalakanPratinjau('baPratinjauWadah', 'baPratinjau');
 peringatanBA();
 }, 120);
@@ -3800,7 +3913,6 @@ google.script.run.withSuccessHandler(function(rek) {
 lepas();
 baState.id = rek.id; baState.kotor = false; baState.fileUrl = rek.fileUrl || '';
 dkLsSet(PREF_DOK_KEY, JSON.stringify({ pengawas: d.pengawas, nip: d.nip }));
-if (d.ttd) { dkLsSet(TTD_TERAKHIR_KEY, d.ttd); if (baPad) baPad.segarkanTombol(); }
 updateStatusBA();
 showToast("Berita acara tersimpan.", "success");
 muatListBA();
@@ -3814,7 +3926,7 @@ function cetakBA() {
 var d = ambilDataBA(), v = validasiBA(d);
 if (v) { perluDiisi('Lengkapi dulu sebelum mencetak: ' + v[0], v[1]); return; }
 if (baState.kotor || !baState.id) showToast("Dokumen dicetak. Jangan lupa klik Simpan agar data tersimpan di server.", "info");
-cetakDokumenHtml(htmlBeritaAcara(d));
+cetakDokumenHtml(htmlBeritaAcara(d), 6000);
 }
 
 function klikUnggahBA() { mintaUnggah('ba', baState.id); }
@@ -3864,7 +3976,6 @@ isiDropdownMapel('baMapel'); var sel = dkEl('baMapel'); sel.value = r.mapel;
 if (sel.value !== r.mapel) { var o = document.createElement('option'); o.value = r.mapel; o.textContent = r.mapel; sel.appendChild(o); sel.value = r.mapel; }
 dkSet('baSeharusnya', r.seharusnya); dkSet('baHadir', r.hadir); dkSet('baTidakHadir', r.tidakHadir);
 dkSet('baCatatan', r.catatan); setPengawas('ba', r.pengawas, r.nip);
-baPad.setel(r.ttd || '');
 var ada = pesertaDiRuang(r.ruang);
 isiPilihanTidakHadir(ada, r.ruang); renderChipTidakHadir();
 updateStatusBA(); renderPratinjauBA();
@@ -3884,11 +3995,14 @@ showToast(pesanGalat(err, "Gagal memuat berita acara."), "error");
 function cetakBAdariList(id) {
 showToast("Menyiapkan dokumen...", "info");
 google.script.run.withSuccessHandler(function(r) {
+function jalan() {
 cetakDokumenHtml(htmlBeritaAcara({
 tanggal: r.tanggal, jamMulai: r.jamMulai, jamSelesai: r.jamSelesai, kegiatan: r.kegiatan, ruang: r.ruang, mapel: r.mapel,
 seharusnya: r.seharusnya, hadir: r.hadir, tidakHadir: r.tidakHadir, namaTidakHadir: dkParseJson(r.namaTidakHadir, []),
 catatan: r.catatan, pengawas: r.pengawas, nip: r.nip, ttd: r.ttd
-}));
+}), 6000);
+}
+if (guruMuat) jalan(); else muatDaftarGuru(jalan);
 }).withFailureHandler(function(err) {
 showToast(pesanGalat(err, "Gagal memuat berita acara."), "error");
 }).getBeritaAcara(id);
