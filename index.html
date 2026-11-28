@@ -378,11 +378,6 @@ body.printing .sheet-dok:last-child{page-break-after:auto;break-after:auto;}
 <h4 class="font-bold text-slate-800 mb-1">Analisis Grafik</h4>
 <p class="text-slate-500 text-xs line-clamp-3">Visualisasi data pencapaian siswa melalui grafik bar interaktif dan rata-rata kelas.</p>
 </div>
-<div class="dash-card bg-white p-5 rounded-xl border border-slate-200 shadow-sm" onclick="openTab('guru-ai')">
-<div class="w-10 h-10 rounded-full bg-purple-50 text-purple-600 flex items-center justify-center text-lg mb-3"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
-<h4 class="font-bold text-slate-800 mb-1">Generator Soal AI</h4>
-<p class="text-slate-500 text-xs line-clamp-3">Otomatisasi pembuatan draf soal pilihan ganda dengan teknologi kecerdasan buatan.</p>
-</div>
 <div class="dash-card bg-white p-5 rounded-xl border border-slate-200 shadow-sm" onclick="openTab('shared-ba')">
 <div class="w-10 h-10 rounded-full bg-teal-50 text-teal-600 flex items-center justify-center text-lg mb-3"><i class="fa-solid fa-file-signature"></i></div>
 <h4 class="font-bold text-slate-800 mb-1">Berita Acara</h4>
@@ -633,6 +628,7 @@ Pastikan Anda mengklik "Simpan" setelah mengubah data. Perubahan otomatis disink
 <tbody id="baListBody" class="divide-y divide-slate-100"></tbody>
 </table>
 </div>
+<div id="baListNav" class="hidden px-3 py-2 border-t border-slate-200 bg-slate-50 flex flex-col sm:flex-row sm:items-center justify-between gap-2"></div>
 </div>
 
 <div class="mt-4 bg-slate-200 rounded-xl p-2 overflow-hidden" id="baPratinjauWadah"><div id="baPratinjau" class="dok-skala"></div></div>
@@ -705,6 +701,7 @@ Pastikan Anda mengklik "Simpan" setelah mengubah data. Perubahan otomatis disink
 <tbody id="dhListBody" class="divide-y divide-slate-100"></tbody>
 </table>
 </div>
+<div id="dhListNav" class="hidden px-3 py-2 border-t border-slate-200 bg-slate-50 flex flex-col sm:flex-row sm:items-center justify-between gap-2"></div>
 </div>
 
 <div id="dhPratinjauBungkus" class="mt-4 bg-slate-200 rounded-xl p-2 overflow-hidden"><div id="dhPratinjauWadah"><div id="dhPratinjau" class="dok-skala"></div></div></div>
@@ -851,56 +848,6 @@ Rekap Hasil Ujian
 </div>
 </div>
 
-<div id="view-guru-ai" class="tab-content max-w-6xl mx-auto hidden mt-2">
-<div class="bg-gradient-to-r from-purple-600 to-indigo-600 rounded-xl md:rounded-2xl p-6 md:p-8 mb-5 shadow-lg text-white relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-6">
-<div class="relative z-10 w-full md:w-auto text-center md:text-left">
-<h3 class="text-xl md:text-2xl font-bold mb-1"><i class="fa-solid fa-wand-magic-sparkles mr-2"></i> Generator Soal AI ✨</h3>
-<p class="text-blue-100 text-xs md:text-sm">Buat soal ujian pilihan ganda secara otomatis dengan kecerdasan buatan Gemini.</p>
-</div>
-</div>
-
-<div class="bg-white rounded-xl md:rounded-2xl shadow-sm border border-slate-200 overflow-hidden p-6 md:p-8 mb-5">
-<form onsubmit="handleGenerateSoal(event)" class="space-y-4">
-<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-<div>
-<label class="block text-sm font-bold text-gray-700 mb-1">Mata Pelajaran</label>
-<input id="aiMapel" type="text" placeholder="Contoh: IPA, Matematika..." required class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 outline-none transition bg-slate-50 focus:bg-white text-sm">
-</div>
-<div>
-<label class="block text-sm font-bold text-gray-700 mb-1">Kelas Tingkat</label>
-<input id="aiKelas" type="text" placeholder="Contoh: 7, 8, atau 9" required class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 outline-none transition bg-slate-50 focus:bg-white text-sm">
-</div>
-</div>
-<div>
-<label class="block text-sm font-bold text-gray-700 mb-1">Topik Spesifik</label>
-<textarea id="aiTopik" rows="2" placeholder="Contoh: Sistem Tata Surya dan Planet-Planet..." required class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 outline-none transition bg-slate-50 focus:bg-white text-sm resize-none"></textarea>
-</div>
-<div>
-<label class="block text-sm font-bold text-gray-700 mb-1">Jumlah Soal</label>
-<select id="aiJumlah" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 outline-none transition bg-slate-50 focus:bg-white text-sm">
-<option value="5">5 Soal</option>
-<option value="10">10 Soal</option>
-<option value="15">15 Soal</option>
-</select>
-</div>
-<button type="submit" id="btnGenerateSoal" class="w-full bg-purple-600 text-white font-bold py-3 rounded-lg hover:bg-purple-700 transition active:scale-[0.98] flex justify-center items-center gap-2 mt-4 shadow-lg shadow-purple-600/30">
-<span id="aiBtnText">Buat Soal Sekarang ✨</span>
-<div id="aiSpinner" class="loader border-white border-t-purple-200" style="display:none; width: 18px; height: 18px; border-width: 3px;"></div>
-</button>
-</form>
-</div>
-
-<div id="aiResultContainer" class="hidden bg-white rounded-xl md:rounded-2xl shadow-sm border border-slate-200 overflow-hidden p-6 md:p-8">
-<div class="flex justify-between items-center mb-4">
-<h4 class="font-bold text-slate-800"><i class="fa-solid fa-list-check text-purple-600 mr-2"></i> Hasil Generator Soal</h4>
-<button onclick="copySoalAI()" class="bg-slate-100 text-slate-600 hover:text-purple-600 hover:bg-purple-50 px-4 py-2 rounded-lg font-semibold flex items-center gap-2 transition text-sm">
-<i class="fa-regular fa-copy"></i> Salin Teks
-</button>
-</div>
-<textarea id="aiResultText" rows="15" class="w-full px-4 py-3 border border-slate-200 rounded-lg outline-none bg-slate-50 text-sm font-mono text-slate-700 resize-y" readonly></textarea>
-</div>
-</div>
-
 </div>
 </div>
 
@@ -1031,7 +978,6 @@ var chartMapelInstance = null;
 var chartTop10Instance = null;
 var chartBottom10Instance = null;
 var globalBelumData = {};
-var apiKey = "";
 
 window.onload = function() {
 try {
@@ -1387,7 +1333,7 @@ menus = [
 { id: 'guru-analisis', label: 'Analisis', icon: 'fa-solid fa-chart-pie' }
  ];
 } else if (currentUser.role === 'guru') {
-menus = [ { id: 'guru-home', label: 'Dashboard', icon: 'fa-solid fa-house' }, { id: 'shared-belum', label: 'Belum Mengerjakan', icon: 'fa-solid fa-user-clock' }, { id: 'shared-hasil', label: 'Hasil Ujian', icon: 'fa-solid fa-table' }, { id: 'shared-ba', label: 'Berita Acara', icon: 'fa-solid fa-file-signature' }, { id: 'shared-dh', label: 'Daftar Hadir', icon: 'fa-solid fa-clipboard-list' }, { id: 'guru-analisis', label: 'Analisis', icon: 'fa-solid fa-chart-pie' }, { id: 'guru-ai', label: 'Generator Soal ✨', icon: 'fa-solid fa-wand-magic-sparkles' } ];
+menus = [ { id: 'guru-home', label: 'Dashboard', icon: 'fa-solid fa-house' }, { id: 'shared-belum', label: 'Belum Mengerjakan', icon: 'fa-solid fa-user-clock' }, { id: 'shared-hasil', label: 'Hasil Ujian', icon: 'fa-solid fa-table' }, { id: 'shared-ba', label: 'Berita Acara', icon: 'fa-solid fa-file-signature' }, { id: 'shared-dh', label: 'Daftar Hadir', icon: 'fa-solid fa-clipboard-list' }, { id: 'guru-analisis', label: 'Analisis', icon: 'fa-solid fa-chart-pie' } ];
 } else {
 menus.push({ id: 'student-home', label: 'Dashboard', icon: 'fa-solid fa-house' });
 var kelasStr = currentUser.kelas ? currentUser.kelas.toUpperCase() : "";
@@ -1429,7 +1375,7 @@ if (tabId === 'guru-home') { displayTitle = 'DASHBOARD'; document.getElementById
 else if (tabId === 'shared-belum') { displayTitle = 'BELUM MENGERJAKAN'; document.getElementById('view-shared-belum').classList.add('active'); loadBelumMengerjakan(); }
 else if (tabId === 'shared-hasil') { displayTitle = 'HASIL UJIAN'; document.getElementById('view-shared-hasil').classList.add('active'); loadHasilUjian(); }
 else if (tabId === 'guru-analisis') { displayTitle = 'ANALISIS HASIL'; document.getElementById('view-guru-analisis').classList.add('active'); loadAnalisisData(); }
-else if (tabId === 'guru-ai') { displayTitle = 'GENERATOR SOAL AI ✨'; document.getElementById('view-guru-ai').classList.add('active'); }
+else if (tabId === 'guru-ai') { openTab('guru-home'); return; } // sisa tab Generator Soal di penyimpanan browser
 else if (tabId === 'shared-ba') { displayTitle = 'BERITA ACARA'; document.getElementById('view-shared-ba').classList.add('active'); siapkanHalamanBA(); }
 else if (tabId === 'shared-dh') { displayTitle = 'DAFTAR HADIR'; document.getElementById('view-shared-dh').classList.add('active'); siapkanHalamanDH(); }
 }
@@ -3157,6 +3103,8 @@ var pesertaRuang = [];
 var pesertaRuangMuat = false;
 var daftarBA = [];
 var daftarDH = [];
+var BARIS_PER_HALAMAN = 5;
+var halamanBA = 1, halamanDH = 1, cariBATerakhir = '', cariDHTerakhir = '';
 var baState = { id: '', ttd: '', fileUrl: '', kegiatan: '', tidakHadir: [], manualHadir: false, manualTidak: false, kotor: false, menyimpan: false };
 var dhState = { id: '', ttd: '', fileUrl: '', asesmen: '', tahun: '', kotor: false, menyimpan: false, hadir: {} };
 var baPad = null;
@@ -3730,6 +3678,31 @@ var e = dkEl(idField);
 if (e) { try { e.scrollIntoView({ behavior: 'smooth', block: 'center' }); e.focus(); } catch (x) {} }
 }
 
+// ---------- Daftar tersimpan: 5 daftar per halaman + navigasi halaman ----------
+function htmlNavHalaman(fungsi, hal, total, dari, sampai, jumlah) {
+var dasar = 'px-2.5 py-1 rounded-md border text-[11px] font-semibold transition active:scale-95 whitespace-nowrap ';
+var aktif = 'bg-blue-600 border-blue-600 text-white';
+var biasa = 'bg-white border-slate-300 text-slate-700 hover:bg-slate-50';
+var mati = 'bg-slate-100 border-slate-200 text-slate-400 cursor-not-allowed';
+function tombol(n, isi, kelas, nonaktif) { return '<button type="button"' + (nonaktif ? ' disabled' : ' onclick="' + fungsi + '(' + n + ')"') + ' class="' + dasar + kelas + '">' + isi + '</button>'; }
+var h = '<span class="text-[11px] md:text-xs text-slate-500">Menampilkan ' + dari + '-' + sampai + ' dari ' + jumlah + ' daftar (halaman ' + hal + ' dari ' + total + ')</span><div class="flex flex-wrap items-center gap-1">';
+h += tombol(hal - 1, '<i class="fa-solid fa-chevron-left"></i> Sebelumnya', hal <= 1 ? mati : biasa, hal <= 1);
+var tampilkan = {};
+[1, total, hal - 1, hal, hal + 1].forEach(function(p) { if (p >= 1 && p <= total) tampilkan[p] = true; });
+var terakhir = 0;
+for (var p = 1; p <= total; p++) {
+if (!tampilkan[p]) continue;
+if (p - terakhir > 1) h += '<span class="px-1 text-slate-400 text-xs">&hellip;</span>';
+h += tombol(p, p, p === hal ? aktif : biasa, false);
+terakhir = p;
+}
+h += tombol(hal + 1, 'Berikutnya <i class="fa-solid fa-chevron-right"></i>', hal >= total ? mati : biasa, hal >= total);
+return h + '</div>';
+}
+
+function gantiHalamanBA(n) { halamanBA = n; renderListBA(); }
+function gantiHalamanDH(n) { halamanDH = n; renderListDH(); }
+
 // ======================= BERITA ACARA =======================
 function infoAdmBA() {
 var e = dkEl('baInfoAdm'); if (!e) return;
@@ -3943,13 +3916,22 @@ dkEl('baListInfo').innerText = 'Gagal memuat daftar. Klik Segarkan untuk mencoba
 
 function renderListBA() {
 var cari = dkVal('baCari').toLowerCase();
+if (cari !== cariBATerakhir) { cariBATerakhir = cari; halamanBA = 1; }
 var h = '', tampil = 0;
 var admin = currentUser && currentUser.role === 'admin';
-for (var i = 0; i < daftarBA.length; i++) {
-var r = daftarBA[i];
-var teksCari = (r.tanggal + ' ' + r.ruang + ' ' + r.mapel + ' ' + r.pengawas).toLowerCase();
+var cocok = [];
+for (var c = 0; c < daftarBA.length; c++) {
+var teksCari = (daftarBA[c].tanggal + ' ' + daftarBA[c].ruang + ' ' + daftarBA[c].mapel + ' ' + daftarBA[c].pengawas).toLowerCase();
 if (cari && teksCari.indexOf(cari) === -1) continue;
-tampil++;
+cocok.push(daftarBA[c]);
+}
+tampil = cocok.length;
+var totalHal = Math.max(1, Math.ceil(tampil / BARIS_PER_HALAMAN));
+if (halamanBA > totalHal) halamanBA = totalHal;
+if (halamanBA < 1) halamanBA = 1;
+var mulai = (halamanBA - 1) * BARIS_PER_HALAMAN, akhir = Math.min(tampil, mulai + BARIS_PER_HALAMAN);
+for (var i = mulai; i < akhir; i++) {
+var r = cocok[i];
 h += '<tr class="hover:bg-slate-50"><td class="px-3 py-2 whitespace-nowrap">' + esc(teksTanggalJadwal(r.tanggal)) + '<div class="text-[10px] text-slate-400">' + esc(r.jamMulai) + ' - ' + esc(r.jamSelesai) + '</div></td>' +
 '<td class="px-3 py-2 text-center font-bold">' + esc(r.ruang) + '</td><td class="px-3 py-2">' + esc(r.mapel) + '</td>' +
 '<td class="px-3 py-2 text-center whitespace-nowrap">' + esc(r.hadir) + ' / ' + esc(r.tidakHadir) + '</td><td class="px-3 py-2">' + esc(r.pengawas) + '</td>' +
@@ -3962,6 +3944,8 @@ tombolAksi('unggahDariListBA', r.id, 'fa-cloud-arrow-up', 'Upload', 'bg-white bo
 }
 if (!tampil) h = '<tr><td colspan="7" class="px-3 py-6 text-center text-slate-400">' + (daftarBA.length ? 'Tidak ada data yang cocok.' : 'Belum ada berita acara tersimpan.') + '</td></tr>';
 dkEl('baListBody').innerHTML = h;
+var navBA = dkEl('baListNav');
+if (tampil > BARIS_PER_HALAMAN) { navBA.innerHTML = htmlNavHalaman('gantiHalamanBA', halamanBA, totalHal, mulai + 1, akhir, tampil); navBA.classList.remove('hidden'); } else { navBA.innerHTML = ''; navBA.classList.add('hidden'); }
 dkEl('baListInfo').innerText = daftarBA.length + ' berita acara tersimpan di server' + (cari ? ' (' + tampil + ' cocok dengan pencarian)' : '') + '.';
 }
 
@@ -4222,13 +4206,22 @@ dkEl('dhListInfo').innerText = 'Gagal memuat daftar. Klik Segarkan untuk mencoba
 
 function renderListDH() {
 var cari = dkVal('dhCari').toLowerCase();
+if (cari !== cariDHTerakhir) { cariDHTerakhir = cari; halamanDH = 1; }
 var admin = currentUser && currentUser.role === 'admin';
 var h = '', tampil = 0;
-for (var i = 0; i < daftarDH.length; i++) {
-var r = daftarDH[i];
-var teksCari = (r.tanggal + ' ' + r.ruang + ' ' + r.mapel + ' ' + r.pengawas).toLowerCase();
+var cocok = [];
+for (var c = 0; c < daftarDH.length; c++) {
+var teksCari = (daftarDH[c].tanggal + ' ' + daftarDH[c].ruang + ' ' + daftarDH[c].mapel + ' ' + daftarDH[c].pengawas).toLowerCase();
 if (cari && teksCari.indexOf(cari) === -1) continue;
-tampil++;
+cocok.push(daftarDH[c]);
+}
+tampil = cocok.length;
+var totalHal = Math.max(1, Math.ceil(tampil / BARIS_PER_HALAMAN));
+if (halamanDH > totalHal) halamanDH = totalHal;
+if (halamanDH < 1) halamanDH = 1;
+var mulai = (halamanDH - 1) * BARIS_PER_HALAMAN, akhir = Math.min(tampil, mulai + BARIS_PER_HALAMAN);
+for (var i = mulai; i < akhir; i++) {
+var r = cocok[i];
 h += '<tr class="hover:bg-slate-50"><td class="px-3 py-2 whitespace-nowrap">' + esc(teksTanggalJadwal(r.tanggal) || '-') + '</td>' +
 '<td class="px-3 py-2 whitespace-nowrap">' + ((r.jamMulai || r.jamSelesai) ? esc(r.jamMulai || '..') + ' - ' + esc(r.jamSelesai || '..') : '-') + '</td>' +
 '<td class="px-3 py-2 text-center font-bold">' + esc(r.ruang) + '</td><td class="px-3 py-2">' + esc(r.mapel) + '</td><td class="px-3 py-2">' + (esc(r.pengawas) || '-') + '</td>' +
@@ -4240,6 +4233,8 @@ tombolAksi('unggahDariListDH', r.id, 'fa-cloud-arrow-up', 'Upload', 'bg-white bo
 }
 if (!tampil) h = '<tr><td colspan="7" class="px-3 py-6 text-center text-slate-400">' + (daftarDH.length ? 'Tidak ada data yang cocok.' : 'Belum ada daftar hadir yang tersimpan.') + '</td></tr>';
 dkEl('dhListBody').innerHTML = h;
+var navDH = dkEl('dhListNav');
+if (tampil > BARIS_PER_HALAMAN) { navDH.innerHTML = htmlNavHalaman('gantiHalamanDH', halamanDH, totalHal, mulai + 1, akhir, tampil); navDH.classList.remove('hidden'); } else { navDH.innerHTML = ''; navDH.classList.add('hidden'); }
 dkEl('dhListInfo').innerText = daftarDH.length + ' daftar hadir tersimpan di server' + (cari ? ' (' + tampil + ' cocok dengan pencarian)' : '') + '.';
 }
 
@@ -4290,86 +4285,6 @@ showToast("Daftar hadir dihapus.", "success");
 }).withFailureHandler(function(err) {
 showToast(pesanGalat(err, "Gagal menghapus."), "error");
 }).hapusDaftarHadir(id);
-}
-
-// ==========================================
-// GEMINI AI INTEGRATION (GENERATOR SOAL)
-// ==========================================
-function fetchWithRetry(url, options, retries) {
-var retryCount = retries || 5;
-var delay = 1000;
-return new Promise(function(resolve, reject) {
-function attempt(n) {
-fetch(url, options)
-.then(function(res) {
-if(!res.ok) throw new Error("HTTP error");
-return res.json();
-})
-.then(function(data) { resolve(data); })
-.catch(function(err) {
-if (n === 1) reject(err);
-else {
-setTimeout(function() { attempt(n - 1); }, delay);
-delay *= 2;
-}
-});
-}
-attempt(retryCount);
-});
-}
-
-function handleGenerateSoal(e) {
-if (e.preventDefault) e.preventDefault(); else e.returnValue = false;
-var mapel = document.getElementById('aiMapel').value;
-var kelas = document.getElementById('aiKelas').value;
-var topik = document.getElementById('aiTopik').value;
-var jumlah = document.getElementById('aiJumlah').value;
-
-var btnText = document.getElementById('aiBtnText');
-var spinner = document.getElementById('aiSpinner');
-var resultContainer = document.getElementById('aiResultContainer');
-var resultText = document.getElementById('aiResultText');
-
-btnText.innerText = "Menghasilkan Soal...";
-spinner.style.display = "block";
-document.getElementById('btnGenerateSoal').disabled = true;
-resultContainer.classList.add('hidden');
-
-var prompt = "Buatkan " + jumlah + " soal pilihan ganda tingkat SMP untuk siswa kelas " + kelas + " pada mata pelajaran " + mapel + " dengan topik " + topik + ". Sertakan 4 opsi jawaban (A, B, C, D) untuk setiap soal. Di akhir, berikan kunci jawaban lengkapnya. Pisahkan antara soal satu dengan yang lainnya menggunakan enter. Jangan gunakan format markdown yang terlalu kompleks, buat teks bersih yang mudah disalin.";
-
-var payload = {
-contents: [{ parts: [{ text: prompt }] }],
-systemInstruction: { parts: [{ text: "Anda adalah seorang pendidik dan guru SMP ahli yang bertugas membuat soal-soal ujian berkualitas tinggi yang sesuai dengan kurikulum pendidikan nasional di Indonesia." }] }
-};
-
-var url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=" + apiKey;
-fetchWithRetry(url, {
-method: 'POST',
-headers: { 'Content-Type': 'application/json' },
-body: JSON.stringify(payload)
-}, 5).then(function(data) {
-var generatedText = "Maaf, gagal menghasilkan soal.";
-if (data && data.candidates && data.candidates.length > 0 && data.candidates[0].content && data.candidates[0].content.parts && data.candidates[0].content.parts.length > 0 && data.candidates[0].content.parts[0].text) {
-generatedText = data.candidates[0].content.parts[0].text;
-}
-resultText.value = generatedText;
-resultContainer.classList.remove('hidden');
-showToast("Soal berhasil dibuat ✨", "success");
-}).catch(function(error) {
-showToast("Gagal terhubung ke AI. Silakan coba lagi.", "error");
-console.error(error);
-}).finally(function() {
-btnText.innerText = "Buat Soal Sekarang ✨";
-spinner.style.display = "none";
-document.getElementById('btnGenerateSoal').disabled = false;
-});
-}
-
-function copySoalAI() {
-var copyText = document.getElementById("aiResultText");
-copyText.select();
-document.execCommand("copy");
-showToast("Soal berhasil disalin!", "success");
 }
 
 var toastTimeout;
